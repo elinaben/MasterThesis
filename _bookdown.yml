@@ -1,0 +1,13 @@
+book_filename: "Elina_Thesis"
+rmd_files:
+  - index.Rmd
+  - 01-abstract.Rmd
+  - 02-acknowledgements.Rmd
+  - 03-abbreviations.Rmd
+  - 10-introduction.Rmd
+  - 20-methods.Rmd
+  - 30-results.Rmd
+  - 40-discussion.Rmd
+  - 50-conclusion.Rmd
+  - 90-figures-legends.Rmd
+  - references.Rmd
