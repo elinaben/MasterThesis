@@ -102,12 +102,12 @@
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same}
 \hypersetup{
-  pdftitle={Your Thesis Title},
+  pdftitle={Tau levels in axonal and soma compartments in BFCN after pro-neurotrophin treatment},
   pdfauthor={Elina Nemtsov},
   hidelinks,
   pdfcreator={LaTeX via pandoc}}
 
-\title{Your Thesis Title}
+\title{Tau levels in axonal and soma compartments in BFCN after pro-neurotrophin treatment}
 \author{Elina Nemtsov}
 \date{February 2026}
 
@@ -118,10 +118,13 @@
 \setcounter{tocdepth}{2}
 \tableofcontents
 }
+source(``R/functions.R'')
+```
+
 \section*{Abstract}\label{abstract}
 \addcontentsline{toc}{section}{Abstract}
 
-Your abstract here.
+Short summary - do last
 
 \section*{Acknowledgements}\label{acknowledgements}
 \addcontentsline{toc}{section}{Acknowledgements}
@@ -139,9 +142,7 @@ Your acknowledgements here.
   p75NTR --- p75 Neurotrophin Receptor
 \end{itemize}
 
-\section{Introduction}\label{introduction}
-
-\section{Introduction}\label{introduction-1}
+\section{Background}\label{background}
 
 Traumatic brain injury (TBI) is traditionally viewed as a focal insult, in which neurons at the site of impact undergo acute necrotic or apoptotic cell death. However, it is now well established that the consequences of brain injury extend far beyond the cortical neurons directly affected by the initial trauma. Injury to the cortex induces profound and long-lasting changes in the local extracellular environment, including inflammation, altered neurotrophin availability, and disruption of synaptic homeostasis. These changes can propagate retrogradely to afferent neuronal populations that project to the injured region, leading to delayed and secondary degeneration that unfolds over days to weeks after the initial injury.
 
@@ -187,7 +188,7 @@ Recent work from our laboratory has demonstrated that proneurotrophin stimulatio
 
 Within this framework, Tau is well positioned to act as a downstream effector of p75NTR signaling. By modulating microtubule stability, axonal transport, and cytoskeletal organization, Tau may translate p75NTR--JNK signaling into the structural breakdown of axons observed after cortical injury. This raises the possibility that Tau is not merely a marker of degeneration but an active participant in injury-induced axonal fragmentation.
 
-\subsection{Scope and Aims of This Thesis}\label{scope-and-aims-of-this-thesis}
+\subsection{Scope and Aims of Thesis}\label{scope-and-aims-of-thesis}
 
 The overarching goal of this thesis is to define the role of Tau in p75NTR-mediated degeneration and axonal fragmentation of basal forebrain cholinergic neurons following cortical injury. Specifically, this work aims to:
 
@@ -195,24 +196,66 @@ The overarching goal of this thesis is to define the role of Tau in p75NTR-media
 \def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
-  Characterize p75NTR-dependent retrograde degenerative signaling in BFCNs after injury-relevant stimulation.
+  Characterize p75NTR-dependent retrograde degenerative signaling in BFCNs after axonal proNGF treatment
+  1.1 Is Tau synthesis increase upstream or downstream of APP?
 \item
-  Determine how Tau localization, modification, and function are altered downstream of p75NTR activation.
+  Characterize levels of total Tau and phosphorylated Tau after proNGF treatment\\
 \item
   Test whether Tau is required for p75NTR-induced axonal degeneration and fragmentation.
 \end{enumerate}
 
 By integrating neurotrophin signaling biology with Tau-centered mechanisms of cytoskeletal regulation, this study seeks to provide a unified framework for understanding early degenerative events in vulnerable cholinergic circuits.
 
+\section{Results}\label{results}
+
+\subsection{Total Tau increase in response to ProNGF treatment}\label{total-tau-increase-in-response-to-prongf-treatment}
+
+The images show total Tau in response to proNGF treatment.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=4.1in]{figs/LabeledWB_Feb12.png}
+\caption{Western blot analysis of Tau and actin expression. Composite image.}
+\label{fig:labeled-wb}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=4.5in]{figs/ELINA_2026-02-12_12h52m48s_Composite_.jpg}
+\caption{Representative composite image showing actin (blue) and Tau (green).}
+\label{fig:actin-tau-composite}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=3.5in]{figs/ELINA_2026-02-05_12h18m48s_IRDye_800CW_.jpg}
+\caption{Green channel image showing actin (mouse) and phospho-Tau (rabbit; pSer202/pThr205).}
+\label{fig:actin-ptau-800}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=3.5in]{figs/ELINA_2026-02-06_13h04m41s_IRDye_680RD_.jpg}
+\caption{Red channel image showing total Tau (pan-Tau; rabbit; Tau-5/“237”).}
+\label{fig:tau-680}
+\end{figure}
+
+\subsubsection{WB2}\label{wb2}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=3.5in]{figs/ELINA_2026-02-11_13h52m00s_IRDye_680RD_.jpg}
+\caption{Red channel image showing phospho-Tau at Ser622 (pSer622).}
+\label{fig:ptau-ser622-680}
+\end{figure}
+
+Explanation of the significance of Ser622 residue.
+
 \section{Materials and Methods}\label{materials-and-methods}
 
 \subsection{Experimental Design}\label{experimental-design}
 
 \subsection{Statistical Analysis}\label{statistical-analysis}
-
-\section{Results}\label{results}
-
-\subsection{Main Findings}\label{main-findings}
 
 \section{Discussion}\label{discussion}
 

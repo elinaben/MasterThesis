@@ -1,7 +1,4 @@
-# Introduction
-
-
-# Introduction
+# Background
 
 Traumatic brain injury (TBI) is traditionally viewed as a focal insult, in which neurons at the site of impact undergo acute necrotic or apoptotic cell death. However, it is now well established that the consequences of brain injury extend far beyond the cortical neurons directly affected by the initial trauma. Injury to the cortex induces profound and long-lasting changes in the local extracellular environment, including inflammation, altered neurotrophin availability, and disruption of synaptic homeostasis. These changes can propagate retrogradely to afferent neuronal populations that project to the injured region, leading to delayed and secondary degeneration that unfolds over days to weeks after the initial injury.
 
@@ -47,13 +44,16 @@ Recent work from our laboratory has demonstrated that proneurotrophin stimulatio
 
 Within this framework, Tau is well positioned to act as a downstream effector of p75NTR signaling. By modulating microtubule stability, axonal transport, and cytoskeletal organization, Tau may translate p75NTR–JNK signaling into the structural breakdown of axons observed after cortical injury. This raises the possibility that Tau is not merely a marker of degeneration but an active participant in injury-induced axonal fragmentation.
 
-## Scope and Aims of This Thesis
+## Scope and Aims of Thesis
 
 The overarching goal of this thesis is to define the role of Tau in p75NTR-mediated degeneration and axonal fragmentation of basal forebrain cholinergic neurons following cortical injury. Specifically, this work aims to:
 
-1. Characterize p75NTR-dependent retrograde degenerative signaling in BFCNs after injury-relevant stimulation.
-2. Determine how Tau localization, modification, and function are altered downstream of p75NTR activation.
+1. Characterize p75NTR-dependent retrograde degenerative signaling in BFCNs after axonal proNGF treatment 
+1.1 Is Tau synthesis increase upstream or downstream of APP? 
+2. Characterize levels of total Tau and phosphorylated Tau after proNGF treatment  
 3. Test whether Tau is required for p75NTR-induced axonal degeneration and fragmentation.
+
+
 
 By integrating neurotrophin signaling biology with Tau-centered mechanisms of cytoskeletal regulation, this study seeks to provide a unified framework for understanding early degenerative events in vulnerable cholinergic circuits.
 
