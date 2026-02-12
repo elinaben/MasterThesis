@@ -1,0 +1,28 @@
+---
+title: "Your Thesis Title"
+author: "Elina Nemtsov"
+date: "`r format(Sys.Date(), '%B %Y')`"
+site: bookdown::bookdown_site
+
+output:
+  bookdown::pdf_book:
+    latex_engine: xelatex
+    toc: true
+    number_sections: true
+  bookdown::word_document2:
+    toc: true
+  bookdown::html_book:
+    toc: true
+
+bibliography: bib/references.bib
+link-citations: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE
+)
+source("R/functions.R")
+```
