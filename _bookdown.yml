@@ -9,5 +9,4 @@ rmd_files:
   - 20-methods.Rmd
   - 40-discussion.Rmd
   - 50-conclusion.Rmd
-  - 90-figures-legends.Rmd
   - references.Rmd

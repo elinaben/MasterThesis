@@ -7,17 +7,16 @@ The images show total Tau in response to proNGF treatment.
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=4.5in]{figs/ELINA_2026-02-12_12h52m48s_Composite_.jpg}
-\caption{Representative composite image showing actin (blue) and Tau (green).}
-\label{fig:actin-tau-composite}
+\includegraphics[width=3.5in]{figs/ColoredLabeledWB_Feb12.png}
+\caption{Western blot analysis of Tau and actin expression. Composite image.}
+\label{fig:labeled-wb}
 \end{figure}
-
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=4.1in]{figs/LabeledWB_Feb12.png}
-\caption{Western blot analysis of Tau and actin expression. Composite image.}
-\label{fig:labeled-wb}
+\includegraphics[width=3.5in]{figs/ELINA_2026-02-12_12h52m48s_Composite_.jpg}
+\caption{Representative composite image showing actin (blue) and Tau (green).}
+\label{fig:actin-tau-composite}
 \end{figure}
 
 \begin{figure}[htbp]
@@ -30,7 +29,7 @@ The images show total Tau in response to proNGF treatment.
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=3.5in]{figs/ELINA_2026-02-06_13h04m41s_IRDye_680RD_.jpg}
-\caption{Red channel image showing total Tau (pan-Tau; rabbit; Tau-5/“237”).}
+\caption{Red channel image showing total Tau (pan-Tau ; Rb-237).}
 \label{fig:tau-680}
 \end{figure}
 
@@ -40,5 +39,12 @@ Only somas WB - same Experiment
 \includegraphics[width=3.5in]{figs/ELINA_2026-02-11_13h52m00s_IRDye_680RD_.jpg}
 \caption{Red channel image showing phospho-Tau at Ser622 (pSer622).}
 \label{fig:ptau-ser622-680}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=3.5in]{figs/ELINA_2026-02-13_10h47m12s_Composite_.jpg}
+\caption{Red channel image showing phospho-Tau at Ser622 (pSer622), Green channel shows panTau (Red - Rb, Green - Ms)}
+\label{fig:ptau-composite}
 \end{figure}
 
