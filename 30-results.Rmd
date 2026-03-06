@@ -33,7 +33,15 @@ The images show total Tau in response to proNGF treatment.
 \label{fig:tau-680}
 \end{figure}
 
-Only somas WB - same Experiment
+### Only somas repeated WB on same samples as above
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=3.5in]{figs/ColoredLabeledWB_onlySoma.png}
+\caption{Western blot analysis of phosphoTau, panTau and actin expression. Composite image.}
+\label{fig:labeled-wb}
+\end{figure}
+
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=3.5in]{figs/ELINA_2026-02-11_13h52m00s_IRDye_680RD_.jpg}
