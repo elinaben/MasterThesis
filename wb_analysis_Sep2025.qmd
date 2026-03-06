@@ -1,0 +1,281 @@
+---
+title: "Western Blot — Sep 2025"
+subtitle: "Tau & Actin: composite figure and quantification"
+date: today
+format:
+  html:
+    toc: true
+    toc-depth: 2
+    embed-resources: true
+    theme: cosmo
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+```{r libraries}
+library(magick)
+library(tidyverse)
+library(ggplot2)
+library(patchwork)
+```
+
+# Western Blot Images
+
+```{r build-composites}
+# ── Read band images ───────────────────────────────────────────────────────────
+tau_soma  <- image_read("ImagesTif/ELINA_2025-09-03_12h27m08s_DyLight_800_tau-soma.tif")
+tau_axon  <- image_read("ImagesTif/ELINA_2025-09-03_12h27m08s_DyLight_800_tau-axons.tif")
+act_soma  <- image_read("ImagesTif/ELINA_2025-09-03_14h40m53s_DyLight_800_actin-soma.tif")
+act_axon  <- image_read("ImagesTif/ELINA_2025-09-03_14h40m53s_DyLight_800_actin-axons.tif")
+
+# ── Layout constants ───────────────────────────────────────────────────────────
+PANEL_W   <- 500L   # width of the band image area
+LEFT_W    <- 72L    # left margin: kDa labels
+RIGHT_W   <- 80L    # right margin: protein name
+TOTAL_W   <- LEFT_W + PANEL_W + RIGHT_W
+HEADER_H  <- 38L    # lane-label row height
+GAP_H     <- 10L    # gap between tau and actin rows
+FS        <- 15L    # base font size
+BG        <- "white"
+
+# ── Resize panels to uniform width ────────────────────────────────────────────
+fit_w <- function(img) {
+  h <- as.integer(round(image_info(img)$height *
+                        PANEL_W / image_info(img)$width))
+  image_resize(img, paste0(PANEL_W, "x", h, "!"))
+}
+
+tau_soma <- fit_w(tau_soma); tau_axon <- fit_w(tau_axon)
+act_soma <- fit_w(act_soma); act_axon <- fit_w(act_axon)
+
+# ── Add black border around a band panel ──────────────────────────────────────
+add_border <- function(img, thickness = 2L) {
+  image_border(img, "black", paste0(thickness, "x", thickness))
+  # image_border adds to both sides, so subtract to keep PANEL_W
+  # → just use border without resizing; the 2px difference is negligible
+}
+
+tau_soma <- add_border(tau_soma)
+tau_axon <- add_border(tau_axon)
+act_soma <- add_border(act_soma)
+act_axon <- add_border(act_axon)
+
+# ── Build one labelled band row ────────────────────────────────────────────────
+# [kDa left strip | band panel | protein name right strip]
+make_row <- function(img, kda_label, protein_label) {
+  h <- image_info(img)$height
+
+  left <- image_blank(LEFT_W, h, color = BG) |>
+    image_annotate(kda_label,
+                   size = FS - 1, color = "black", font = "sans",
+                   gravity = "West", location = "+4+0")
+
+  right <- image_blank(RIGHT_W, h, color = BG) |>
+    image_annotate(protein_label,
+                   size = FS, color = "black", font = "sans",
+                   style = "italic", gravity = "West", location = "+6+0")
+
+  image_append(c(left, img, right), stack = FALSE)
+}
+
+# ── Build lane-header row ──────────────────────────────────────────────────────
+make_header <- function(labels = c("Ctrl", "ProNGF\n30 min",
+                                   "ProNGF\n45 min", "ProNGF\n60 min")) {
+  header <- image_blank(TOTAL_W, HEADER_H, color = BG)
+  col_w  <- PANEL_W / length(labels)
+  for (i in seq_along(labels)) {
+    x <- LEFT_W + as.integer((i - 1L) * col_w + col_w / 2L) - 28L
+    header <- image_annotate(header, labels[i],
+                             size = FS - 1, color = "black",
+                             font = "sans", weight = 700,
+                             gravity = "NorthWest",
+                             location = paste0("+", x, "+4"))
+  }
+  header
+}
+
+gap <- image_blank(TOTAL_W, GAP_H, color = BG)
+
+# ── Build composite for one compartment ───────────────────────────────────────
+build_composite <- function(tau_img, act_img, title_label) {
+  title_row <- image_blank(TOTAL_W, 28L, color = BG) |>
+    image_annotate(title_label,
+                   size = FS + 1, color = "black",
+                   font = "sans", weight = 700,
+                   gravity = "NorthWest",
+                   location = paste0("+", LEFT_W, "+4"))
+
+  row_tau  <- make_row(tau_img, "56 kDa", "Tau")
+  row_actin <- make_row(act_img, "42 kDa", "Actin")
+
+  comp <- image_append(
+    c(title_row, make_header(), row_tau, gap, row_actin),
+    stack = TRUE
+  )
+  image_border(comp, BG, "8x8")
+}
+
+soma_composite <- build_composite(tau_soma, act_soma, "Soma")
+axon_composite <- build_composite(tau_axon, act_axon, "Axon")
+
+# ── Save PNGs for external use ─────────────────────────────────────────────────
+image_write(soma_composite, "WB_soma_Sep2025.png", format = "png", density = 300)
+image_write(axon_composite, "WB_axon_Sep2025.png", format = "png", density = 300)
+```
+
+## Soma
+
+```{r show-soma, fig.align="center"}
+soma_composite
+```
+
+## Axon
+
+```{r show-axon, fig.align="center"}
+axon_composite
+```
+
+---
+
+# Quantification
+
+```{r quant-setup}
+# ── Load data ──────────────────────────────────────────────────────────────────
+lane_map  <- read_csv("ImagesTif/LaneMapping_ExperimentSep25.csv")
+actin_raw <- read_csv("ImagesTif/Sep03_DyLight800_actin.csv") |>
+  rename(Lane = 1, Actin = Area)
+tau_raw   <- read_csv("ImagesTif/Sep03_DyLight800_tau.csv") |>
+  rename(Lane = 1, Tau = Area)
+
+df <- lane_map |>
+  left_join(tau_raw,   by = "Lane") |>
+  left_join(actin_raw, by = "Lane") |>
+  mutate(
+    Tau_Actin   = Tau / Actin,
+    Condition   = factor(Condition,
+                         levels = c("Ctrl", "ProNGF 30min",
+                                    "ProNGF 45min", "ProNGF 60min")),
+    Compartment = factor(Compartment, levels = c("Soma", "Axon"))
+  )
+
+theme_wb <- function() {
+  theme_classic(base_size = 13) +
+    theme(
+      axis.text.x        = element_text(angle = 35, hjust = 1, size = 11),
+      plot.title         = element_text(face = "bold", size = 13),
+      plot.subtitle      = element_text(size = 10, color = "grey45"),
+      panel.grid.major.y = element_line(color = "grey90"),
+      legend.position    = "none"
+    )
+}
+
+pal <- c(Soma = "#4A90D9", Axon = "#E07B54")
+```
+
+## Tau / Actin Ratio
+
+Normalised tau signal (Tau ÷ Actin) for each condition. Soma and Axon are
+shown side-by-side for direct comparison.
+
+```{r plot-ratio, fig.width=8, fig.height=5}
+ggplot(df, aes(x = Condition, y = Tau_Actin, fill = Compartment)) +
+  geom_col(
+    position = position_dodge(width = 0.65),
+    width    = 0.6,
+    color    = "white"
+  ) +
+  scale_fill_manual(values = pal) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.12))) +
+  labs(
+    title    = "Tau / Actin ratio by condition and compartment",
+    subtitle = "Single replicate — no statistical comparison shown",
+    x        = NULL,
+    y        = "Tau / Actin (a.u.)",
+    fill     = "Compartment"
+  ) +
+  theme_wb() +
+  theme(legend.position = "right")
+```
+
+## Raw Quantification
+
+### Actin
+
+```{r plot-actin, fig.width=10, fig.height=4.5}
+y_max_actin <- max(df$Actin, na.rm = TRUE) * 1.15
+
+p_soma_actin <- df |>
+  filter(Compartment == "Soma") |>
+  ggplot(aes(x = Condition, y = Actin, fill = Compartment)) +
+  geom_col(width = 0.6, color = "white") +
+  scale_fill_manual(values = pal) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0)),
+                     limits = c(0, y_max_actin)) +
+  labs(title = "Soma — Actin", x = NULL, y = "Band intensity (a.u.)") +
+  theme_wb()
+
+p_axon_actin <- df |>
+  filter(Compartment == "Axon") |>
+  ggplot(aes(x = Condition, y = Actin, fill = Compartment)) +
+  geom_col(width = 0.6, color = "white") +
+  scale_fill_manual(values = pal) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0)),
+                     limits = c(0, y_max_actin)) +
+  labs(title = "Axon — Actin", x = NULL, y = "Band intensity (a.u.)") +
+  theme_wb()
+
+p_soma_actin + p_axon_actin +
+  plot_annotation(
+    title    = "Raw Actin signal",
+    subtitle = "Y-axes share the same scale for cross-compartment comparison"
+  )
+```
+
+### Tau
+
+```{r plot-tau, fig.width=10, fig.height=4.5}
+y_max_tau <- max(df$Tau, na.rm = TRUE) * 1.15
+
+p_soma_tau <- df |>
+  filter(Compartment == "Soma") |>
+  ggplot(aes(x = Condition, y = Tau, fill = Compartment)) +
+  geom_col(width = 0.6, color = "white") +
+  scale_fill_manual(values = pal) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0)),
+                     limits = c(0, y_max_tau)) +
+  labs(title = "Soma — Tau", x = NULL, y = "Band intensity (a.u.)") +
+  theme_wb()
+
+p_axon_tau <- df |>
+  filter(Compartment == "Axon") |>
+  ggplot(aes(x = Condition, y = Tau, fill = Compartment)) +
+  geom_col(width = 0.6, color = "white") +
+  scale_fill_manual(values = pal) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0)),
+                     limits = c(0, y_max_tau)) +
+  labs(title = "Axon — Tau", x = NULL, y = "Band intensity (a.u.)") +
+  theme_wb()
+
+p_soma_tau + p_axon_tau +
+  plot_annotation(
+    title    = "Raw Tau signal",
+    subtitle = "Y-axes share the same scale for cross-compartment comparison"
+  )
+```
+
+---
+
+## Data Table
+
+```{r data-table}
+df |>
+  select(Lane, Condition, Compartment, Tau, Actin, Tau_Actin) |>
+  mutate(across(where(is.numeric), \(x) round(x, 3))) |>
+  knitr::kable(
+    col.names = c("Lane", "Condition", "Compartment",
+                  "Tau (a.u.)", "Actin (a.u.)", "Tau/Actin"),
+    align = "llcrrr"
+  )
+```

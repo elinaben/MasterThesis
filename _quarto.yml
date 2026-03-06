@@ -1,0 +1,45 @@
+project:
+  type: book
+
+book:
+  title: "Regulation of MAPT (Tau) Translation in Basal Forebrain Axons"
+  author: "Elina Nemtsov"
+  date: today
+  output-file: "Elina_Thesis"
+  chapters:
+    - index.qmd
+    - 01-abstract.qmd
+    - 02-acknowledgements.qmd
+    - 03-abbreviations.qmd
+    - 10-introduction.qmd
+    - 30-results.qmd
+    - 20-methods.qmd
+    - 40-discussion.qmd
+    - 50-conclusion.qmd
+    - references.qmd
+
+bibliography: bib/references.bib
+link-citations: true
+
+format:
+  pdf:
+    pdf-engine: xelatex
+    toc: true
+    number-sections: true
+    keep-tex: true
+  docx:
+    toc: true
+  html:
+    toc: true
+
+execute:
+  echo: false
+  message: false
+  warning: false
+
+knitr:
+  opts_chunk:
+    fig.path: "figures/"
+    fig.align: "center"
+    out.width: "80%"
+    dpi: 300

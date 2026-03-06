@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rat MAPT/Tau Peptide Coverage Map</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: #0a0e17;
+    color: #e0e6f0;
+    padding: 24px;
+    min-height: 100vh;
+  }
+  h1 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #f0f4ff;
+    margin-bottom: 4px;
+  }
+  .subtitle {
+    font-size: 0.85rem;
+    color: #7a8ba8;
+    margin-bottom: 28px;
+  }
+  .section-title {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #c8d4e8;
+    margin: 28px 0 12px 0;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #1e2a3e;
+  }
+
+  /* Coverage bar */
+  .coverage-container { margin: 16px 0 8px 0; }
+  .coverage-label {
+    font-size: 0.8rem;
+    color: #7a8ba8;
+    margin-bottom: 6px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .bar-track {
+    position: relative;
+    height: 28px;
+    background: #151c2c;
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid #1e2a3e;
+  }
+  .bar-segment {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    opacity: 0.85;
+    transition: opacity 0.2s;
+    cursor: pointer;
+  }
+  .bar-segment:hover { opacity: 1; }
+  .bar-segment.axon { background: #3b82f6; }
+  .bar-segment.soma { background: #f59e0b; }
+  .bar-segment.both { background: #10b981; }
+
+  /* Tick marks */
+  .tick-container {
+    position: relative;
+    height: 18px;
+    margin-top: 2px;
+  }
+  .tick {
+    position: absolute;
+    font-size: 0.6rem;
+    color: #4a5a78;
+    transform: translateX(-50%);
+    top: 2px;
+  }
+  .tick::before {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: 50%;
+    width: 1px;
+    height: 4px;
+    background: #2a3a55;
+  }
+
+  /* Legend */
+  .legend {
+    display: flex;
+    gap: 20px;
+    margin: 12px 0 8px 0;
+    flex-wrap: wrap;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.78rem;
+    color: #9aabc4;
+  }
+  .legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+  }
+
+  /* Sequence display */
+  .sequence-wrap {
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 0.72rem;
+    line-height: 1.9;
+    letter-spacing: 0.5px;
+    background: #0d1220;
+    border: 1px solid #1e2a3e;
+    border-radius: 6px;
+    padding: 16px;
+    margin: 12px 0;
+    word-break: break-all;
+    overflow-x: auto;
+  }
+  .aa { display: inline; padding: 1px 0; }
+  .aa.axon-only { background: rgba(59,130,246,0.35); color: #93c5fd; }
+  .aa.soma-only { background: rgba(245,158,11,0.35); color: #fcd34d; }
+  .aa.both-comp { background: rgba(16,185,129,0.35); color: #6ee7b7; }
+  .aa.no-cover  { color: #3a4560; }
+  .aa.oxidized  { border-bottom: 2px solid #ef4444; }
+  .pos-marker {
+    display: inline;
+    color: #3a4a68;
+    font-size: 0.6rem;
+    vertical-align: super;
+    margin: 0 1px;
+  }
+
+  /* Peptide table */
+  .pep-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.78rem;
+    margin: 12px 0;
+  }
+  .pep-table th {
+    text-align: left;
+    color: #7a8ba8;
+    font-weight: 500;
+    padding: 8px 10px;
+    border-bottom: 1px solid #1e2a3e;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .pep-table td {
+    padding: 7px 10px;
+    border-bottom: 1px solid #111827;
+    vertical-align: middle;
+  }
+  .pep-table tr:hover td { background: #111827; }
+  .pep-mono { font-family: 'Consolas', monospace; letter-spacing: 0.5px; }
+  .tag {
+    display: inline-block;
+    padding: 1px 7px;
+    border-radius: 3px;
+    font-size: 0.68rem;
+    font-weight: 500;
+  }
+  .tag-axon { background: rgba(59,130,246,0.2); color: #60a5fa; }
+  .tag-soma { background: rgba(245,158,11,0.2); color: #fbbf24; }
+  .tag-both { background: rgba(16,185,129,0.2); color: #34d399; }
+
+  .mod-badge {
+    display: inline-block;
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-size: 0.65rem;
+    background: rgba(239,68,68,0.15);
+    color: #f87171;
+    margin: 1px 2px;
+  }
+
+  /* Domain annotations */
+  .domain-track {
+    position: relative;
+    height: 20px;
+    margin-top: 4px;
+  }
+  .domain-bar {
+    position: absolute;
+    height: 100%;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.6rem;
+    font-weight: 500;
+    color: rgba(255,255,255,0.8);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* Stats boxes */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+    margin: 16px 0;
+  }
+  .stat-box {
+    background: #111827;
+    border: 1px solid #1e2a3e;
+    border-radius: 6px;
+    padding: 14px;
+  }
+  .stat-value {
+    font-size: 1.4rem;
+    font-weight: 700;
+  }
+  .stat-label {
+    font-size: 0.72rem;
+    color: #6b7fa0;
+    margin-top: 2px;
+  }
+  .stat-axon .stat-value { color: #60a5fa; }
+  .stat-soma .stat-value { color: #fbbf24; }
+  .stat-both .stat-value { color: #34d399; }
+  .stat-neutral .stat-value { color: #e0e6f0; }
+
+  .note {
+    font-size: 0.75rem;
+    color: #5a6a88;
+    margin-top: 4px;
+    font-style: italic;
+  }
+</style>
+</head>
+<body>
+
+<h1>Rat MAPT/Tau — Peptide Coverage Map</h1>
+<p class="subtitle">Accession A0JN25 (343 aa) · iTRAQ 4-plex · Axon vs Soma compartments</p>
+
+<div class="stats-row">
+  <div class="stat-box stat-axon">
+    <div class="stat-value">8</div>
+    <div class="stat-label">Axon peptides</div>
+  </div>
+  <div class="stat-box stat-soma">
+    <div class="stat-value">9</div>
+    <div class="stat-label">Soma peptides</div>
+  </div>
+  <div class="stat-box stat-both">
+    <div class="stat-value">7</div>
+    <div class="stat-label">Shared peptides</div>
+  </div>
+  <div class="stat-box stat-neutral">
+    <div class="stat-value">46.4%</div>
+    <div class="stat-label">Combined coverage</div>
+  </div>
+</div>
+
+<!-- Coverage Bars -->
+<div class="section-title">Linear Coverage</div>
+
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:#3b82f6"></div>Axon only</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#f59e0b"></div>Soma only</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#10b981"></div>Both compartments</div>
+  <div class="legend-item"><div class="legend-dot" style="background:rgba(239,68,68,0.6)"></div>Oxidized Met</div>
+</div>
+
+<!-- Axon bar -->
+<div class="coverage-container">
+  <div class="coverage-label"><span>Axon</span><span>36.4% coverage</span></div>
+  <div class="bar-track" id="axon-bar"></div>
+</div>
+
+<!-- Soma bar -->
+<div class="coverage-container">
+  <div class="coverage-label"><span>Soma</span><span>46.4% coverage</span></div>
+  <div class="bar-track" id="soma-bar"></div>
+</div>
+
+<!-- Combined bar -->
+<div class="coverage-container">
+  <div class="coverage-label"><span>Combined</span><span style="color:#10b981">46.4% coverage</span></div>
+  <div class="bar-track" id="combined-bar"></div>
+  <div class="tick-container" id="ticks"></div>
+</div>
+
+<!-- Domain annotations -->
+<div class="coverage-container">
+  <div class="coverage-label"><span>Protein Domains</span></div>
+  <div class="domain-track" id="domains"></div>
+</div>
+
+<!-- Sequence -->
+<div class="section-title">Sequence Coverage</div>
+<p class="note">Colored residues = detected peptides. Red underline = oxidized methionine.</p>
+<div class="sequence-wrap" id="sequence"></div>
+
+<!-- Peptide Table -->
+<div class="section-title">Peptide Details</div>
+<table class="pep-table">
+  <thead>
+    <tr>
+      <th>Peptide</th>
+      <th>Position</th>
+      <th>Compartment</th>
+      <th>Spectra</th>
+      <th>Best XCorr</th>
+      <th>Modifications</th>
+    </tr>
+  </thead>
+  <tbody id="pep-tbody"></tbody>
+</table>
+
+<script>
+const PROTEIN_LEN = 343;
+const SEQUENCE = "MAEPRQEFDTMEDQAGDYTMLQDQEGDMDHGLKAEEAGIGDTPNMEDQAAGHVTQARVAGVSKDRTGNDEKKAKGADGKTGAKIATPRGAATPGQKGTSNATRIPAKTTPSPKTPPGSGEPPKSGERSGYSSPGSPGTPGSRSRTPSLPTPPTREPKKVAVVRTPPKSPSASKSRLQTAPVPMPDLKNVRSKIGSTENLKHQPGGGKVQIVYKPVDLSKVTSKCGSLGNIHHKPGGGQVEVKSEKLDFKDRVQSKIGSLDNITHVPGGGNKKIETHKLTFRENAKAKTDHGAEIVYKSPVVSGDTSPRHLSNVSSTGSIDMVDSPQLATLADEVSASLAKQGL";
+
+// Peptides: [sequence, start(1-indexed), end, compartment, spectra_count, best_xcorr, modifications]
+const peptides = [
+  ["QEFDTMEDQAGDYTMLQDQEGDMDHGLK", 5, 32, "soma", 4, 2.46, ["Ox:Met10", "Ox:Met19", "Ox:Met27"]],
+  ["AEEAGIGDTPNMEDQAAGHVTQAR", 33, 56, "both", 46, 7.27, ["Ox:Met44"]],
+  ["VAGVSK", 57, 62, "axon", 1, 2.42, []],
+  ["TPSLPTPPTR", 144, 153, "both", 24, 3.03, []],
+  ["TPSLPTPPTREPK", 144, 156, "soma", 2, 1.94, []],
+  ["LQTAPVPMPDLK", 175, 186, "both", 11, 3.61, ["Ox:Met182"]],
+  ["IGSTENLK", 192, 199, "both", 7, 2.80, []],
+  ["VQIVYKPVDLSK", 207, 218, "both", 17, 4.57, []],
+  ["IGSLDNITHVPGGGNK", 255, 270, "both", 11, 4.52, []],
+  ["SPVVSGDTSPR", 297, 307, "both", 5, 2.42, []]
+];
+
+// Oxidized positions (1-indexed)
+const oxidizedMet = [10, 19, 27, 44, 182];
+
+// Domains
+const domains = [
+  { start: 1, end: 120, label: "N-terminal", color: "rgba(99,102,241,0.4)" },
+  { start: 121, end: 190, label: "Proline-rich", color: "rgba(236,72,153,0.4)" },
+  { start: 191, end: 270, label: "MT-binding repeats", color: "rgba(34,197,94,0.4)" },
+  { start: 271, end: 343, label: "C-terminal", color: "rgba(168,85,247,0.4)" }
+];
+
+// Build coverage arrays
+const axonCov = new Uint8Array(PROTEIN_LEN);
+const somaCov = new Uint8Array(PROTEIN_LEN);
+
+peptides.forEach(p => {
+  const [, start, end, comp] = p;
+  for (let i = start - 1; i < end; i++) {
+    if (comp === "axon" || comp === "both") axonCov[i] = 1;
+    if (comp === "soma" || comp === "both") somaCov[i] = 1;
+  }
+});
+
+function pct(arr) { return (arr.reduce((a,b) => a+b, 0) / arr.length * 100).toFixed(1); }
+
+// Render coverage bars
+function renderBar(containerId, covArray, cls) {
+  const el = document.getElementById(containerId);
+  let inSegment = false, segStart = 0;
+  for (let i = 0; i <= PROTEIN_LEN; i++) {
+    const on = i < PROTEIN_LEN && covArray[i];
+    if (on && !inSegment) { segStart = i; inSegment = true; }
+    if (!on && inSegment) {
+      const div = document.createElement('div');
+      div.className = 'bar-segment ' + cls;
+      div.style.left = (segStart / PROTEIN_LEN * 100) + '%';
+      div.style.width = ((i - segStart) / PROTEIN_LEN * 100) + '%';
+      div.title = `aa ${segStart+1}–${i}`;
+      el.appendChild(div);
+      inSegment = false;
+    }
+  }
+}
+
+renderBar('axon-bar', axonCov, 'axon');
+renderBar('soma-bar', somaCov, 'soma');
+
+// Combined bar with color coding
+(function() {
+  const el = document.getElementById('combined-bar');
+  let prevState = -1, segStart = 0;
+  for (let i = 0; i <= PROTEIN_LEN; i++) {
+    let state = 0; // 0=none
+    if (i < PROTEIN_LEN) {
+      if (axonCov[i] && somaCov[i]) state = 3;      // both
+      else if (axonCov[i]) state = 1;                 // axon
+      else if (somaCov[i]) state = 2;                 // soma
+    }
+    if (state !== prevState) {
+      if (prevState > 0) {
+        const div = document.createElement('div');
+        div.className = 'bar-segment ' + (prevState===3?'both':prevState===1?'axon':'soma');
+        div.style.left = (segStart / PROTEIN_LEN * 100) + '%';
+        div.style.width = ((i - segStart) / PROTEIN_LEN * 100) + '%';
+        div.title = `aa ${segStart+1}–${i}`;
+        el.appendChild(div);
+      }
+      segStart = i;
+      prevState = state;
+    }
+  }
+})();
+
+// Ticks
+(function() {
+  const el = document.getElementById('ticks');
+  for (let pos = 1; pos <= PROTEIN_LEN; pos += 50) {
+    const t = document.createElement('span');
+    t.className = 'tick';
+    t.style.left = ((pos-1) / PROTEIN_LEN * 100) + '%';
+    t.textContent = pos;
+    el.appendChild(t);
+  }
+  const last = document.createElement('span');
+  last.className = 'tick';
+  last.style.left = '100%';
+  last.textContent = PROTEIN_LEN;
+  el.appendChild(last);
+})();
+
+// Domains
+(function() {
+  const el = document.getElementById('domains');
+  domains.forEach(d => {
+    const div = document.createElement('div');
+    div.className = 'domain-bar';
+    div.style.left = ((d.start-1) / PROTEIN_LEN * 100) + '%';
+    div.style.width = ((d.end - d.start + 1) / PROTEIN_LEN * 100) + '%';
+    div.style.background = d.color;
+    div.textContent = d.label;
+    el.appendChild(div);
+  });
+})();
+
+// Sequence
+(function() {
+  const el = document.getElementById('sequence');
+  let html = '';
+  for (let i = 0; i < SEQUENCE.length; i++) {
+    const pos1 = i + 1;
+    if ((i) % 10 === 0 && i > 0) {
+      html += `<span class="pos-marker">${pos1}</span>`;
+    }
+    const a = axonCov[i], s = somaCov[i];
+    let cls = 'no-cover';
+    if (a && s) cls = 'both-comp';
+    else if (a) cls = 'axon-only';
+    else if (s) cls = 'soma-only';
+
+    const isOx = SEQUENCE[i] === 'M' && oxidizedMet.includes(pos1);
+    if (isOx) cls += ' oxidized';
+
+    html += `<span class="aa ${cls}">${SEQUENCE[i]}</span>`;
+  }
+  el.innerHTML = html;
+})();
+
+// Peptide table
+(function() {
+  const tbody = document.getElementById('pep-tbody');
+  peptides.sort((a,b) => a[1] - b[1]);
+  peptides.forEach(p => {
+    const [seq, start, end, comp, spectra, xcorr, mods] = p;
+    const tr = document.createElement('tr');
+    const tagCls = comp === 'both' ? 'tag-both' : comp === 'axon' ? 'tag-axon' : 'tag-soma';
+    const tagLabel = comp === 'both' ? 'Both' : comp === 'axon' ? 'Axon only' : 'Soma only';
+    const modHtml = mods.length ? mods.map(m => `<span class="mod-badge">${m}</span>`).join('') : '<span style="color:#3a4a68">—</span>';
+    tr.innerHTML = `
+      <td class="pep-mono">${seq}</td>
+      <td>${start}–${end}</td>
+      <td><span class="tag ${tagCls}">${tagLabel}</span></td>
+      <td>${spectra}</td>
+      <td>${xcorr.toFixed(2)}</td>
+      <td>${modHtml}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+})();
+</script>
+</body>
+</html>

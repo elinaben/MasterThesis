@@ -1,0 +1,414 @@
+---
+title: "Western Blot Analysis - Experiment Jan 26"
+author: ""
+date: "`r Sys.Date()`"
+output:
+  pdf_document:
+    toc: true
+    toc_depth: 2
+    latex_engine: xelatex
+    number_sections: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE,
+                      fig.width = 8, fig.height = 4.5)
+library(tidyverse)
+
+COL_BLUE    <- "#4472C4"
+COL_GREY    <- "#A6A6A6"
+COL_WB1     <- "#4472C4"   # 1st WB = blue
+COL_WB2_SUM <- "#2E5FA3"   # 2nd WB sum tau = dark blue
+COL_WB2_PT  <- "#A6A6A6"   # 2nd WB pTau56 = grey
+```
+
+---
+
+# First Western Blot - Axon Compartment
+
+
+## Blot Images
+
+```{r wb1-blots, fig.show='hold', out.width='49%', fig.cap='Left: 680 nm panTau | Right: 800 nm Actin'}
+knitr::include_graphics(c("ImagesTif/wb1_680.png", "ImagesTif/wb1_800.png"))
+```
+
+**Channel 680 nm:** panTau | **Channel 800 nm:** Actin
+Note: Lane 1 (Ctrl) was excluded from axon analysis due to unreliable reading.
+
+```{r wb1-axon-load}
+# Conditions for axon lanes 2-6 (Ctrl/lane 1 removed)
+axon_conditions <- c("ProNGF 45min", "ProNGF 60min", "ProNGF 75min",
+                     "siAPP", "siAPP + proNGF")
+
+raw_680_ax <- read_csv("ImagesTif/Feb05_IRDye_680_panTau_quantification_only_axons.csv",
+                        show_col_types = FALSE) %>%
+  rename(lane = 1, area = Area) %>%
+  mutate(Condition = factor(axon_conditions, levels = axon_conditions),
+         Protein   = "panTau")
+
+raw_800_ax <- read_csv("ImagesTif/Feb05_IRDye_800_Ms_Act_quantification_only_axons.csv",
+                        show_col_types = FALSE) %>%
+  rename(lane = 1, area = Area) %>%
+  mutate(Condition = factor(axon_conditions, levels = axon_conditions),
+         Protein   = "Actin")
+
+# Soma data loaded here so it is available for the combined 4-panel plot below
+soma_conditions <- c("Ctrl", "ProNGF 45min", "ProNGF 60min",
+                     "ProNGF 75min", "siAPP", "siAPP + proNGF")
+
+raw_680_sm <- read_csv("ImagesTif/Feb05_IRDye_680_panTau_quantification_only_soma.csv",
+                        show_col_types = FALSE) %>%
+  rename(lane = 1, area = Area) %>%
+  mutate(Condition = factor(soma_conditions, levels = soma_conditions),
+         Protein   = "panTau")
+
+raw_800_sm <- read_csv("ImagesTif/Feb05_IRDye_800_Ms_Act_quantification_only_soma.csv",
+                        show_col_types = FALSE) %>%
+  rename(lane = 1, area = Area) %>%
+  mutate(Condition = factor(soma_conditions, levels = soma_conditions),
+         Protein   = "Actin")
+```
+
+## Raw Measurements - Axon and Soma
+
+```{r wb1-raw-all-4}
+raw_all <- bind_rows(
+  raw_680_ax %>% select(Condition, area) %>% mutate(Panel = "Axon | panTau (680 nm)"),
+  raw_800_ax %>% select(Condition, area) %>% mutate(Panel = "Axon | Actin (800 nm)"),
+  raw_680_sm %>% select(Condition, area) %>% mutate(Panel = "Soma | panTau (680 nm)"),
+  raw_800_sm %>% select(Condition, area) %>% mutate(Panel = "Soma | Actin (800 nm)")
+) %>%
+  mutate(
+    Condition = factor(as.character(Condition), levels = soma_conditions),
+    Panel     = factor(Panel, levels = c("Axon | panTau (680 nm)", "Axon | Actin (800 nm)",
+                                         "Soma | panTau (680 nm)", "Soma | Actin (800 nm)"))
+  )
+
+ggplot(raw_all, aes(x = Condition, y = area)) +
+  geom_col(fill = COL_BLUE, colour = "black", width = 0.65) +
+  facet_wrap(~ Panel, scales = "free_y", ncol = 2) +
+  labs(title = "1st WB - Raw Measurements (All 4 Panels)",
+       x = NULL, y = "Band Area (pixel units)") +
+  theme_classic(base_size = 11) +
+  theme(axis.text.x      = element_text(angle = 35, hjust = 1),
+        strip.background = element_rect(fill = "grey90"))
+```
+
+## panTau / Actin Ratio - Axon
+
+```{r wb1-axon-ratio}
+axon_ratio <- inner_join(
+  raw_680_ax %>% select(lane, Condition, tau = area),
+  raw_800_ax %>% select(lane, actin = area),
+  by = "lane"
+) %>% mutate(ratio = tau / actin)
+
+ggplot(axon_ratio, aes(x = Condition, y = ratio)) +
+  geom_col(fill = COL_BLUE, colour = "black", width = 0.65) +
+  labs(title = "1st WB Axon - panTau / Actin",
+       x = NULL, y = "panTau / Actin (ratio)") +
+  theme_classic(base_size = 12) +
+  theme(axis.text.x = element_text(angle = 35, hjust = 1))
+```
+
+---
+
+# First Western Blot - Soma Compartment
+
+**Channel 680 nm:** panTau | **Channel 800 nm:** Actin
+
+## panTau / Actin Ratio - Soma
+
+```{r wb1-soma-ratio}
+soma_ratio_wb1 <- inner_join(
+  raw_680_sm %>% select(lane, Condition, tau = area),
+  raw_800_sm %>% select(lane, actin = area),
+  by = "lane"
+) %>% mutate(ratio = tau / actin)
+
+ggplot(soma_ratio_wb1, aes(x = Condition, y = ratio)) +
+  geom_col(fill = COL_BLUE, colour = "black", width = 0.65) +
+  labs(title = "1st WB Soma - panTau / Actin",
+       x = NULL, y = "panTau / Actin (ratio)") +
+  theme_classic(base_size = 12) +
+  theme(axis.text.x = element_text(angle = 35, hjust = 1))
+```
+
+---
+
+# First Western Blot - Axon vs Soma Comparison
+
+Axon and Soma measurements side-by-side for both Tau and Actin.
+Note: Ctrl is soma-only (axon lane 1 excluded).
+
+```{r wb1-axon-soma-comparison}
+tau_compare <- bind_rows(
+  raw_680_ax %>% select(Condition, area) %>% mutate(Compartment = "Axon"),
+  raw_680_sm %>% select(Condition, area) %>% mutate(Compartment = "Soma")
+) %>% mutate(Protein = "panTau (680 nm)")
+
+actin_compare <- bind_rows(
+  raw_800_ax %>% select(Condition, area) %>% mutate(Compartment = "Axon"),
+  raw_800_sm %>% select(Condition, area) %>% mutate(Compartment = "Soma")
+) %>% mutate(Protein = "Actin (800 nm)")
+
+compare_df <- bind_rows(tau_compare, actin_compare) %>%
+  mutate(
+    Condition   = factor(as.character(Condition), levels = soma_conditions),
+    Compartment = factor(Compartment, levels = c("Axon", "Soma")),
+    Protein     = factor(Protein, levels = c("panTau (680 nm)", "Actin (800 nm)"))
+  )
+
+ggplot(compare_df, aes(x = Condition, y = area, fill = Compartment)) +
+  geom_col(position = position_dodge(width = 0.75), colour = "black", width = 0.65) +
+  scale_fill_manual(values = c(Axon = COL_BLUE, Soma = COL_GREY)) +
+  facet_wrap(~ Protein, scales = "free_y") +
+  labs(title = "1st WB - Axon vs Soma",
+       x = NULL, y = "Band Area (pixel units)", fill = NULL) +
+  theme_classic(base_size = 12) +
+  theme(axis.text.x      = element_text(angle = 35, hjust = 1),
+        strip.background = element_rect(fill = "grey90"),
+        legend.position  = "top")
+```
+
+---
+
+# Second Western Blot - Soma Only
+
+
+## Blot Images
+
+```{r wb2-blots, fig.show='hold', out.width='49%', fig.cap='Left: 680 nm pTau65+pTau56 | Right: 800 nm pTau56+Actin'}
+knitr::include_graphics(c("ImagesTif/wb2_680.png", "ImagesTif/wb2_800.png"))
+```
+
+**Channel 680 nm:** pTau65 (band 1) + pTau56 (band 2) | **Channel 800 nm:** pTau56 (band 1) + Actin (band 2)
+
+```{r wb2-load}
+lane_map_2 <- read_csv("ImagesTif/LaneMapping_ExperimentJan26_2ndWB.csv",
+                        show_col_types = FALSE) %>%
+  mutate(Lane      = as.integer(Lane),
+         Condition = factor(Condition, levels = unique(Condition)))
+
+condition_levels_2 <- levels(lane_map_2$Condition)
+
+band_map_2     <- read_csv("ImagesTif/BandMapping_ExperimentJan26_2ndWB.csv",
+                            show_col_types = FALSE)
+band_map_680_2 <- band_map_2 %>% filter(Channel == 680)
+band_map_800_2 <- band_map_2 %>% filter(Channel == 800)
+
+data_680_2 <- read_csv(
+  "ImagesTif/Feb26_IRDye_680RD_Ms_panTau_actin_quantification.csv",
+  show_col_types = FALSE) %>%
+  rename(area = Area) %>%
+  left_join(band_map_680_2, by = c("band" = "Band")) %>%
+  left_join(lane_map_2,    by = c("lane" = "Lane")) %>%
+  mutate(Condition = factor(Condition, levels = condition_levels_2))
+
+data_800_2 <- read_csv(
+  "ImagesTif/Feb26_IRDye_800_Rb_pTau_p622_p202_quantification.csv",
+  show_col_types = FALSE) %>%
+  rename(area = Area) %>%
+  left_join(band_map_800_2, by = c("band" = "Band")) %>%
+  left_join(lane_map_2,    by = c("lane" = "Lane")) %>%
+  mutate(Condition = factor(Condition, levels = condition_levels_2))
+
+# pTau56 / Actin from 800 nm
+wide_800_2 <- data_800_2 %>%
+  select(lane, Condition, Protein, area) %>%
+  pivot_wider(names_from = Protein, values_from = area) %>%
+  mutate(Tau_Actin = pTau56 / Actin)
+
+# Sum of tau bands (680 nm) / Actin (800 nm)
+tau_sum_2 <- data_680_2 %>%
+  group_by(lane, Condition) %>%
+  summarise(tau_total = sum(area, na.rm = TRUE), .groups = "drop")
+
+actin_800_2 <- data_800_2 %>%
+  filter(Protein == "Actin") %>%
+  select(lane, actin = area)
+
+ratio_sum_2 <- tau_sum_2 %>%
+  left_join(actin_800_2, by = "lane") %>%
+  mutate(ratio = tau_total / actin,
+         Condition = factor(Condition, levels = condition_levels_2))
+```
+
+## Raw Band Measurements (2nd WB)
+
+```{r wb2-raw}
+combined_2 <- bind_rows(
+  data_680_2 %>% mutate(Channel = "680 nm"),
+  data_800_2 %>% mutate(Channel = "800 nm")
+)
+
+ggplot(combined_2, aes(x = Condition, y = area)) +
+  geom_col(fill = COL_BLUE, colour = "black", width = 0.65) +
+  facet_wrap(~ paste0(Channel, " | ", Protein), scales = "free_y", ncol = 2) +
+  labs(title = "2nd WB Soma - Raw Band Measurements",
+       x = NULL, y = "Band Area (pixel units)") +
+  theme_classic(base_size = 11) +
+  theme(axis.text.x      = element_text(angle = 35, hjust = 1),
+        strip.background = element_rect(fill = "grey90"))
+```
+
+## pTau56 / Actin (800 nm)
+
+```{r wb2-ratio-800}
+ggplot(wide_800_2, aes(x = Condition, y = Tau_Actin)) +
+  geom_col(fill = COL_BLUE, colour = "black", width = 0.65) +
+  labs(title = "2nd WB Soma - pTau56 / Actin (800 nm)",
+       x = NULL, y = "pTau56 / Actin (ratio)") +
+  theme_classic(base_size = 12) +
+  theme(axis.text.x = element_text(angle = 35, hjust = 1))
+```
+
+## Total Tau (680 nm) / Actin (800 nm)
+
+```{r wb2-ratio-sum}
+ggplot(ratio_sum_2, aes(x = Condition, y = ratio)) +
+  geom_col(fill = COL_BLUE, colour = "black", width = 0.65) +
+  labs(title = "2nd WB Soma - Total Tau (680 nm) / Actin (800 nm)",
+       subtitle = "(pTau65 + pTau56) / Actin",
+       x = NULL, y = "Total Tau / Actin (ratio)") +
+  theme_classic(base_size = 12) +
+  theme(axis.text.x = element_text(angle = 35, hjust = 1))
+```
+
+## Both Tau/Actin Ratios Side-by-Side (2nd WB)
+
+```{r wb2-combined}
+wb2_combined <- bind_rows(
+  ratio_sum_2  %>% select(Condition, ratio) %>% mutate(Measure = "Total Tau 680nm / Actin"),
+  wide_800_2   %>% select(Condition, ratio = Tau_Actin) %>% mutate(Measure = "pTau56 800nm / Actin")
+) %>% mutate(
+  Condition = factor(Condition, levels = condition_levels_2),
+  Measure   = factor(Measure, levels = c("Total Tau 680nm / Actin", "pTau56 800nm / Actin"))
+)
+
+ggplot(wb2_combined, aes(x = Condition, y = ratio, fill = Measure)) +
+  geom_col(position = position_dodge(width = 0.75), colour = "black", width = 0.65) +
+  scale_fill_manual(values = c("Total Tau 680nm / Actin" = COL_BLUE,
+                               "pTau56 800nm / Actin"    = COL_GREY)) +
+  labs(title = "2nd WB Soma - Tau/Actin: 680nm vs 800nm",
+       x = NULL, y = "Ratio (au)", fill = NULL) +
+  theme_classic(base_size = 12) +
+  theme(axis.text.x    = element_text(angle = 35, hjust = 1),
+        legend.position = "top")
+```
+
+---
+
+# Cross-Experiment Comparison - Soma Only
+
+Comparing 1st WB (panTau/Actin) vs 2nd WB (Total Tau/Actin and pTau56/Actin)
+for all conditions present in both experiments.
+
+## Actin Signal Comparison
+
+```{r cross-actin}
+actin_wb1 <- raw_800_sm %>%
+  select(Condition, area) %>%
+  mutate(WB = "1st WB - panTau blot")
+
+actin_wb2 <- actin_800_2 %>%
+  left_join(lane_map_2, by = c("lane" = "Lane")) %>%
+  select(Condition, area = actin) %>%
+  mutate(WB = "2nd WB - pTau blot",
+         Condition = factor(Condition, levels = soma_conditions))
+
+actin_both <- bind_rows(actin_wb1, actin_wb2) %>%
+  mutate(Condition = factor(as.character(Condition), levels = soma_conditions),
+         WB = factor(WB, levels = c("1st WB - panTau blot", "2nd WB - pTau blot")))
+
+ggplot(actin_both, aes(x = Condition, y = area, fill = WB)) +
+  geom_col(position = position_dodge(width = 0.75), colour = "black", width = 0.65) +
+  scale_fill_manual(values = c("1st WB - panTau blot" = COL_WB1,
+                               "2nd WB - pTau blot"   = COL_GREY)) +
+  labs(title = "Soma Actin Signal - 1st vs 2nd WB",
+       x = NULL, y = "Band Area (pixel units)", fill = NULL) +
+  theme_classic(base_size = 12) +
+  theme(axis.text.x    = element_text(angle = 35, hjust = 1),
+        legend.position = "top")
+```
+
+## Tau Signal Comparison
+
+```{r cross-tau}
+tau_wb1 <- raw_680_sm %>%
+  select(Condition, area) %>%
+  mutate(WB = "1st WB - panTau (680nm)")
+
+tau_wb2_sum <- tau_sum_2 %>%
+  select(Condition, area = tau_total) %>%
+  mutate(WB = "2nd WB - Total Tau (680nm)",
+         Condition = factor(as.character(Condition), levels = soma_conditions))
+
+tau_wb2_pt <- wide_800_2 %>%
+  select(Condition, area = pTau56) %>%
+  mutate(WB = "2nd WB - pTau56 (800nm)",
+         Condition = factor(as.character(Condition), levels = soma_conditions))
+
+tau_both <- bind_rows(tau_wb1, tau_wb2_sum, tau_wb2_pt) %>%
+  mutate(Condition = factor(as.character(Condition), levels = soma_conditions),
+         WB = factor(WB, levels = c("1st WB - panTau (680nm)",
+                                    "2nd WB - Total Tau (680nm)",
+                                    "2nd WB - pTau56 (800nm)")))
+
+ggplot(tau_both, aes(x = Condition, y = area, fill = WB)) +
+  geom_col(position = position_dodge(width = 0.8), colour = "black", width = 0.65) +
+  scale_fill_manual(values = c("1st WB - panTau (680nm)"    = "#7EB3E8",
+                               "2nd WB - Total Tau (680nm)" = COL_BLUE,
+                               "2nd WB - pTau56 (800nm)"    = COL_GREY)) +
+  labs(title = "Soma Tau Signal - 1st vs 2nd WB",
+       x = NULL, y = "Band Area (pixel units)", fill = NULL) +
+  theme_classic(base_size = 12) +
+  theme(axis.text.x    = element_text(angle = 35, hjust = 1),
+        legend.position = "top",
+        legend.text     = element_text(size = 9))
+```
+
+## Tau / Actin Ratio Comparison
+
+```{r cross-ratio}
+ratio_wb1 <- soma_ratio_wb1 %>%
+  select(Condition, ratio) %>%
+  mutate(WB = "1st WB - panTau/Actin")
+
+ratio_wb2_sum <- ratio_sum_2 %>%
+  select(Condition, ratio) %>%
+  mutate(WB = "2nd WB - Total Tau/Actin (680nm)",
+         Condition = factor(as.character(Condition), levels = soma_conditions))
+
+ratio_wb2_pt <- wide_800_2 %>%
+  select(Condition, ratio = Tau_Actin) %>%
+  mutate(WB = "2nd WB - pTau56/Actin (800nm)",
+         Condition = factor(as.character(Condition), levels = soma_conditions))
+
+ratio_both <- bind_rows(ratio_wb1, ratio_wb2_sum, ratio_wb2_pt) %>%
+  mutate(Condition = factor(as.character(Condition), levels = soma_conditions),
+         WB = factor(WB, levels = c("1st WB - panTau/Actin",
+                                    "2nd WB - Total Tau/Actin (680nm)",
+                                    "2nd WB - pTau56/Actin (800nm)")))
+
+ggplot(ratio_both, aes(x = Condition, y = ratio, fill = WB)) +
+  geom_col(position = position_dodge(width = 0.8), colour = "black", width = 0.65) +
+  scale_fill_manual(values = c("1st WB - panTau/Actin"           = "#7EB3E8",
+                               "2nd WB - Total Tau/Actin (680nm)" = COL_BLUE,
+                               "2nd WB - pTau56/Actin (800nm)"    = COL_GREY)) +
+  labs(title = "Soma Tau/Actin Ratio - 1st vs 2nd WB",
+       x = NULL, y = "Tau / Actin (ratio)", fill = NULL) +
+  theme_classic(base_size = 12) +
+  theme(axis.text.x    = element_text(angle = 35, hjust = 1),
+        legend.position = "top",
+        legend.text     = element_text(size = 9))
+```
+
+---
+
+# Session Info
+
+```{r session-info}
+sessionInfo()
+```
