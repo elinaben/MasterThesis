@@ -1,0 +1,7 @@
+﻿Lane,Condition,Compartment
+1,Ctrl,Soma
+2,ProNGF 45min,Soma
+3,ProNGF 60min,Soma
+4,ProNGF 75min,Soma
+5,siAPP,Soma
+6,siAPP + proNGF,Soma

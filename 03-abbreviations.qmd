@@ -1,0 +1,4 @@
+# List of Abbreviations {-}
+
+- LC — Locus Coeruleus
+- p75NTR — p75 Neurotrophin Receptor

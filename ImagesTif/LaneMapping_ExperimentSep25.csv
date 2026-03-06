@@ -1,0 +1,9 @@
+﻿Lane,Condition,Compartment
+1,Ctrl,Soma
+2,ProNGF 30min,Soma
+3,ProNGF 45min,Soma
+4,ProNGF 60min,Soma
+5,Ctrl,Axon
+6,ProNGF 30min,Axon
+7,ProNGF 45min,Axon
+8,ProNGF 60min,Axon
