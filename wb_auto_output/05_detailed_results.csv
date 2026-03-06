@@ -1,3 +1,0 @@
-"band_id","lane_id","cell_label","x_left","x_right","y_top","y_bottom","area_px","raw_integrated_intensity","raw_mean_intensity","bg_median","corrected_integrated_intensity","corrected_mean_intensity","max_pixel_intensity"
-1,1,"B1L1",399,1126,270,898,457912,393707.7922,0.859789,0.890196,15028.7333,0.03282,1
-1,2,"B1L2",1128,1253,270,898,79254,73913.4588,0.932615,0.937255,1547.0118,0.01952,1

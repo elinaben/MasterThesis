@@ -62,39 +62,6 @@
 % Set default figure placement to htbp
 \def\fps@figure{htbp}
 \makeatother
-% definitions for citeproc citations
-\NewDocumentCommand\citeproctext{}{}
-\NewDocumentCommand\citeproc{mm}{%
-  \begingroup\def\citeproctext{#2}\cite{#1}\endgroup}
-\makeatletter
- % allow citations to break across lines
- \let\@cite@ofmt\@firstofone
- % avoid brackets around text for \cite:
- \def\@biblabel#1{}
- \def\@cite#1#2{{#1\if@tempswa , #2\fi}}
-\makeatother
-\newlength{\cslhangindent}
-\setlength{\cslhangindent}{1.5em}
-\newlength{\csllabelwidth}
-\setlength{\csllabelwidth}{3em}
-\newenvironment{CSLReferences}[2] % #1 hanging-indent, #2 entry-spacing
- {\begin{list}{}{%
-  \setlength{\itemindent}{0pt}
-  \setlength{\leftmargin}{0pt}
-  \setlength{\parsep}{0pt}
-  % turn on hanging indent if param 1 is 1
-  \ifodd #1
-   \setlength{\leftmargin}{\cslhangindent}
-   \setlength{\itemindent}{-1\cslhangindent}
-  \fi
-  % set entry spacing
-  \setlength{\itemsep}{#2\baselineskip}}}
- {\end{list}}
-\usepackage{calc}
-\newcommand{\CSLBlock}[1]{\hfill\break\parbox[t]{\linewidth}{\strut\ignorespaces#1\strut}}
-\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{\strut#1\strut}}
-\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{\strut#1\strut}}
-\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
 \setlength{\emergencystretch}{3em} % prevent overfull lines
 \providecommand{\tightlist}{%
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
@@ -109,7 +76,7 @@
 
 \title{Tau levels in axonal and soma compartments in BFCN after pro-neurotrophin treatment}
 \author{Elina Nemtsov}
-\date{February 2026}
+\date{March 2026}
 
 \begin{document}
 \maketitle
@@ -118,9 +85,6 @@
 \setcounter{tocdepth}{2}
 \tableofcontents
 }
-source(``R/functions.R'')
-```
-
 \section*{Abstract}\label{abstract}
 \addcontentsline{toc}{section}{Abstract}
 
@@ -144,121 +108,55 @@ Your acknowledgements here.
 
 \section{Background}\label{background}
 
-Traumatic brain injury (TBI) is traditionally viewed as a focal insult, in which neurons at the site of impact undergo acute necrotic or apoptotic cell death. However, it is now well established that the consequences of brain injury extend far beyond the cortical neurons directly affected by the initial trauma. Injury to the cortex induces profound and long-lasting changes in the local extracellular environment, including inflammation, altered neurotrophin availability, and disruption of synaptic homeostasis. These changes can propagate retrogradely to afferent neuronal populations that project to the injured region, leading to delayed and secondary degeneration that unfolds over days to weeks after the initial injury.
-
-A growing body of work from our laboratory and others has demonstrated that long-projecting neuromodulatory systems are particularly vulnerable to these secondary effects of cortical injury. Basal forebrain cholinergic neurons (BFCNs), which send extensive axonal projections to the cerebral cortex, undergo retrograde degeneration following cortical TBI despite the absence of direct mechanical damage to their cell bodies (\citeproc{ref-Counts2011}{Counts and Mufson 2011}; \citeproc{ref-dasguptaProNGFElicitsRetrograde2024}{Dasgupta et al. 2024}). Importantly, this degeneration is mediated by signaling events initiated at the distal axon terminals within the injured cortex, rather than by intrinsic somatic damage (\citeproc{ref-dasguptaProNGFElicitsRetrograde2024}{Dasgupta et al. 2024}). These findings shift the conceptual framework of TBI from a purely local injury to a circuit-level pathology involving long-range axonal communication.
-
-This thesis builds on this framework by focusing on the molecular mechanisms that link cortical injury to retrograde axonal degeneration in BFCNs. In particular, it examines the role of the p75 neurotrophin receptor (p75NTR), a receptor that is persistently expressed in adult BFCNs (\citeproc{ref-Yaar1997}{Yaar et al. 1997}) and is strongly implicated in injury-induced and stress-induced degeneration (\citeproc{ref-Ibanez1992}{Ibáñez 1992}). While p75NTR signaling has been extensively studied in the context of neurodegenerative disease, increasing evidence indicates that it plays a critical role in secondary degeneration after TBI. Moreover, TBI is now recognized as a major risk factor for the later development of neurodegenerative diseases, suggesting that shared molecular pathways may underlie both injury-induced and disease-associated neuronal loss.
-
-Within this context, Tau (microtubule-associated protein Tau, MAPT) emerges as a compelling candidate mediator of p75NTR-dependent axonal degeneration. Tau has classically been studied in neurodegenerative disease, particularly Alzheimer's disease (\citeproc{ref-Lei2016}{Lei et al. 2016}), but its functions in axonal signaling, transport, and injury responses are increasingly appreciated. This introduction therefore emphasizes traumatic brain injury as the initiating event, with neurodegenerative disease discussed as a related and downstream consequence, and frames Tau as a potential signaling effector linking p75NTR activation to axonal fragmentation in BFCNs.
+Placeholder
 
 \subsection{Traumatic Brain Injury and Secondary Retrograde Neurodegeneration}\label{traumatic-brain-injury-and-secondary-retrograde-neurodegeneration}
 
-Traumatic brain injury results in immediate damage at the site of impact, characterized by mechanical disruption of neurons, glia, and vasculature. In addition to this primary injury, a secondary phase ensues in which biochemical and molecular changes propagate through connected neural circuits. These secondary processes include neuroinflammation, excitotoxicity, oxidative stress, and alterations in trophic support. Importantly, neurons that project to the injured cortex experience a sudden loss or imbalance of target-derived signals, exposing their distal axons to a hostile environment despite the physical separation of their somata from the injury site.
-
-Experimental models of cortical injury have demonstrated that afferent neuronal populations undergo delayed degeneration as a result of these secondary changes. This retrograde degeneration is not a passive consequence of axotomy but rather a regulated process involving receptor-mediated signaling at the axon terminal, retrograde transport of injury signals, and activation of stress-responsive pathways (\citeproc{ref-dasguptaProNGFElicitsRetrograde2024}{Dasgupta et al. 2024}). Such mechanisms are particularly relevant for neuromodulatory neurons with long, highly branched axons, including BFCNs.
-
 \subsection{Neurotrophin Signaling and p75NTR in Injury-Induced Degeneration}\label{neurotrophin-signaling-and-p75ntr-in-injury-induced-degeneration}
-
-Neurotrophins are key regulators of neuronal survival and maintenance, and their signaling balance is profoundly disrupted after brain injury (\citeproc{ref-Dechant2002}{Dechant and Barde 2002}; \citeproc{ref-Kaplan2013}{Kaplan and Miller, n.d.}). All neurotrophins are synthesized as precursor proneurotrophins, which can be cleaved to generate mature ligands with distinct biological functions. After TBI, there is a well-documented shift in the injured cortex toward increased levels of proneurotrophins, including proNGF and proBDNF, relative to their mature counterparts (\citeproc{ref-Counts2011}{Counts and Mufson 2011}).
-
-Proneurotrophins bind with high affinity to p75NTR, particularly in complexes containing sortilin, and preferentially activate degenerative signaling pathways (\citeproc{ref-Teng2005}{Helen K. Teng et al. 2005}; \citeproc{ref-tengProBDNFInducesNeuronal2005}{Henry K. Teng et al. 2005}). Activation of p75NTR initiates intracellular cascades involving adaptor proteins and stress kinases, most notably c-Jun N-terminal kinase (JNK) (\citeproc{ref-Ibanez1992}{Ibáñez 1992}; \citeproc{ref-Dechant2002}{Dechant and Barde 2002}). p75NTR--JNK signaling has been implicated in both apoptotic cell death and axonal degeneration, and critically, this signaling can be initiated locally at axon terminals and transmitted retrogradely to the soma (\citeproc{ref-dasguptaProNGFElicitsRetrograde2024}{Dasgupta et al. 2024}).
-
-p75NTR has been shown to contribute to secondary degeneration in the penumbra following cortical TBI, and genetic or pharmacological disruption of p75NTR signaling confers protection to projecting neurons (\citeproc{ref-dasguptaProNGFElicitsRetrograde2024}{Dasgupta et al. 2024}). These findings position p75NTR as a central mediator linking cortical injury to retrograde neuronal degeneration.
 
 \subsection{Basal Forebrain Cholinergic Neurons as a Model of Retrograde Vulnerability}\label{basal-forebrain-cholinergic-neurons-as-a-model-of-retrograde-vulnerability}
 
-Basal forebrain cholinergic neurons provide widespread cholinergic innervation to the cortex and hippocampus and are essential for cognitive functions such as attention, learning, and memory. A defining feature of BFCNs is their continued expression of p75NTR throughout adulthood, distinguishing them from many other central neurons (\citeproc{ref-Yaar1997}{Yaar et al. 1997}).
+\subsection{Tau background and roles}\label{tau-background-and-roles}
 
-Following cortical injury, BFCNs exhibit axonal degeneration and loss that is ipsilateral to the site of injury, despite the absence of direct trauma to the basal forebrain (\citeproc{ref-Counts2011}{Counts and Mufson 2011}; \citeproc{ref-dasguptaProNGFElicitsRetrograde2024}{Dasgupta et al. 2024}). In vitro compartmentalized culture systems have demonstrated that activation of p75NTR specifically at BFCN axon terminals is sufficient to induce axonal fragmentation and retrograde cell death (\citeproc{ref-dasguptaProNGFElicitsRetrograde2024}{Dasgupta et al. 2024}). Notably, axonal degeneration often precedes somatic apoptosis, indicating that axons are an early and primary target of injury-induced signaling.
+\subsubsection{Core roles of Tau (physiology)}\label{core-roles-of-tau-physiology}
 
-These properties make BFCNs an ideal model system for dissecting the molecular mechanisms of retrograde degeneration initiated by cortical injury.
+\subsubsection{When Tau becomes pathological}\label{when-tau-becomes-pathological}
 
-\subsection{Tau (MAPT) as an Axonal Effector of Degenerative Signaling}\label{tau-mapt-as-an-axonal-effector-of-degenerative-signaling}
+\subsubsection{Post-translational modifications and why phosphorylation matters}\label{post-translational-modifications-and-why-phosphorylation-matters}
 
-Tau is a microtubule-associated protein highly enriched in axons, where it regulates microtubule stability and axonal transport (\citeproc{ref-Morris2011}{Morris et al. 2011}). Under physiological conditions, Tau supports axonal integrity; however, its function is dynamically regulated by post-translational modifications, particularly phosphorylation.
+\subsubsection{Antibodies used in this study (tau phosphorylation readouts)}\label{antibodies-used-in-this-study-tau-phosphorylation-readouts}
 
-In pathological contexts, Tau becomes hyperphosphorylated, dissociates from microtubules, and disrupts axonal transport (\citeproc{ref-Lei2016}{Lei et al. 2016}; \citeproc{ref-Morfini2009}{Morfini et al. 2009}). Although Tau aggregation is a defining feature of several neurodegenerative diseases, increasing evidence indicates that soluble and modified Tau species play critical roles in axonal dysfunction independent of aggregation (\citeproc{ref-Morris2011}{Morris et al. 2011}).
+\subsection{proNGF--p75NTR signaling and tau phosphorylation}\label{prongfp75ntr-signaling-and-tau-phosphorylation}
 
-Importantly, several kinases activated downstream of p75NTR signaling, including JNK, directly phosphorylate Tau at sites associated with axonal degeneration (\citeproc{ref-Lei2016}{Lei et al. 2016}). Tau also interacts with motor proteins and components of the retrograde transport machinery, positioning it as a potential scaffold that integrates signaling and transport processes within the axon (\citeproc{ref-Morfini2009}{Morfini et al. 2009}).
-
-\subsection{Linking p75NTR Signaling, Tau, and Axonal Fragmentation After TBI}\label{linking-p75ntr-signaling-tau-and-axonal-fragmentation-after-tbi}
-
-Recent work from our laboratory has demonstrated that proneurotrophin stimulation of BFCN axons induces local axonal protein synthesis, retrograde transport of degenerative signals, and axonal fragmentation through p75NTR-dependent mechanisms (\citeproc{ref-dasguptaProNGFElicitsRetrograde2024}{Dasgupta et al. 2024}; \citeproc{ref-cagnettaRapidCueSpecificRemodeling2018}{Cagnetta et al. 2018}). These findings identify axons as active sites of signal integration rather than passive conduits.
-
-Within this framework, Tau is well positioned to act as a downstream effector of p75NTR signaling. By modulating microtubule stability, axonal transport, and cytoskeletal organization, Tau may translate p75NTR--JNK signaling into the structural breakdown of axons observed after cortical injury. This raises the possibility that Tau is not merely a marker of degeneration but an active participant in injury-induced axonal fragmentation.
+\subsubsection{Linking p75NTR Signaling, Tau, and Axonal Fragmentation After TBI}\label{linking-p75ntr-signaling-tau-and-axonal-fragmentation-after-tbi}
 
 \subsection{Scope and Aims of Thesis}\label{scope-and-aims-of-thesis}
 
-The overarching goal of this thesis is to define the role of Tau in p75NTR-mediated degeneration and axonal fragmentation of basal forebrain cholinergic neurons following cortical injury. Specifically, this work aims to:
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  Characterize p75NTR-dependent retrograde degenerative signaling in BFCNs after axonal proNGF treatment
-  1.1 Is Tau synthesis increase upstream or downstream of APP?
-\item
-  Characterize levels of total Tau and phosphorylated Tau after proNGF treatment\\
-\item
-  Test whether Tau is required for p75NTR-induced axonal degeneration and fragmentation.
-\end{enumerate}
-
-By integrating neurotrophin signaling biology with Tau-centered mechanisms of cytoskeletal regulation, this study seeks to provide a unified framework for understanding early degenerative events in vulnerable cholinergic circuits.
-
 \section{Results}\label{results}
+
+Placeholder
 
 \subsection{Total Tau increase in response to ProNGF treatment}\label{total-tau-increase-in-response-to-prongf-treatment}
 
-The images show total Tau in response to proNGF treatment.
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=3.5in]{figs/ColoredLabeledWB_Feb12.png}
-\caption{Western blot analysis of Tau and actin expression. Composite image.}
-\label{fig:labeled-wb}
-\end{figure}
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=3.5in]{figs/ELINA_2026-02-12_12h52m48s_Composite_.jpg}
-\caption{Representative composite image showing actin (blue) and Tau (green).}
-\label{fig:actin-tau-composite}
-\end{figure}
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=3.5in]{figs/ELINA_2026-02-05_12h18m48s_IRDye_800CW_.jpg}
-\caption{Green channel image showing actin (mouse) and phospho-Tau (rabbit; pSer202/pThr205).}
-\label{fig:actin-ptau-800}
-\end{figure}
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=3.5in]{figs/ELINA_2026-02-06_13h04m41s_IRDye_680RD_.jpg}
-\caption{Red channel image showing total Tau (pan-Tau ; Rb-237).}
-\label{fig:tau-680}
-\end{figure}
-
-Only somas WB - same Experiment
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=3.5in]{figs/ELINA_2026-02-11_13h52m00s_IRDye_680RD_.jpg}
-\caption{Red channel image showing phospho-Tau at Ser622 (pSer622).}
-\label{fig:ptau-ser622-680}
-\end{figure}
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=3.5in]{figs/ELINA_2026-02-13_10h47m12s_Composite_.jpg}
-\caption{Red channel image showing phospho-Tau at Ser622 (pSer622), Green channel shows panTau (Red - Rb, Green - Ms)}
-\label{fig:ptau-composite}
-\end{figure}
+\subsubsection{Only somas repeated WB on same samples as above}\label{only-somas-repeated-wb-on-same-samples-as-above}
 
 \section{Materials and Methods}\label{materials-and-methods}
 
 \subsection{Experimental Design}\label{experimental-design}
+
+\subsubsection{Neuronal cultures}\label{neuronal-cultures}
+
+Wild-type pregnant rats were euthanized by exposure to CO2 and soaked in 70\% ethanol for 5 min for sterilization.
+Embryonic day 16 (E16) rat fetuses were removed under sterile conditions and kept in phosphate-buffered saline (PBS) on ice. Basal forebrains were dissected and dissociated in serum-free medium (SFM) composed of a 1:1 mixture of Eagle's MEM and Ham's F-12 supplemented with insulin (2.5μg/ml), glucose (6 mg/ml), transferrin (100 μg/ml), putrescine (60 μm), progesterone (20 nm), selenium (30 nm), penicillin (0.5 U/ml), and streptomycin (0.5 μg/ml). The cells were then plated in microfluidic chambers (50) attached to glass coverslips in tissue culture dishes that were precoated overnight with poly-d-lysine (0.2 mg/ml). Two hundred microliters of medium was added to the soma compartment, and 100 μl of medium was maintained in the axon compartments to maintain a
+medium volume difference that facilitated the growth of the axons
+of the neurons through the microgrooves toward the axon compartment. The cells were maintained with the volume difference
+between the soma and axon compartments in SFM supplemented
+with 1\% B-27 for 5 days at 37°C to obtain compartmentalized
+BFCN cultures that could be treated separately at the axons or
+somas. For biochemical experiments, BFCNs were plated on the
+top compartment of filter inserts with a pore size of 1 μm, allowing neurites to grow through the filter to the bottom compartment,
+providing an axon-enriched compartment for axon- or soma-specific
+stimulation (51).
 
 \subsection{Statistical Analysis}\label{statistical-analysis}
 
@@ -272,45 +170,5 @@ Conclusion text.
 
 \section*{References}\label{references}
 \addcontentsline{toc}{section}{References}
-
-\phantomsection\label{refs}
-\begin{CSLReferences}{1}{0}
-\bibitem[\citeproctext]{ref-cagnettaRapidCueSpecificRemodeling2018}
-Cagnetta, Roberta, Christian K. Frese, Toshiaki Shigeoka, Jeroen Krijgsveld, and Christine E. Holt. 2018. {``Rapid {Cue-Specific Remodeling} of the {Nascent Axonal Proteome}.''} \emph{Neuron} 99 (1): 29--46.e4. \url{https://doi.org/10.1016/j.neuron.2018.06.004}.
-
-\bibitem[\citeproctext]{ref-Counts2011}
-Counts, Scott E., and Elliott J. Mufson. 2011. {``The Role of Nerve Growth Factor Signaling in Basal Forebrain Cholinergic Neuron Degeneration in {Alzheimer}'s Disease.''} \emph{Current Alzheimer Research} 8 (5): 514--25.
-
-\bibitem[\citeproctext]{ref-dasguptaProNGFElicitsRetrograde2024}
-Dasgupta, Srestha, Mansi A. Pandya, Juan P. Zanin, Tong Liu, Qian Sun, Hong Li, and Wilma J. Friedman. 2024. {``{ProNGF} Elicits Retrograde Axonal Degeneration of Basal Forebrain Neurons Through {p75NTR} and Induction of Amyloid Precursor Protein.''} \emph{Science Signaling} 17 (855): eadn2616. \url{https://doi.org/10.1126/scisignal.adn2616}.
-
-\bibitem[\citeproctext]{ref-Dechant2002}
-Dechant, Geneviève, and Yves-Alain Barde. 2002. {``Neurotrophin Signaling.''} \emph{Annual Review of Neuroscience} 25: 677--714.
-
-\bibitem[\citeproctext]{ref-Ibanez1992}
-Ibáñez, Carlos F. 1992. {``P75 Neurotrophin Receptor: A Multifunctional Protein.''} \emph{Trends in Neurosciences} 15 (6): 217--23.
-
-\bibitem[\citeproctext]{ref-Kaplan2013}
-Kaplan, David R., and Frederick D. Miller. n.d. {``Neurotrophin Signal Transduction in the Nervous System.''} \emph{Current Opinion in Neurobiology} 23.
-
-\bibitem[\citeproctext]{ref-Lei2016}
-Lei, Peng et al. 2016. {``Tau Phosphorylation and Aggregation in {Alzheimer}'s Disease.''} \emph{Acta Neuropathologica} 131: 1--14.
-
-\bibitem[\citeproctext]{ref-Morfini2009}
-Morfini, Gerardo A. et al. 2009. {``Axonal Transport Defects in Neurodegenerative Diseases.''} \emph{Journal of Neuroscience} 29 (41): 12776--86.
-
-\bibitem[\citeproctext]{ref-Morris2011}
-Morris, Maxime et al. 2011. {``Tau Post-Translational Modifications in Wild-Type and Human Amyloid Precursor Protein Transgenic Mice.''} \emph{Journal of Neuroscience} 31 (30): 10433--44.
-
-\bibitem[\citeproctext]{ref-Teng2005}
-Teng, Helen K. et al. 2005. {``{ProNGF} Induces Neuronal Apoptosis via Activation of the {p75NTR}--Sortilin Complex.''} \emph{Journal of Neuroscience} 25 (22): 5455--63.
-
-\bibitem[\citeproctext]{ref-tengProBDNFInducesNeuronal2005}
-Teng, Henry K., Kenneth K. Teng, Ramee Lee, Saundrene Wright, Seema Tevar, Ramiro D. Almeida, Pouneh Kermani, et al. 2005. {``{ProBDNF} Induces Neuronal Apoptosis via Activation of a Receptor Complex of {p75NTR} and Sortilin.''} \emph{The Journal of Neuroscience: The Official Journal of the Society for Neuroscience} 25 (22): 5455--63. \url{https://doi.org/10.1523/JNEUROSCI.5123-04.2005}.
-
-\bibitem[\citeproctext]{ref-Yaar1997}
-Yaar, Menachem et al. 1997. {``Expression of P75 Neurotrophin Receptor in the Adult Human Brain.''} \emph{Journal of Neuroscience} 17 (13): 4813--24.
-
-\end{CSLReferences}
 
 \end{document}

@@ -2,7 +2,7 @@
 
 Traumatic brain injury (TBI) is traditionally viewed as a focal insult, in which neurons at the site of impact undergo acute necrotic or apoptotic cell death. However, it is now well established that the consequences of brain injury extend far beyond the cortical neurons directly affected by the initial trauma. Injury to the cortex induces profound and long-lasting changes in the local extracellular environment, including inflammation, altered neurotrophin availability, and disruption of synaptic homeostasis. These changes can propagate retrogradely to afferent neuronal populations that project to the injured region, leading to delayed and secondary degeneration that unfolds over days to weeks after the initial injury.
 
-A growing body of work from our laboratory and others has demonstrated that long-projecting neuromodulatory systems are particularly vulnerable to these secondary effects of cortical injury. Basal forebrain cholinergic neurons (BFCNs), which send extensive axonal projections to the cerebral cortex, undergo retrograde degeneration following cortical TBI despite the absence of direct mechanical damage to their cell bodies [@Counts2011; @dasguptaProNGFElicitsRetrograde2024]. Importantly, this degeneration is mediated by signaling events initiated at the distal axon terminals within the injured cortex, rather than by intrinsic somatic damage [@dasguptaProNGFElicitsRetrograde2024]. These findings shift the conceptual framework of TBI from a purely local injury to a circuit-level pathology involving long-range axonal communication.
+Basal forebrain cholinergic neurons (BFCNs), which send extensive axonal projections to the cerebral cortex, undergo retrograde degeneration following cortical TBI despite the absence of direct mechanical damage to their cell bodies [@Counts2011; @dasguptaProNGFElicitsRetrograde2024]. Importantly, this degeneration is mediated by signaling events initiated at the distal axon terminals within the injured cortex, rather than by intrinsic somatic damage [@dasguptaProNGFElicitsRetrograde2024]. The signal that mediates this is an increase in the amount of the immature proform of nerve growth factor (proNGF) in the cerebral cortex, this results in retrograde degeneration of BFCNs through activation of proNGF receptor p75NTR. In addition, previous work from the lab showed that that local axonal protein synthesis and retrograde transport mediated proNGF-induced degeneration which was initiated at the axon terminal [@dasguptaProNGFElicitsRetrograde2024].  
 
 This thesis builds on this framework by focusing on the molecular mechanisms that link cortical injury to retrograde axonal degeneration in BFCNs. In particular, it examines the role of the p75 neurotrophin receptor (p75NTR), a receptor that is persistently expressed in adult BFCNs [@Yaar1997] and is strongly implicated in injury-induced and stress-induced degeneration [@Ibanez1992]. While p75NTR signaling has been extensively studied in the context of neurodegenerative disease, increasing evidence indicates that it plays a critical role in secondary degeneration after TBI. Moreover, TBI is now recognized as a major risk factor for the later development of neurodegenerative diseases, suggesting that shared molecular pathways may underlie both injury-induced and disease-associated neuronal loss.
 
@@ -30,15 +30,87 @@ Following cortical injury, BFCNs exhibit axonal degeneration and loss that is ip
 
 These properties make BFCNs an ideal model system for dissecting the molecular mechanisms of retrograde degeneration initiated by cortical injury.
 
-## Tau (MAPT) as an Axonal Effector of Degenerative Signaling
 
-Tau is a microtubule-associated protein highly enriched in axons, where it regulates microtubule stability and axonal transport [@Morris2011]. Under physiological conditions, Tau supports axonal integrity; however, its function is dynamically regulated by post-translational modifications, particularly phosphorylation.
+## Tau background and roles
 
-In pathological contexts, Tau becomes hyperphosphorylated, dissociates from microtubules, and disrupts axonal transport [@Lei2016; @Morfini2009]. Although Tau aggregation is a defining feature of several neurodegenerative diseases, increasing evidence indicates that soluble and modified Tau species play critical roles in axonal dysfunction independent of aggregation [@Morris2011].
+Tau is a microtubule-associated protein that stabilizes axonal microtubules and regulates cytoskeletal dynamics under physiological conditions. Beyond its structural role, tau participates in axonal transport regulation and can act as a phosphorylation-state-dependent scaffold that links signaling to trafficking and synaptic function.  
+(Review: https://www.mdpi.com/1422-0067/22/17/9207)
+
+### Core roles of Tau (physiology)
+
+- **Microtubule stabilization and cytoskeletal coordination**
+  - Binds and stabilizes axonal microtubules to maintain neuronal polarity and cytoskeletal integrity.  
+    (Review: https://www.mdpi.com/1422-0067/22/17/9207)
+  - Coordinates microtubule–actin network behavior to support axonal structure and dynamics.  
+    (Review: https://www.mdpi.com/1422-0067/22/17/9207)
+
+- **Regulation of axonal transport**
+  - Supports efficient bidirectional trafficking by tuning the accessibility of microtubule tracks for kinesin/dynein-driven cargo movement.  
+    (Review: https://www.mdpi.com/1422-0067/22/17/9207)
+  - Under pathological conditions, hyperphosphorylated tau can trap/perturb motor-adaptor complexes (e.g., JIP1–kinesin), disrupting cargo-selective transport.  
+    (Primary: https://pmc.ncbi.nlm.nih.gov/articles/PMC2742856/ ; PMID landing page: https://pubmed.ncbi.nlm.nih.gov/19491104/)
+
+- **Signaling scaffold (stress and kinase signaling integration)**
+  - Organizes kinase/stress-response pathways and can link extracellular cues to intracellular responses in a phospho-state-dependent manner.  
+    (Review: https://www.mdpi.com/1422-0067/22/17/9207)
+
+- **Synaptic function and plasticity**
+  - Modulates synaptic vesicle cycling and postsynaptic processes, consistent with tau’s presence in dendritic spines and synaptic compartments.  
+    (Review: https://www.mdpi.com/1422-0067/22/17/9207)
+  - Contributes to dynamic **AMPAR trafficking** in dendrites, influencing synaptic efficacy.  
+    (Primary example: https://pubmed.ncbi.nlm.nih.gov/28554859/)
+
+- **Proteostasis and clearance**
+  - Interfaces with chaperones, proteasome, and autophagy machinery to regulate tau turnover and quality control.  
+    (Review: https://www.mdpi.com/1422-0067/22/17/9207)
+
+- **Nuclear and stress-related roles**
+  - A smaller nuclear fraction can bind DNA and may contribute to protection against stress-induced DNA damage.  
+    (Review: https://www.mdpi.com/1422-0067/22/17/9207)
+
+### When Tau becomes pathological
+
+When tau becomes excessively phosphorylated, it detaches from microtubules, destabilizes cytoskeletal organization and axonal transport, and becomes prone to misfolding and aggregation into oligomers/paired helical filaments and neurofibrillary tangles, a pathological hallmark of Alzheimer’s disease and other tauopathies.  
+(Review: https://www.mdpi.com/1422-0067/22/17/9207)
+
+### Post-translational modifications and why phosphorylation matters
+
+Tau’s functional “mode” is strongly shaped by post-translational modifications (PTMs), including phosphorylation, acetylation, truncation, ubiquitination, glycation, and others. These PTMs can change tau’s microtubule affinity, subcellular localization, interactions with motors/adaptors, and aggregation propensity.  
+(Review: https://www.mdpi.com/1422-0067/22/17/9207)
+
+Phosphorylation is especially important because it can directly weaken tau–microtubule binding and shift tau toward conformations and interaction networks that impair trafficking and favor aggregation. Site-specific phosphorylation patterns are also leveraged as biomarkers (CSF/plasma) and neuropathology readouts.  
+(Review overview of phosphorylation patterns/biomarkers: https://pmc.ncbi.nlm.nih.gov/articles/PMC10839341/)
+
+### Antibodies used in this study (tau phosphorylation readouts)
+
+In this research, I quantified tau phosphorylation using three antibodies that report distinct tau states:
+
+- **pThr181 (p-tau181)**: commonly used biomarker-associated phosphorylation site that tracks Alzheimer’s disease-related tau pathology in CSF and plasma and is widely used for staging/stratification.  
+  (Context review: https://pmc.ncbi.nlm.nih.gov/articles/PMC10839341/)
+
+- **AT8 (pSer202/pThr205)**: canonical neuropathology epitope used to detect early and established pathological tau (pre-tangles/tangles) in tissue; often treated as a marker of disease-associated tau phosphorylation.  
+  (Epitope/usage context: https://www.alzforum.org/alzantibodies/tau-at8-phospho-tau-ser-202-thr-205)
+
+- **pSer622**: a C-terminal tau site sometimes assessed in biochemical studies; interpretation can depend on antibody specificity and isoform context, and is typically considered alongside broader phosphorylation patterns rather than as a standalone “core biomarker” site.  
+  (Phosphorylation landscape context: https://pmc.ncbi.nlm.nih.gov/articles/PMC10839341/)
+
+## proNGF–p75NTR signaling and tau phosphorylation
+
+A central focus of this thesis is how **proNGF–p75NTR signaling** engages stress-associated kinase cascades that converge on tau phosphorylation states linked to axonal dysfunction and degeneration.
+
+Genetic deletion of p75NTR attenuates tau hyperphosphorylation in a tauopathy mouse model, and p75NTR is required for ligand-driven tau phosphorylation in vitro, supporting a causal role for p75NTR signaling in tau phosphorylation pathways.  
+(Primary: https://pmc.ncbi.nlm.nih.gov/articles/PMC6756909/ ; PubMed: https://pubmed.ncbi.nlm.nih.gov/31479419/)
+
+Mechanistically, p75NTR activation can engage downstream kinases including **JNK**, a stress-activated MAPK family member with well-described roles in neurodegenerative signaling. JNK isoforms can phosphorylate tau at multiple sites and influence tau’s interaction landscape, consistent with a model where p75NTR-dependent stress signaling drives tau modifications that destabilize the axonal cytoskeleton and transport.  
+(JNK–tau biochemical/kinase context: https://pubs.acs.org/doi/10.1021/acschemneuro.3c00093)
+
+Tau is also positioned to integrate signaling and transport because under pathological conditions hyperphosphorylated tau interacts with the JNK scaffold/adaptor **JIP1**, which associates with kinesin motor complexes; this interaction disrupts kinesin motor complex formation and is linked to axonal transport defects.  
+(Primary: https://pmc.ncbi.nlm.nih.gov/articles/PMC2742856/ ; PubMed: https://pubmed.ncbi.nlm.nih.gov/19491104/)
+
 
 Importantly, several kinases activated downstream of p75NTR signaling, including JNK, directly phosphorylate Tau at sites associated with axonal degeneration [@Lei2016]. Tau also interacts with motor proteins and components of the retrograde transport machinery, positioning it as a potential scaffold that integrates signaling and transport processes within the axon [@Morfini2009].
 
-## Linking p75NTR Signaling, Tau, and Axonal Fragmentation After TBI
+### Linking p75NTR Signaling, Tau, and Axonal Fragmentation After TBI
 
 Recent work from our laboratory has demonstrated that proneurotrophin stimulation of BFCN axons induces local axonal protein synthesis, retrograde transport of degenerative signals, and axonal fragmentation through p75NTR-dependent mechanisms [@dasguptaProNGFElicitsRetrograde2024; @cagnettaRapidCueSpecificRemodeling2018]. These findings identify axons as active sites of signal integration rather than passive conduits.
 
@@ -48,12 +120,6 @@ Within this framework, Tau is well positioned to act as a downstream effector of
 
 The overarching goal of this thesis is to define the role of Tau in p75NTR-mediated degeneration and axonal fragmentation of basal forebrain cholinergic neurons following cortical injury. Specifically, this work aims to:
 
-1. Characterize p75NTR-dependent retrograde degenerative signaling in BFCNs after axonal proNGF treatment 
-1.1 Is Tau synthesis increase upstream or downstream of APP? 
-2. Characterize levels of total Tau and phosphorylated Tau after proNGF treatment  
-3. Test whether Tau is required for p75NTR-induced axonal degeneration and fragmentation.
-
-
-
-By integrating neurotrophin signaling biology with Tau-centered mechanisms of cytoskeletal regulation, this study seeks to provide a unified framework for understanding early degenerative events in vulnerable cholinergic circuits.
-
+1. Characterize p75NTR-dependent signaling in BFCNs after axonal proNGF treatment specifically is "Tau synthesis increase upstream or downstream of APP?" Is newely synthesized Tau required for p75NTR-induced axonal degeneration and fragmentation?
+2. Does blocking new APP synthesis will prevent Tau increase and axonal degeneration?
+3. Characterize levels of total Tau and phosphorylated Tau after proNGF treatment, is proNGF treatment increases a specific phospho-Tau species that is associated with axonal degeneration?
