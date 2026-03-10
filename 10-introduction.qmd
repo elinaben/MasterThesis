@@ -36,7 +36,7 @@ These properties make BFCNs an ideal model system for dissecting the molecular m
 Tau is a microtubule-associated protein that stabilizes axonal microtubules and regulates cytoskeletal dynamics under physiological conditions. Beyond its structural role, tau participates in axonal transport regulation and can act as a phosphorylation-state-dependent scaffold that links signaling to trafficking and synaptic function.
 (Review: https://www.mdpi.com/1422-0067/22/17/9207)
 
-### Core roles of Tau (physiology)
+### Core roles of Tau 
 
 - **Microtubule stabilization and cytoskeletal coordination**
   - Binds and stabilizes axonal microtubules to maintain neuronal polarity and cytoskeletal integrity.
@@ -67,6 +67,14 @@ Tau is a microtubule-associated protein that stabilizes axonal microtubules and 
 - **Nuclear and stress-related roles**
   - A smaller nuclear fraction can bind DNA and may contribute to protection against stress-induced DNA damage.
     (Review: https://www.mdpi.com/1422-0067/22/17/9207)
+    
+### Tau interaction with the dynein–dynactin transport machinery
+
+Of particular interest to our research is tau's ability to regulate axonal transport by interacting with components of the dynein–dynactin motor complex. A previous study demonstrated that the N-terminal projection domain of tau binds the C-terminal region of the p150 subunit of dynactin, a key activator of the dynein motor responsible for retrograde transport along microtubules [@magnaniInteractionTauProtein2007]. Through this interaction, tau can simultaneously bind microtubules via its C-terminal repeat domain while recruiting the dynactin complex through its N-terminal projection domain. This structural arrangement positions tau as a molecular scaffold that stabilizes the association of the dynein–dynactin transport machinery with axonal microtubules, thereby supporting efficient cargo transport.
+
+Consistent with this model, the authors showed that the presence of tau increases the association of the dynactin complex with microtubules in vitro, suggesting that tau helps stabilize transport complexes on the microtubules. Importantly, this interaction occurs through sequences encoded by exons 1–4 of the tau protein, indicating that the N-terminal projection domain mediates the dynactin interaction while the microtubule-binding repeats anchor tau to the microtubule cytoskeleton. The neuronal model used in this study expressed only the 0N3R and 0N4R tau isoforms which lack exons 2 and 3. As reported by the authors: _“SH-SY5Y cells express only the shortest three- and four-repeat tau isoforms without amino-terminal inserts.”_ Despite this, dynactin p150 was still found to co-immunoprecipitate with tau, showing that the absence of N-terminal inserts does not impair the ability of tau to bind dynactin. This observation is particularly relevant to our experimental neuronal culture systems that showed similar tau isoforms present. This dual role of tau in microtubule stabilization and transport regulation is particularly relevant in the context of axonal injury and degeneration, where disruptions in either function can either prevent or contribute to axon degeneration and cell death. Our labs previous study showed that blocking dynein-dependent retrograde transport with the inhibitor "ciliobrevin D" prevented both axon degeneration and neuronal death induced by axonal proNGF stimulation [@dasguptaProNGFElicitsRetrograde2024]. These results indicate that degenerative signals initiated at the axon terminal must be transported retrogradely to the soma to execute the degeneration program. Together with study showing that tau interacts with the dynactin–dynein motor complex, it is possible that tau contributes to the regulation of retrograde signaling by facilitating the association of the dynein–dynactin transport machinery with microtubules. Thus, the local translation upregulation of tau functions to stabilize the efficiency of retrograde transport to allow axonal degeneration. 
+
+### Retrograde Degenrative Signaling of p75NTR
 
 ### When Tau becomes pathological
 

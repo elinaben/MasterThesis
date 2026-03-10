@@ -3,28 +3,24 @@
 ## Experimental Design
 
 ### Neuronal cultures
-Wild-type pregnant rats were euthanized by exposure to CO2 and soaked in 70% ethanol for 5 min for sterilization.
-Embryonic day 16 (E16) rat fetuses were removed under sterile conditions and kept in phosphate-buffered saline (PBS) on ice. Basal forebrains were dissected and dissociated in serum-free medium (SFM) composed of a 1:1 mixture of Eagle's MEM and Ham's F-12 supplemented with insulin (2.5μg/ml), glucose (6 mg/ml), transferrin (100 μg/ml), putrescine (60 μm), progesterone (20 nm), selenium (30 nm), penicillin (0.5 U/ml), and streptomycin (0.5 μg/ml). The cells were then plated in microfluidic chambers (50) attached to glass coverslips in tissue culture dishes that were precoated overnight with poly-d-lysine (0.2 mg/ml). Two hundred microliters of medium was added to the soma compartment, and 100 μl of medium was maintained in the axon compartments to maintain a
-medium volume difference that facilitated the growth of the axons
-of the neurons through the microgrooves toward the axon compartment. The cells were maintained with the volume difference
-between the soma and axon compartments in SFM supplemented
-with 1% B-27 for 5 days at 37°C to obtain compartmentalized
-BFCN cultures that could be treated separately at the axons or
-somas. For biochemical experiments, BFCNs were plated on the
-top compartment of filter inserts with a pore size of 1 μm, allowing neurites to grow through the filter to the bottom compartment,
-providing an axon-enriched compartment for axon- or soma-specific stimulation (51).
+Wild-type pregnant rats were euthanized by exposure to CO2 and soaked in 70% ethanol for 5 min for sterilization. Embryonic day 16 (E16) rat fetuses were removed under sterile conditions and kept in phosphate-buffered saline (PBS) on ice. 
+
+For the preparation of serum-free medium (SFM) we use 1:2 - F12+, 1:50 - B27 and the remaining quantity is MEM.
+F12+ is prepared as 50mL of: insulin (2.5μg) dissolved in 0.1N HCl (1ml), To 10mL of F12 media glucose (0.6 g) and  transferrin (100 μg/ml) are added and vortexed until nothing precipitates. To that we add putrescine (10 μm), progesterone (30 μL), selenium (0.525 μL), penstrem (20 μL). The F12+ media is filtered and a small tube is tested over night for contamination.  
+
+Basal forebrains were dissected in PBS and dissociated in serum-free medium (SFM). Using hemocytometer cells are counted and plated at a density of 75,000 cells per MicroFluidics (MF) chamber and 1M per Filter chamber. 
+The MF are attached to glass coverslips in tissue culture dishes that were precoated overnight with poly-d-lysine (0.2 mg/ml). Two hundred microliters of medium was added to the soma compartment, and 100 μl of medium was maintained in the axon compartments to maintain a medium volume difference that facilitated the growth of the axons of the neurons through the microgrooves toward the axon compartment. The cells were maintained with the volume difference between the soma and axon compartments in SFM for 5 days at 37°C to obtain compartmentalized BFCN cultures that could be treated separately at the axons or somas. 
+
+### Filter chamber cultures
+
+For axonal-specific treamtent experiments, BFCNs were plated on the top compartment of Transwell filter inserts with a 1-μm pore size. Axons grew through the pores to the bottom compartment over 5 days in vitro (DIV). Compartmental separation of the filter system was validated in prior study from our lab using 10-kDa dextran bead diffusion assays, which established that diffusion from the axon to the soma compartment is not detected until 2 hours, providing a 2-hour window for axon-specific treatments. This validation was not repeated as part of the present thesis experiments. 
+
+### Immunocytochemistry
+
+Basal forebrain microfluidic cultures were fixed with 4% paraformaldehyde for 20 min, washed with PBS, and permeabilized with 0.5% Triton X-100 in PBS for 10 min. Cells were blocked for 1 hour with 5% normal donkey serum and 1% bovine serum albumin (BSA) in PBS. Cells were then incubated overnight at 4°C with primary antibodies against p75^NTR^ (goat, 1:500) and Tau (rabbit, 1:500; TODO: clone/catalog) diluted in 1% BSA/PBS. The following day, cells were washed with PBS and incubated for 1 hour at room temperature with a primary antibody against β-tubulin III (Tuj1; mouse, 1:1000; TODO: catalog). After washing with PBS, cells were incubated for 1 hour at room temperature with species-appropriate donkey secondary antibodies: donkey anti-goat Alexa Fluor 488, donkey anti-rabbit Alexa Fluor 555, and donkey anti-mouse Alexa Fluor 594 (all 1:10,000; Invitrogen). Coverslips were mounted on slides with DAPI Fluoromount-G to label nuclei. Images were acquired on a Zeiss LSM TODO confocal microscope at TODO×, and analyzed using ImageJ software.
 
 ### Western blot analysis
-Five-DIV filter cultures were treated with proNGF, and axon and
-soma lysates were obtained in 30 and 60 μl, respectively, of lysis buffer composed of RIPA TODO: should I leave as RIPA or list the ingredients *10% glycerol (70%), 10% Triton X-100 (10%), 10%NP-40 (10%),* 10× protease inhibitors (5%), and 10× phosphatase
-inhibitors (5%). After protein quantification, equal amounts of protein were run on a 12% polyacrylamide gel and transferred to nitrocellulose membrane. Equal protein loading was assessed by Ponceau
-staining, which was washed out with TBS (tris-buffered saline) with
-0.05% Tween 20 (TBST) and was confirmed by re-probing the membranes with anti-actin. The membranes were blocked with 5% nonfat milk prepared in TBST for 1 hour and incubated with primary
-antibody overnight. After washing 3× 10 min with TBST, the blots
-were incubated with appropriate secondary antibodies for 1 hour at
-room temperature. The membrane was washed 3× 10 min with
-TBST and then scanned with the Odyssey infrared imaging system
-(LI-COR Bioscience). All blots shown are representative of at least
-three independent experiments
+
+Five-DIV filter cultures were treated with proNGF, and axon and soma lysates were obtained in 40 and 60 μl, respectively, of lysis buffer composed of 90% RIPA buffer, 5% 10× protease inhibitors, and 5% 10× phosphatase inhibitors. After protein quantification, equal amounts of protein were run on a 12% polyacrylamide gel and transferred to nitrocellulose membrane. Equal protein loading was assessed by Ponceau staining, which was washed out with TBS (tris-buffered saline) with 0.05% Tween 20 (TBST) and was confirmed by re-probing the membranes with anti-actin. The membranes were blocked with 5% nonfat milk prepared in TBST for 1 hour. Membranes were then incubated with primary antibodies diluted in blocking solution. β-Actin (mouse, 1:10,000; catalog no. TODO) was incubated for 1 hour at room temperature. All other primary antibodies were incubated overnight at 4°C and included: pan-Tau (mouse, 1:1000; catalog no. TODO), pan-Tau (rabbit, 1:1000; catalog no. TODO), phospho-Tau (TODO epitope; 1:1000; catalog no. TODO), phospho-Tau (TODO epitope; 1:1000; catalog no. TODO), and phospho-Tau (TODO epitope; 1:1000; catalog no. TODO). After washing 3× 10 min with TBST, the blots were incubated with appropriate secondary antibodies for 1 hour at room temperature. The membrane was washed 3× 10 min with TBST and then scanned with the Odyssey infrared imaging system (LI-COR Bioscience). All blots shown are representative of at least three independent experiments.
 
 ## Statistical Analysis
