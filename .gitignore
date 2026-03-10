@@ -12,3 +12,18 @@
 
 /.quarto/
 **/*.quarto_ipynb
+
+# Output files
+*.pptx
+*.pdf
+*.html
+_book/
+
+# Generated WB composite PNGs
+WB_*.png
+
+# Raw microscopy images
+*.czi
+ZeissImages/
+ImagesTif/*.tif
+ImagesTif/*.tiff
