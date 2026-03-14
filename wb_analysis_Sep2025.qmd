@@ -143,10 +143,10 @@ axon_composite
 
 ```{r quant-setup}
 # ── Load data ──────────────────────────────────────────────────────────────────
-lane_map  <- read_csv("ImagesTif/LaneMapping_ExperimentSep25.csv")
-actin_raw <- read_csv("ImagesTif/Sep03_DyLight800_actin.csv") |>
+lane_map  <- read_csv("ImagesCSV/LaneMapping_ExperimentSep25.csv")
+actin_raw <- read_csv("ImagesCSV/Sep03_DyLight800_actin.csv") |>
   rename(Lane = 1, Actin = Area)
-tau_raw   <- read_csv("ImagesTif/Sep03_DyLight800_tau.csv") |>
+tau_raw   <- read_csv("ImagesCSV/Sep03_DyLight800_tau.csv") |>
   rename(Lane = 1, Tau = Area)
 
 df <- lane_map |>

@@ -141,17 +141,11 @@ In this research, I quantified tau phosphorylation using three antibodies that r
 
 A central focus of this thesis is how **proNGF–p75NTR signaling** engages stress-associated kinase cascades that converge on tau phosphorylation states linked to axonal dysfunction and degeneration.
 
-Genetic deletion of p75NTR attenuates tau hyperphosphorylation in a tauopathy mouse model, and p75NTR is required for ligand-driven tau phosphorylation in vitro, supporting a causal role for p75NTR signaling in tau phosphorylation pathways.
-(Primary: https://pmc.ncbi.nlm.nih.gov/articles/PMC6756909/ ; PubMed: https://pubmed.ncbi.nlm.nih.gov/31479419/)
+Genetic deletion of p75NTR attenuates tau hyperphosphorylation in a tauopathy mouse model, and p75NTR is required for ligand-driven tau phosphorylation in vitro, supporting a causal role for p75NTR signaling in tau phosphorylation pathways. [@manucat-tanKnockoutP75Neurotrophin2019]
 
-Mechanistically, p75NTR activation can engage downstream kinases including **JNK**, a stress-activated MAPK family member with well-described roles in neurodegenerative signaling. JNK isoforms can phosphorylate tau at multiple sites and influence tau's interaction landscape, consistent with a model where p75NTR-dependent stress signaling drives tau modifications that destabilize the axonal cytoskeleton and transport.
-(JNK–tau biochemical/kinase context: https://pubs.acs.org/doi/10.1021/acschemneuro.3c00093)
+Mechanistically, p75NTR activation can engage downstream kinases including **JNK**, a stress-activated MAPK family member with well-described roles in neurodegenerative signaling. JNK isoforms can phosphorylate tau at multiple sites and influence tau's interaction landscape, consistent with a model where p75NTR-dependent stress signaling drives tau modifications that destabilize the axonal cytoskeleton and transport. [@solasJNKActivationAlzheimers2023]
 
-Tau is also positioned to integrate signaling and transport because under pathological conditions hyperphosphorylated tau interacts with the JNK scaffold/adaptor **JIP1**, which associates with kinesin motor complexes; this interaction disrupts kinesin motor complex formation and is linked to axonal transport defects.
-(Primary: https://pmc.ncbi.nlm.nih.gov/articles/PMC2742856/ ; PubMed: https://pubmed.ncbi.nlm.nih.gov/19491104/)
-
-
-Importantly, several kinases activated downstream of p75NTR signaling, including JNK, directly phosphorylate Tau at sites associated with axonal degeneration [@Lei2016]. Tau also interacts with motor proteins and components of the retrograde transport machinery, positioning it as a potential scaffold that integrates signaling and transport processes within the axon [@Morfini2009].
+As mentioned above, Tau is also positioned to integrate signaling and transport because under pathological conditions hyperphosphorylated tau interacts with the JNK scaffold/adaptor **JIP1**, which associates with kinesin motor complexes; this interaction disrupts kinesin motor complex formation and is linked to axonal transport defects. [@ittnerPhosphorylatedTauInteracts2009]
 
 ### Linking p75NTR Signaling, Tau, and Axonal Fragmentation After TBI
 

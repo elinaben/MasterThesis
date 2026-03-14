@@ -54,13 +54,13 @@ Note: Lane 1 (Ctrl) was excluded from axon analysis due to unreliable reading.
 axon_conditions <- c("ProNGF 45min", "ProNGF 60min", "ProNGF 75min",
                      "siAPP", "siAPP + proNGF")
 
-raw_680_ax <- read_csv("ImagesTif/Feb05_IRDye_680_panTau_quantification_only_axons.csv",
+raw_680_ax <- read_csv("ImagesCSV/Feb05_IRDye_680_panTau_quantification_only_axons.csv",
                         show_col_types = FALSE) %>%
   rename(lane = 1, area = Area) %>%
   mutate(Condition = factor(axon_conditions, levels = axon_conditions),
          Protein   = "panTau")
 
-raw_800_ax <- read_csv("ImagesTif/Feb05_IRDye_800_Ms_Act_quantification_only_axons.csv",
+raw_800_ax <- read_csv("ImagesCSV/Feb05_IRDye_800_Ms_Act_quantification_only_axons.csv",
                         show_col_types = FALSE) %>%
   rename(lane = 1, area = Area) %>%
   mutate(Condition = factor(axon_conditions, levels = axon_conditions),
@@ -70,13 +70,13 @@ raw_800_ax <- read_csv("ImagesTif/Feb05_IRDye_800_Ms_Act_quantification_only_axo
 soma_conditions <- c("Ctrl", "ProNGF 45min", "ProNGF 60min",
                      "ProNGF 75min", "siAPP", "siAPP + proNGF")
 
-raw_680_sm <- read_csv("ImagesTif/Feb05_IRDye_680_panTau_quantification_only_soma.csv",
+raw_680_sm <- read_csv("ImagesCSV/Feb05_IRDye_680_panTau_quantification_only_soma.csv",
                         show_col_types = FALSE) %>%
   rename(lane = 1, area = Area) %>%
   mutate(Condition = factor(soma_conditions, levels = soma_conditions),
          Protein   = "panTau")
 
-raw_800_sm <- read_csv("ImagesTif/Feb05_IRDye_800_Ms_Act_quantification_only_soma.csv",
+raw_800_sm <- read_csv("ImagesCSV/Feb05_IRDye_800_Ms_Act_quantification_only_soma.csv",
                         show_col_types = FALSE) %>%
   rename(lane = 1, area = Area) %>%
   mutate(Condition = factor(soma_conditions, levels = soma_conditions),
@@ -208,20 +208,20 @@ knitr::include_graphics(c("ImagesTif/wb2_680.png", "ImagesTif/wb2_800.png"))
 
 ```{r}
 #| label: wb2-load
-lane_map_2 <- read_csv("ImagesTif/LaneMapping_ExperimentJan26_2ndWB.csv",
+lane_map_2 <- read_csv("ImagesCSV/LaneMapping_ExperimentJan26_2ndWB.csv",
                         show_col_types = FALSE) %>%
   mutate(Lane      = as.integer(Lane),
          Condition = factor(Condition, levels = unique(Condition)))
 
 condition_levels_2 <- levels(lane_map_2$Condition)
 
-band_map_2     <- read_csv("ImagesTif/BandMapping_ExperimentJan26_2ndWB.csv",
+band_map_2     <- read_csv("ImagesCSV/BandMapping_ExperimentJan26_2ndWB.csv",
                             show_col_types = FALSE)
 band_map_680_2 <- band_map_2 %>% filter(Channel == 680)
 band_map_800_2 <- band_map_2 %>% filter(Channel == 800)
 
 data_680_2 <- read_csv(
-  "ImagesTif/Feb26_IRDye_680RD_Ms_panTau_actin_quantification.csv",
+  "ImagesCSV/Feb26_IRDye_680RD_Ms_panTau_actin_quantification.csv",
   show_col_types = FALSE) %>%
   rename(area = Area) %>%
   left_join(band_map_680_2, by = c("band" = "Band")) %>%
@@ -229,7 +229,7 @@ data_680_2 <- read_csv(
   mutate(Condition = factor(Condition, levels = condition_levels_2))
 
 data_800_2 <- read_csv(
-  "ImagesTif/Feb26_IRDye_800_Rb_pTau_p622_p202_quantification.csv",
+  "ImagesCSV/Feb26_IRDye_800_Rb_pTau_p622_p202_quantification.csv",
   show_col_types = FALSE) %>%
   rename(area = Area) %>%
   left_join(band_map_800_2, by = c("band" = "Band")) %>%
