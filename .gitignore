@@ -12,3 +12,8 @@
 
 /.quarto/
 **/*.quarto_ipynb
+*.png
+*_book*/
+*.tex
+*.pdf
+DegenrationIndex/

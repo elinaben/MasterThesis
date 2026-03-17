@@ -1,3 +1,26 @@
-# Abstract {-}
+# Abstract {.unnumbered}
 
-Short summary - do last
+```{=latex}
+\begin{center}
+\textbf{ABSTRACT OF THE DISSERTATION}
+
+\vspace{0.5cm}
+
+Regulation of MAPT (Tau) Translation in Basal Forebrain Axons
+
+\vspace{0.5cm}
+
+By ELINA NEMTSOV
+
+\vspace{1cm}
+
+Dissertation Director:\\
+Dr. Wilma Friedman
+
+\end{center}
+
+\vspace{1cm}
+```
+
+Short summary — do last.
+

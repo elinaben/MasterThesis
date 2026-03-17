@@ -3,3 +3,73 @@
 #| include: false
 source("R/functions.R")
 ```
+
+```{=latex}
+\thispagestyle{empty}
+\begin{center}
+
+\vspace*{2cm}
+
+REGULATION OF MAPT (TAU) TRANSLATION IN BASAL FOREBRAIN AXONS
+
+\vspace{1cm}
+
+by
+
+\vspace{0.5cm}
+
+ELINA NEMTSOV
+
+\vspace{1.5cm}
+
+A Dissertation submitted to the
+
+Graduate School-Newark
+
+Rutgers, The State University of New Jersey
+
+in partial fulfillment of the requirements
+
+for the degree of
+
+Master of Science
+
+Graduate Program in Biology
+
+\vspace{1cm}
+
+written under the direction of
+
+Dr. Wilma Friedman
+
+\vspace{0.5cm}
+
+and approved by
+
+\vspace{1.5cm}
+
+\rule{7cm}{0.4pt}
+
+\vspace{1cm}
+
+\rule{7cm}{0.4pt}
+
+\vspace{1cm}
+
+\rule{7cm}{0.4pt}
+
+\vspace{1cm}
+
+\rule{7cm}{0.4pt}
+
+\vspace{1.5cm}
+
+Newark, New Jersey
+
+\vspace{0.5cm}
+
+May 2026
+
+\end{center}
+\newpage
+```

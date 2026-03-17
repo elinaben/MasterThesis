@@ -109,6 +109,131 @@ build_composite <- function(tau_img, act_img,
 
 ---
 
+# July 2025 — Tau & Actin across Neurotrophin Conditions
+
+**Conditions:** Ctrl · ProNGF · BDNF · ProNGF + BDNF
+**Compartments:** Soma (lanes 1–4) · Axon (lanes 5–8)
+**Channel 800 nm:** Tau (56 kDa, band 1) | Actin (42 kDa, band 2)
+
+```{r jul25-composite}
+lane_labels_jul <- c("Soma\nCtrl", "Soma\nProNGF", "Soma\nBDNF", "Soma\npN+B",
+                     "Axon\nCtrl", "Axon\nProNGF", "Axon\nBDNF", "Axon\npN+B")
+
+jul_comp <- build_composite(
+  tau_img     = image_read("ImagesTif/ELINA 2025-07-08 10h15m12s_DyLight_800_TauActinPB-invert_crop_tau.tif"),
+  act_img     = image_read("ImagesTif/ELINA 2025-07-08 10h15m12s_DyLight_800_TauActinPB-1_crop_inverted_actin.tif"),
+  tau_kda     = "56 kDa", act_kda = "42 kDa",
+  tau_label   = "Tau",    act_label = "Actin",
+  lane_labels = lane_labels_jul,
+  title_label = "Soma + Axon"
+)
+
+image_write(jul_comp, "WB_Jul2025.png", format = "png", density = 300)
+```
+
+## Blot Image
+
+```{r jul25-show, fig.align="center"}
+jul_comp
+```
+
+## Quantification
+
+```{r jul25-load}
+band_map_jul  <- read_csv("ImagesCSV/BandMapping_ExperimentJuly25.csv",  show_col_types = FALSE)
+lane_map_jul  <- read_csv("ImagesCSV/LaneMapping_ExperimentJuly25.csv",  show_col_types = FALSE)
+cond_lvls_jul <- c("Ctrl", "ProNGF", "BDNF", "ProNGF +BDNF")
+
+raw_jul <- read_csv("ImagesCSV/July25_IRDye_800_Ms_Tau_Actin_quantification.csv",
+                    show_col_types = FALSE) |>
+  rename(row_id = 1, area = Area) |>
+  mutate(
+    band = rep(1:2, times = 8),
+    lane = rep(1:8,  each = 2)
+  )
+
+df_jul <- raw_jul |>
+  left_join(band_map_jul, by = c("band" = "Band")) |>
+  left_join(lane_map_jul, by = c("lane" = "Lane")) |>
+  select(lane, Condition, Compartment, Protein, area) |>
+  pivot_wider(names_from = Protein, values_from = area) |>
+  mutate(
+    Tau_Actin   = Tau / Actin,
+    Condition   = factor(Condition,   levels = cond_lvls_jul),
+    Compartment = factor(Compartment, levels = c("Soma", "Axon"))
+  )
+```
+
+### Tau / Actin Ratio
+
+```{r jul25-ratio, fig.width=8, fig.height=5}
+ggplot(df_jul, aes(x = Condition, y = Tau_Actin, fill = Compartment)) +
+  geom_col(position = position_dodge(width = 0.65), width = 0.6, color = "white") +
+  scale_fill_manual(values = PAL_COMP) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.12))) +
+  labs(title    = "Jul 2025 — Tau / Actin ratio",
+       subtitle = "Soma and Axon side-by-side",
+       x = NULL, y = "Tau / Actin (a.u.)", fill = "Compartment") +
+  theme_wb() + theme(legend.position = "right")
+```
+
+### Raw Tau Signal
+
+```{r jul25-raw-tau, fig.width=10, fig.height=4.5}
+y_max_t_jul <- max(df_jul$Tau, na.rm = TRUE) * 1.15
+
+pj1 <- df_jul |> filter(Compartment == "Soma") |>
+  ggplot(aes(Condition, Tau, fill = Compartment)) +
+  geom_col(width = 0.6, color = "white") +
+  scale_fill_manual(values = PAL_COMP) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0)), limits = c(0, y_max_t_jul)) +
+  labs(title = "Soma — Tau", x = NULL, y = "Band intensity (a.u.)") + theme_wb()
+
+pj2 <- df_jul |> filter(Compartment == "Axon") |>
+  ggplot(aes(Condition, Tau, fill = Compartment)) +
+  geom_col(width = 0.6, color = "white") +
+  scale_fill_manual(values = PAL_COMP) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0)), limits = c(0, y_max_t_jul)) +
+  labs(title = "Axon — Tau", x = NULL, y = "Band intensity (a.u.)") + theme_wb()
+
+pj1 + pj2 + plot_annotation(title = "Raw Tau signal", subtitle = "Shared Y-axis scale")
+```
+
+### Raw Actin Signal
+
+```{r jul25-raw-actin, fig.width=10, fig.height=4.5}
+y_max_a_jul <- max(df_jul$Actin, na.rm = TRUE) * 1.15
+
+pj3 <- df_jul |> filter(Compartment == "Soma") |>
+  ggplot(aes(Condition, Actin, fill = Compartment)) +
+  geom_col(width = 0.6, color = "white") +
+  scale_fill_manual(values = PAL_COMP) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0)), limits = c(0, y_max_a_jul)) +
+  labs(title = "Soma — Actin", x = NULL, y = "Band intensity (a.u.)") + theme_wb()
+
+pj4 <- df_jul |> filter(Compartment == "Axon") |>
+  ggplot(aes(Condition, Actin, fill = Compartment)) +
+  geom_col(width = 0.6, color = "white") +
+  scale_fill_manual(values = PAL_COMP) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0)), limits = c(0, y_max_a_jul)) +
+  labs(title = "Axon — Actin", x = NULL, y = "Band intensity (a.u.)") + theme_wb()
+
+pj3 + pj4 + plot_annotation(title = "Raw Actin signal", subtitle = "Shared Y-axis scale")
+```
+
+### Data Table
+
+```{r jul25-table}
+df_jul |>
+  select(Lane = lane, Condition, Compartment, Tau, Actin, Tau_Actin) |>
+  mutate(across(where(is.numeric), \(x) round(x, 3))) |>
+  knitr::kable(col.names = c("Lane", "Condition", "Compartment",
+                             "Tau (a.u.)", "Actin (a.u.)", "Tau/Actin"),
+               align = "llcrrr")
+```
+
+---
+
 # September 2025 — proNGF Time Course
 
 **Conditions:** Ctrl · ProNGF 30 min · ProNGF 45 min · ProNGF 60 min  
@@ -156,7 +281,7 @@ axon_comp
 ## Quantification
 
 ```{r sep-quant-load}
-lane_map_sep  <- read_csv("ImagesCSV/LaneMapping_ExperimentSep25.csv")
+lane_map_sep  <- read_csv("ImagesCSV/LaneMapping_ExperimentSep25 - Copy.csv")
 actin_sep     <- read_csv("ImagesCSV/Sep03_DyLight800_actin.csv") |>
   rename(Lane = 1, Actin = Area)
 tau_sep       <- read_csv("ImagesCSV/Sep03_DyLight800_tau.csv") |>
@@ -427,7 +552,7 @@ feb2_comp
 ## Quantification
 
 ```{r feb2-load}
-band_map_2     <- read_csv("ImagesCSV/BandMapping_ExperimentJan26_2ndWB.csv",
+band_map_2     <- read_csv("ImagesCSV/BandMapping_ExperimentJan26_2ndWB - Copy.csv",
                            show_col_types = FALSE)
 band_map_680_2 <- band_map_2 |> filter(Channel == 680)
 band_map_800_2 <- band_map_2 |> filter(Channel == 800)

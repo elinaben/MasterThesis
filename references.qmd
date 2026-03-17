@@ -1,1 +1,6 @@
 # References {-}
+
+```{=latex}
+\setstretch{1.0}
+\setlength{\parskip}{6pt}
+```
