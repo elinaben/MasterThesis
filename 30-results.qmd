@@ -2,133 +2,98 @@
 
 ## Experimental Approach
 
-To investigate the role of tau in proNGF-induced axonal degeneration, I employed two complementary culture systems for basal forebrain cholinergic neurons (BFCNs): filter chambers (FC) and microfluidic devices (MF).
+To investigate the upregulation of tau protein in proNGF-treated basal forebrain cholinergic neurons (BFCNs) axons, I used two complementary culture systems: filter chambers (FC) and microfluidic devices (MF).
 
-**Filter chambers** allow physical separation of axons from cell bodies. Neurons are plated on the top compartment of Transwell inserts, and axons grow through the 1-μm pores to the bottom compartment over 5 days in vitro. This system enables axon-specific treatment with proNGF and subsequent collection of separate axon and soma lysates for biochemical analysis by Western blot. Using filter chambers, I aimed to: (1) verify that proNGF treatment increases tau levels in axons and soma, and (2) test whether blocking APP synthesis with siRNA prevents the proNGF-induced increase in tau.
+**Filter chambers** allow physical separation of axons from cell bodies. Neurons are plated on the top compartment of Transwell inserts, and axons grow through the 1-μm pores to the bottom compartment over 5 days in vitro. This system enables axon-specific treatment with proNGF and subsequent collection of separate axon and soma lysates for biochemical analysis by Western blot. Using filter chambers, I aimed to: (1) verify whether proNGF treatment increases tau levels in axons and soma, and (2) test whether blocking APP synthesis with siRNA prevents the proNGF-induced increase in tau.
 
-**Microfluidic devices** provide a platform for high-resolution imaging of live and fixed neurons. Neurons are plated in the soma compartment, and axons extend through microgrooves into a separate axon compartment. This system allowed me to visualize tau localization using immunocytochemistry with both epifluorescent and confocal microscopy. Epifluorescent imaging was used for general assessment of tau distribution in axons and soma, while confocal microscopy was employed specifically to determine whether tau localizes within the nucleus. Notably, I observed substantial tau immunoreactivity in the soma, which was initially unexpected given tau's canonical role as an axonal protein.
-
-The results below are organized as follows: first, I present immunofluorescence imaging data showing tau localization in BFCNs (@fig-if-ctrl, @fig-if-bdnf-prongs, @fig-if-bdnf, @fig-confocal-tau); second, I present Western blot analyses demonstrating proNGF-induced changes in tau levels and the effect of APP knockdown (@fig-jul25-combined, @fig-sep-combined, @fig-feb1-combined, @fig-feb2-combined).
+**Microfluidic devices** provide a platform for high-resolution imaging of live and fixed neurons. Neurons are plated in the soma compartment, and axons extend through microgrooves into a separate axon compartment. This system allowed me to visualize tau localization using immunocytochemistry with both epifluorescent and confocal microscopy. Epifluorescent imaging was used for general assessment of tau distribution in axons and soma, while confocal microscopy was employed specifically to determine whether tau localizes within the nucleus. Notably, I observed substantial tau signal in the soma, which was initially unexpected given tau's canonical role as an axonal protein. Although literature showed that there is a role to nuclear Tau, I wasn't quite sure regarding the quantity and abundance. To clarify whether this somatic tau represents significant nuclear localization or mainly cytoplasmic tau, I used confocal microscopy to visualize tau relative to DAPI-stained nuclei. This analysis revealed that tau immunoreactivity in the soma is predominantly perinuclear, surrounding the nucleus but not penetrating into the nuclear compartment, suggesting that the somatic tau detected by immunofluorescence represents cytoplasmic tau.
 
 ---
 
 ## Immunofluorescence — Tau Localization in BFCNs
 
-```{r}
-#| label: if-setup
-#| include: false
-CHANNELS_DIR <- "./ZeissImages/channels_101625-MF_20260309_114651"
+### TrkB Expression and Tau Distribution Across Neurotrophin Conditions
 
-make_if_grid <- function(paths, labels) {
-  imgs <- lapply(seq_along(paths), function(i) {
-    img <- magick::image_read(paths[[i]])
-    img <- magick::image_scale(img, "2400x2400")
-    img <- magick::image_annotate(img, labels[[i]],
-                                  gravity = "SouthWest",
-                                  location = "+8+6",
-                                  size = 40, color = "white",
-                                  font = "Arial-Bold",
-                                  boxcolor = "transparent")
-    img
-  })
-  row1 <- magick::image_append(c(imgs[[1]], imgs[[2]]))
-  row2 <- magick::image_append(c(imgs[[3]], imgs[[4]]))
-  magick::image_append(c(row1, row2), stack = TRUE)
-}
-```
+The following section presents immunofluorescence data characterizing the distribution of tau and TrkB in BFCN axons across different neurotrophin treatment conditions. The goal was to visually assess how proNGF and BDNF treatments affect tau localization and whether TrkB expression correlates with these changes.
 
-### Control — p75 / Tau / Tuj1 (Long Axons)
+TrkB is the high-affinity receptor for BDNF and is expressed by BFCNs, making it a key marker for receptor identity in this system. ChAT (choline acetyltransferase) is the canonical marker of cholinergic identity but it did not yield reliable signal; therefore, only TrkB and Tau channels are presented here (see @fig-trkb-tau).
 
-Immunofluorescence staining of control neurons showing p75, Tau, and Tuj1 distribution in long axons is presented in @fig-if-ctrl.
+Characterizing tau distribution alongside TrkB allows us to assess whether neurotrophin treatment alters tau localization or abundance in axons. 
 
-```{r}
-#| label: fig-if-ctrl
-#| fig-cap: "Control condition — immunofluorescence for p75 (AF568), Tau (AF488), and Tuj1 (dodecane). Composite and individual channels shown."
-#| fig-width: 14
-#| fig-height: 14
+Looking at the images you can see the tau signals beautifly outlining the axons in the microfluidic device and how the different four treatment conditions: control, proNGF, BDNF, and proNGF + BDNF have an impact. While ctrl and BDNF MFs are quite long and smooth the proNGF and proNGF + BDNF MFs are shorter and more fragmented. This is consistent with the known degenerative effects of proNGF on BFCN axons, which may lead to increased tau accumulation as part of the degenerative cascade. 
+
+Another interesting observation is that although most of my neurons express TrkB, some are not. So I probably grabbed some of the surrounding tissue as well because BFCN should be expressing TrkB. 
+
+```{r fig-trkb-tau}
+#| fig-cap: "**TrkB and Tau immunofluorescence in BFCN axons across neurotrophin conditions.** Each row shows a single treatment condition. Left column: DAPI + TrkB (AF488, green); right column: DAPI + Tau (AF555, red). ChAT staining (far-red channel) was attempted but did not produce reliable signal and is not shown."
 #| fig-align: center
 #| out-width: "100%"
-base   <- "Ctrl_p75_488_Tau_555_Tuj1_594_grooves_2_long_axons"
-subdir <- file.path(CHANNELS_DIR, base)
-
-grid <- make_if_grid(
-  paths = list(
-    file.path(subdir, paste0(base, "_composite_all.tif")),
-    file.path(subdir, paste0(base, "_DAPI+AF488.tif")),
-    file.path(subdir, paste0(base, "_DAPI+AF568.tif")),
-    file.path(subdir, paste0(base, "_DAPI+dodec.tif"))
-  ),
-  labels = list("Composite (all)", "DAPI + Tau (AF488)",
-                "DAPI + p75 (AF568)", "DAPI + Tuj1 (dodec)")
-)
-plot(as.raster(grid))
+knitr::include_graphics("figures/precomputed/fig-trkb-tau.png")
 ```
 
-### BDNF + proNGF — p75 / Tau / Tuj1
+### Tau Distribution in Axons 
 
-The corresponding staining under combined BDNF + proNGF treatment is shown in @fig-if-bdnf-prongs.
+A key open question is whether neurotrophin treatment not only changes tau abundance but also alters how tau is distributed within axons — specifically, whether tau appears as discrete clumps or puncta versus a uniform, even distribution along the axon shaft. To begin addressing this visually, cropped regions of the Tau (AF568) channel from three conditions are shown side by side in @fig-tau-distribution. Ideally, this type of comparison across conditions would allow us to determine whether proNGF or BDNF treatment shifts tau from a diffuse to a more aggregated pattern, or vice versa, which would have implications for tau's role in neurotrophin-induced axonal changes. Note that a crop for the ProNGF + BDNF condition is not available for this field.
 
-```{r}
-#| label: fig-if-bdnf-prongs
-#| fig-cap: "BDNF + proNGF condition — immunofluorescence for p75 (AF568), Tau (AF488), and Tuj1 (dodecane)."
-#| fig-width: 14
-#| fig-height: 14
+```{r fig-tau-distribution}
+#| fig-cap: "**Tau (AF568) distribution in BFCN axons — cropped regions from three treatment conditions.** Each panel shows the same channel (Tau, red) at higher magnification to allow visual assessment of tau distribution pattern. Clumped versus even distribution of tau signal may reflect changes in tau organization induced by neurotrophin treatment."
 #| fig-align: center
 #| out-width: "100%"
-base   <- "BDNF_proNGF_p75_488_Tau_555_Tuj1_594_grooves_very_good"
-subdir <- file.path(CHANNELS_DIR, base)
-
-grid <- make_if_grid(
-  paths = list(
-    file.path(subdir, paste0(base, "_composite_all.tif")),
-    file.path(subdir, paste0(base, "_DAPI+AF488.tif")),
-    file.path(subdir, paste0(base, "_DAPI+AF568.tif")),
-    file.path(subdir, paste0(base, "_DAPI+dodec.tif"))
-  ),
-  labels = list("Composite (all)", "DAPI + Tau (AF488)",
-                "DAPI + p75 (AF568)", "DAPI + Tuj1 (dodec)")
-)
-plot(as.raster(grid))
+knitr::include_graphics("figures/precomputed/fig-tau-distribution.png")
 ```
 
-### BDNF — p75 / Tau / Tuj1
+### Adding Tuj1 to Characterize Axonal Degeneration
 
-Immunofluorescence staining under BDNF-only treatment is shown in @fig-if-bdnf.
+As a next step, to better characterize the degeneration of the axons across treatments and to be consistent with our labs previous work I needed to use Tuj1 staining. Tuj1 (β-tubulin III) is a standard marker for neurons and is commonly used to assess axon morphology and degeneration — fragmented or beaded Tuj1 staining is a clear sign that axons are degenerating. Adding Tuj1 would also let me directly compare how tau distributes relative to the axon structure itself, which is important because changes in tau could reflect either a real increase in tau protein or just a change in where it is located along the axon.
 
-```{r}
-#| label: fig-if-bdnf
-#| fig-cap: "BDNF condition — immunofluorescence for p75 (AF568), Tau (AF488), and Tuj1 (dodecane)."
-#| fig-width: 14
-#| fig-height: 14
+In the next 2 experiments I stained for all three antibodies — p75, Tau, and Tuj1 — simultaneously overnight. The result was very weak and patchy signal for Tau channel that is different from the way it looked when used only with TrkB. The problem arises from Tau and Tuj1 primary antibodies competing for binding at the same locations and interfere with each other, which degrades the signal quality.
+
+Looking at the images, you can see Tuj1 signal in the axons in red. The p75 staining is present but weaker than expected. In BFCNs, p75 should be strongly expressed all along the axon, so the signal we see here is less abundant than what we would want for a clean characterization of receptor distribution. Tau in far red, as mentioned above is not as good as I would have liked.
+
+These images are useful as a starting point to confirm that all three proteins can be detected together, but further optimization of antibody concentrations or staining conditions was needed.
+
+```{r fig-p75-tuj1-tau}
+#| fig-cap: "**p75, Tuj1, and Tau immunofluorescence in BFCN axons — Ctrl vs ProNGF.** Each row is one condition. Left: DAPI + p75 (AF488, green); middle: DAPI + Tuj1 (AF555, red); right: DAPI + Tau (AF633, far red). While all three proteins are detectable, Tuj1 signal is not sufficient for degeneration quantification and p75 is less abundant along the axon than expected."
 #| fig-align: center
 #| out-width: "100%"
-base   <- "BDNF_p75_488_Tau_555_Tuj1_594_grooves_very_good"
-subdir <- file.path(CHANNELS_DIR, base)
+knitr::include_graphics("figures/precomputed/fig-p75-tuj1-tau.png")
+```
 
-grid <- make_if_grid(
-  paths = list(
-    file.path(subdir, paste0(base, "_composite_all.tif")),
-    file.path(subdir, paste0(base, "_DAPI+AF488.tif")),
-    file.path(subdir, paste0(base, "_DAPI+AF568.tif")),
-    file.path(subdir, paste0(base, "_DAPI+dodec.tif"))
-  ),
-  labels = list("Composite (all)", "DAPI + Tau (AF488)",
-                "DAPI + p75 (AF568)", "DAPI + Tuj1 (dodec)")
-)
-plot(as.raster(grid))
+### Testing Whether the Problem Was the Secondary Antibody
+
+Before separating tau and tuj1 staining, I wanted to rule out the possibility that the problem was with the secondary antibody and not the primaries competing with each other. To test this, I ran an experiment where I simply swapped the channels: Tuj1 was put in the green channel (AF488) and Tau was moved to the red channel (AF555/568), while still staining both simultaneously overnight (@fig-tuj1-tau-swapped).
+
+If the issue was specific to the secondary antibody used for Tau (for example, if the anti-rabbit 633 secondary was just not working well), then moving Tau to a different secondary should rescue the signal. This experiment showed that Tau signal was still weak, which told me the problem was not the secondary antibody itself but more likely the competition between the primary antibodies when added together. That conclusion is what pushed me toward the sequential protocol used in the later experiments.
+
+The staining for tau was even worse than before and the p75 is not even worth showing.
+
+```{r fig-tuj1-tau-swapped}
+#| fig-cap: "**Channel-swap test — Tuj1 (AF488, green) and Tau (AF555, red) stained simultaneously overnight.** Ctrl, ProNGF, and BDNF axon compartments are shown. This experiment was done to test whether the weak Tau signal seen previously was caused by the secondary antibody. Tau signal remained weak, suggesting the issue is competition between primary antibodies rather than a secondary antibody problem."
+#| fig-align: center
+#| out-width: "100%"
+knitr::include_graphics("figures/precomputed/fig-tuj1-tau-swapped.png")
+```
+
+### p75, Tau, and Tuj1 Across Conditions — Using the Sequential Protocol
+
+The last epifluorescence staining shows the results when I used the sequential protocol — I stained for the primary antibodies of p75 (green, AF488) and Tau (red, AF568) overnight and the Tuj1 (far red) for an hour on the next day before washes and secondaries. The stainings below show clear signal for Tau as well as p75 and Tuj1 both in soma and axons across three conditions: Ctrl, proNGF, and BDNF (@fig-if-combined).
+
+```{r fig-if-combined}
+#| fig-cap: "**p75, Tau, and Tuj1 immunofluorescence in BFCN axons across conditions.** Each row shows one treatment condition. Left: DAPI + p75 (AF488, green); middle: DAPI + Tau (AF568, red); right: DAPI + Tuj1 (dodecane, far red). Staining was performed using the sequential protocol — p75 and Tau overnight, Tuj1 added the following morning."
+#| fig-align: center
+#| out-width: "100%"
+knitr::include_graphics("figures/precomputed/fig-if-combined.png")
 ```
 
 ### Confocal Microscopy — Tau Localization Relative to the Nucleus
 
-Given the unexpected observation of substantial tau immunoreactivity in the soma compartment, I used confocal microscopy to determine whether tau localizes within the nucleus or is restricted to the cytoplasm. BFCNs were immunostained for Tau (red), Tuj1 (green), and counterstained with DAPI to label nuclei (see @fig-confocal-tau).
+Given the unexpected observation of substantial tau signal in the soma compartment, I used confocal microscopy to determine whether tau localizes within the nucleus or is restricted to the cytoplasm. BFCNs were immunostained for Tau (red), Tuj1 (green), and counterstained with DAPI to label nuclei (see @fig-confocal-tau).
 
-```{r}
-#| label: fig-confocal-tau
+```{r fig-confocal-tau}
 #| fig-cap: "Confocal microscopy of tau localization in BFCNs. Tau (red), Tuj1 (green), and DAPI (blue). Increasing magnification from multiple angles demonstrates that tau immunoreactivity surrounds the nucleus but does not localize within the nuclear compartment."
 #| fig-align: center
 #| out-width: "100%"
-confocal_img <- magick::image_read("figs/Confocal_Images.png")
-plot(as.raster(confocal_img))
+knitr::include_graphics("figs/Confocal_Images.png")
 ```
 
 The confocal images at increasing magnification and from multiple angles reveal that tau immunoreactivity is predominantly perinuclear—surrounding the nucleus but not penetrating into the nuclear compartment. This observation suggests that the somatic tau detected by immunofluorescence represents cytoplasmic tau, consistent with tau's role in microtubule stabilization throughout the neuronal cell body.
@@ -136,98 +101,6 @@ The confocal images at increasing magnification and from multiple angles reveal 
 ---
 
 ## Western Blot Analysis — proNGF-Induced Tau Changes
-
-```{r results-setup}
-#| include: false
-library(magick)
-library(tidyverse)
-library(ggplot2)
-library(patchwork)
-library(cowplot)
-
-COL_BLUE <- "#4472C4"
-COL_GREY <- "#A6A6A6"
-PAL_COMP <- c(Soma = "#4A90D9", Axon = "#E07B54")
-
-theme_wb <- function() {
-  theme_classic(base_size = 13) +
-    theme(
-      axis.text.x        = element_text(angle = 35, hjust = 1, size = 11),
-      plot.title         = element_text(face = "bold", size = 13),
-      plot.subtitle      = element_text(size = 10, color = "grey45"),
-      panel.grid.major.y = element_line(color = "grey90"),
-      legend.position    = "none"
-    )
-}
-
-PANEL_W  <- 500L
-LEFT_W   <- 72L
-RIGHT_W  <- 80L
-TOTAL_W  <- LEFT_W + PANEL_W + RIGHT_W
-HEADER_H <- 38L
-GAP_H    <- 10L
-FS       <- 15L
-BG       <- "white"
-
-fit_w <- function(img) {
-  h <- as.integer(round(image_info(img)$height * PANEL_W / image_info(img)$width))
-  image_resize(img, paste0(PANEL_W, "x", h, "!"))
-}
-
-add_border <- function(img, px = 2L) {
-  image_border(img, "black", paste0(px, "x", px))
-}
-
-make_row <- function(img, kda_label, protein_label) {
-  h     <- image_info(img)$height
-  left  <- image_blank(LEFT_W, h, color = BG) |>
-    image_annotate(kda_label, size = FS - 1, color = "black",
-                   font = "sans", gravity = "West", location = "+4+0")
-  right <- image_blank(RIGHT_W, h, color = BG) |>
-    image_annotate(protein_label, size = FS, color = "black",
-                   font = "sans", style = "italic",
-                   gravity = "West", location = "+6+0")
-  image_append(c(left, img, right), stack = FALSE)
-}
-
-make_header <- function(labels) {
-  header <- image_blank(TOTAL_W, HEADER_H, color = BG)
-  col_w  <- as.integer(PANEL_W / length(labels))
-  for (i in seq_along(labels)) {
-    x <- LEFT_W + as.integer((i - 1L) * col_w + col_w / 2L) - 28L
-    header <- image_annotate(header, labels[i],
-                             size = FS - 2, color = "black",
-                             font = "sans", weight = 700,
-                             gravity = "NorthWest",
-                             location = paste0("+", x, "+2"))
-  }
-  header
-}
-
-build_composite <- function(tau_img, act_img,
-                            tau_kda, act_kda,
-                            tau_label, act_label,
-                            lane_labels, title_label) {
-  tau_img <- fit_w(tau_img) |> add_border()
-  act_img <- fit_w(act_img) |> add_border()
-  gap     <- image_blank(TOTAL_W, GAP_H, color = BG)
-
-  title_row <- image_blank(TOTAL_W, 28L, color = BG) |>
-    image_annotate(title_label, size = FS + 1, color = "black",
-                   font = "sans", weight = 700, gravity = "NorthWest",
-                   location = paste0("+", LEFT_W, "+4"))
-
-  comp <- image_append(
-    c(title_row, make_header(lane_labels),
-      make_row(tau_img, tau_kda, tau_label),
-      gap,
-      make_row(act_img, act_kda, act_label)),
-    stack = TRUE
-  ) |> image_border(BG, "8x8")
-
-  comp
-}
-```
 
 ## Effect of proNGF, BDNF, and Combined Treatment on Tau Levels
 
@@ -237,110 +110,11 @@ As an initial characterization, I examined how different neurotrophin conditions
 **Compartments:** Soma (lanes 1–4) · Axon (lanes 5–8)
 **Antibody:** Tau (DyLight 800, 56 kDa) · Actin (DyLight 800, 42 kDa)
 
-```{r jul25-composite}
-#| include: false
-lane_labels_jul <- c("Soma\nCtrl", "Soma\nProNGF", "Soma\nBDNF", "Soma\npN+B",
-                     "Axon\nCtrl", "Axon\nProNGF", "Axon\nBDNF", "Axon\npN+B")
-
-jul_comp <- build_composite(
-  tau_img     = image_read("ImagesTif/ELINA 2025-07-08 10h15m12s_DyLight_800_TauActinPB-invert_crop_tau.tif"),
-  act_img     = image_read("ImagesTif/ELINA 2025-07-08 10h15m12s_DyLight_800_TauActinPB-1_crop_inverted_actin.tif"),
-  tau_kda     = "56 kDa", act_kda = "42 kDa",
-  tau_label   = "Tau",    act_label = "Actin",
-  lane_labels = lane_labels_jul,
-  title_label = "Soma + Axon"
-)
-
-image_write(jul_comp, "WB_Jul2025.png", format = "png", density = 300)
-```
-
-```{r jul25-quant-load}
-#| include: false
-band_map_jul  <- read_csv("ImagesCSV/BandMapping_ExperimentJuly25.csv",  show_col_types = FALSE)
-lane_map_jul  <- read_csv("ImagesCSV/LaneMapping_ExperimentJuly25.csv",  show_col_types = FALSE)
-cond_lvls_jul <- c("Ctrl", "ProNGF", "BDNF", "ProNGF +BDNF")
-
-raw_jul <- read_csv("ImagesCSV/July25_IRDye_800_Ms_Tau_Actin_quantification.csv",
-                    show_col_types = FALSE) |>
-  rename(row_id = 1, area = Area) |>
-  mutate(
-    band = rep(1:2, times = 8),
-    lane = rep(1:8,  each = 2)
-  )
-
-df_jul <- raw_jul |>
-  left_join(band_map_jul, by = c("band" = "Band")) |>
-  left_join(lane_map_jul, by = c("lane" = "Lane")) |>
-  select(lane, Condition, Compartment, Protein, area) |>
-  pivot_wider(names_from = Protein, values_from = area) |>
-  mutate(
-    Tau_Actin   = Tau / Actin,
-    Condition   = factor(Condition,   levels = cond_lvls_jul),
-    Compartment = factor(Compartment, levels = c("Soma", "Axon"))
-  )
-```
-
 ```{r fig-jul25-combined}
 #| fig-cap: "**Effect of neurotrophin treatment on tau levels in BFCNs.** **(A)** Western blot showing Tau (56 kDa) and Actin (42 kDa) across all conditions and compartments; lanes 1–4 = Soma, lanes 5–8 = Axon. **(B)** Tau / Actin ratio in soma and axon compartments. **(C)** Raw Tau band intensities. **(D)** Raw Actin band intensities."
-#| fig-width: 14
-#| fig-height: 14
 #| fig-align: center
 #| out-width: "100%"
-library(cowplot)
-
-# Panel A — WB blot image
-pA <- ggdraw() + draw_image(jul_comp)
-
-# Panel B — Tau / Actin ratio
-pB <- ggplot(df_jul, aes(x = Condition, y = Tau_Actin, fill = Compartment)) +
-  geom_col(position = position_dodge(width = 0.65), width = 0.6, color = "white") +
-  scale_fill_manual(values = PAL_COMP) +
-  scale_y_continuous(expand = expansion(mult = c(0, 0.12))) +
-  labs(x = NULL, y = "Tau / Actin (a.u.)", fill = "Compartment") +
-  theme_wb() + theme(legend.position = "right")
-
-# Panels C & D — Raw signal
-y_max_t_jul <- max(df_jul$Tau,   na.rm = TRUE) * 1.15
-y_max_a_jul <- max(df_jul$Actin, na.rm = TRUE) * 1.15
-
-pC_soma <- df_jul |> filter(Compartment == "Soma") |>
-  ggplot(aes(Condition, Tau, fill = Compartment)) +
-  geom_col(width = 0.6, color = "white") +
-  scale_fill_manual(values = PAL_COMP) +
-  scale_y_continuous(expand = expansion(mult = c(0, 0)), limits = c(0, y_max_t_jul)) +
-  labs(title = "Soma — Tau", x = NULL, y = "Band intensity (a.u.)") + theme_wb()
-
-pC_axon <- df_jul |> filter(Compartment == "Axon") |>
-  ggplot(aes(Condition, Tau, fill = Compartment)) +
-  geom_col(width = 0.6, color = "white") +
-  scale_fill_manual(values = PAL_COMP) +
-  scale_y_continuous(expand = expansion(mult = c(0, 0)), limits = c(0, y_max_t_jul)) +
-  labs(title = "Axon — Tau", x = NULL, y = "Band intensity (a.u.)") + theme_wb()
-
-pD_soma <- df_jul |> filter(Compartment == "Soma") |>
-  ggplot(aes(Condition, Actin, fill = Compartment)) +
-  geom_col(width = 0.6, color = "white") +
-  scale_fill_manual(values = PAL_COMP) +
-  scale_y_continuous(expand = expansion(mult = c(0, 0)), limits = c(0, y_max_a_jul)) +
-  labs(title = "Soma — Actin", x = NULL, y = "Band intensity (a.u.)") + theme_wb()
-
-pD_axon <- df_jul |> filter(Compartment == "Axon") |>
-  ggplot(aes(Condition, Actin, fill = Compartment)) +
-  geom_col(width = 0.6, color = "white") +
-  scale_fill_manual(values = PAL_COMP) +
-  scale_y_continuous(expand = expansion(mult = c(0, 0)), limits = c(0, y_max_a_jul)) +
-  labs(title = "Axon — Actin", x = NULL, y = "Band intensity (a.u.)") + theme_wb()
-
-pC <- plot_grid(pC_soma, pC_axon, ncol = 2)
-pD <- plot_grid(pD_soma, pD_axon, ncol = 2)
-
-top_row <- plot_grid(pA, pB, ncol = 2,
-                     labels = c("A", "B"),
-                     label_size = 18, label_fontface = "bold")
-bot_row <- plot_grid(pC, pD, ncol = 2,
-                     labels = c("C", "D"),
-                     label_size = 18, label_fontface = "bold")
-plot_grid(top_row, bot_row, nrow = 2)
+knitr::include_graphics("figures/precomputed/fig-jul25-combined.png")
 ```
 
 **Interpretation:** Samples were collected 90 minutes after treatment. Although this experiment provides an initial characterization of neurotrophin effects on tau levels, interpretation is limited by the low total protein recovered in the control lane, which complicates direct comparison across conditions. With this caveat in mind, proNGF-treated neurons show higher tau levels relative to both the BDNF-only and combined proNGF + BDNF conditions, suggesting that proNGF selectively promotes tau accumulation and that BDNF may partially counteract this effect.
@@ -354,113 +128,11 @@ To determine whether axonal proNGF treatment increases tau levels, I treated BFC
 **Conditions:** Ctrl · ProNGF 30 min · ProNGF 45 min · ProNGF 60 min
 **Antibodies:** Tau (DyLight 800, 56 kDa) · Actin (DyLight 800, 42 kDa)
 
-```{r sep-composites}
-lane_labels_sep <- c("Ctrl", "ProNGF\n30 min", "ProNGF\n45 min", "ProNGF\n60 min")
-
-soma_comp <- build_composite(
-  tau_img     = image_read("ImagesTif/ELINA_2025-09-03_12h27m08s_DyLight_800_tau-soma.tif"),
-  act_img     = image_read("ImagesTif/ELINA_2025-09-03_14h40m53s_DyLight_800_actin-soma.tif"),
-  tau_kda     = "56 kDa", act_kda = "42 kDa",
-  tau_label   = "Tau",    act_label = "Actin",
-  lane_labels = lane_labels_sep,
-  title_label = "Soma"
-)
-
-axon_comp <- build_composite(
-  tau_img     = image_read("ImagesTif/ELINA_2025-09-03_12h27m08s_DyLight_800_tau-axons.tif"),
-  act_img     = image_read("ImagesTif/ELINA_2025-09-03_14h40m53s_DyLight_800_actin-axons.tif"),
-  tau_kda     = "56 kDa", act_kda = "42 kDa",
-  tau_label   = "Tau",    act_label = "Actin",
-  lane_labels = lane_labels_sep,
-  title_label = "Axon"
-)
-
-image_write(soma_comp, "WB_Sep2025_soma.png", format = "png", density = 300)
-image_write(axon_comp, "WB_Sep2025_axon.png", format = "png", density = 300)
-```
-
-```{r sep-quant-load}
-#| include: false
-lane_map_sep <- read_csv("ImagesCSV/LaneMapping_ExperimentSep25 - Copy.csv")
-actin_sep    <- read_csv("ImagesCSV/Sep03_DyLight800_actin.csv") |>
-  rename(Lane = 1, Actin = Area)
-tau_sep      <- read_csv("ImagesCSV/Sep03_DyLight800_tau.csv") |>
-  rename(Lane = 1, Tau = Area)
-
-df_sep <- lane_map_sep |>
-  left_join(tau_sep,   by = "Lane") |>
-  left_join(actin_sep, by = "Lane") |>
-  mutate(
-    Tau_Actin   = Tau / Actin,
-    Condition   = factor(Condition,
-                         levels = c("Ctrl", "ProNGF 30min",
-                                    "ProNGF 45min", "ProNGF 60min")),
-    Compartment = factor(Compartment, levels = c("Soma", "Axon"))
-  )
-```
-
 ```{r fig-sep-combined}
 #| fig-cap: "**proNGF time course — Western blot analysis of tau levels in BFCNs.** **(A)** Soma compartment blot: Tau (56 kDa) and Actin (42 kDa), DyLight 800. **(B)** Axon compartment blot: Tau (56 kDa) and Actin (42 kDa), DyLight 800. **(C)** Tau / Actin ratio in soma and axon compartments across treatment conditions. **(D)** Raw band intensities for Tau (top) and Actin (bottom) in soma (left) and axon (right)."
-#| fig-width: 14
-#| fig-height: 14
 #| fig-align: center
 #| out-width: "100%"
-library(cowplot)
-
-# Panels A & B — WB blot images
-pA <- ggdraw() + draw_image(soma_comp)
-pB <- ggdraw() + draw_image(axon_comp)
-
-# Panel C — Tau / Actin ratio
-pC <- ggplot(df_sep, aes(x = Condition, y = Tau_Actin, fill = Compartment)) +
-  geom_col(position = position_dodge(width = 0.65), width = 0.6, color = "white") +
-  scale_fill_manual(values = PAL_COMP) +
-  scale_y_continuous(expand = expansion(mult = c(0, 0.12))) +
-  labs(x = NULL, y = "Tau / Actin (a.u.)", fill = "Compartment") +
-  theme_wb() + theme(legend.position = "right")
-
-# Panel D — Raw band intensities (2 × 2 sub-grid)
-y_max_t <- max(df_sep$Tau,   na.rm = TRUE) * 1.15
-y_max_a <- max(df_sep$Actin, na.rm = TRUE) * 1.15
-
-pd1 <- df_sep |> filter(Compartment == "Soma") |>
-  ggplot(aes(Condition, Tau, fill = Compartment)) +
-  geom_col(width = 0.6, color = "white") +
-  scale_fill_manual(values = PAL_COMP) +
-  scale_y_continuous(expand = expansion(mult = c(0, 0)), limits = c(0, y_max_t)) +
-  labs(title = "Soma — Tau", x = NULL, y = "Band intensity (a.u.)") + theme_wb()
-
-pd2 <- df_sep |> filter(Compartment == "Axon") |>
-  ggplot(aes(Condition, Tau, fill = Compartment)) +
-  geom_col(width = 0.6, color = "white") +
-  scale_fill_manual(values = PAL_COMP) +
-  scale_y_continuous(expand = expansion(mult = c(0, 0)), limits = c(0, y_max_t)) +
-  labs(title = "Axon — Tau", x = NULL, y = "Band intensity (a.u.)") + theme_wb()
-
-pd3 <- df_sep |> filter(Compartment == "Soma") |>
-  ggplot(aes(Condition, Actin, fill = Compartment)) +
-  geom_col(width = 0.6, color = "white") +
-  scale_fill_manual(values = PAL_COMP) +
-  scale_y_continuous(expand = expansion(mult = c(0, 0)), limits = c(0, y_max_a)) +
-  labs(title = "Soma — Actin", x = NULL, y = "Band intensity (a.u.)") + theme_wb()
-
-pd4 <- df_sep |> filter(Compartment == "Axon") |>
-  ggplot(aes(Condition, Actin, fill = Compartment)) +
-  geom_col(width = 0.6, color = "white") +
-  scale_fill_manual(values = PAL_COMP) +
-  scale_y_continuous(expand = expansion(mult = c(0, 0)), limits = c(0, y_max_a)) +
-  labs(title = "Axon — Actin", x = NULL, y = "Band intensity (a.u.)") + theme_wb()
-
-pD <- plot_grid(pd1, pd2, pd3, pd4, ncol = 2)
-
-# Assemble full figure with A, B, C, D labels
-top_row <- plot_grid(pA, pB, ncol = 2,
-                     labels = c("A", "B"),
-                     label_size = 18, label_fontface = "bold")
-bot_row <- plot_grid(pC, pD, ncol = 2,
-                     labels = c("C", "D"),
-                     label_size = 18, label_fontface = "bold")
-plot_grid(top_row, bot_row, nrow = 2)
+knitr::include_graphics("figures/precomputed/fig-sep-combined.png")
 ```
 
 **Interpretation:** A progressive increase in tau levels is observed across the proNGF time course, with the most pronounced elevation at the 60-minute time point in both soma and axon compartments. This time-dependent accumulation is consistent with local proNGF-induced protein synthesis occurring within the 1–2 hour window identified by Dasgupta et al. [@dasguptaProNGFElicitsRetrograde2024].
@@ -475,120 +147,11 @@ Dasgupta et al. [@dasguptaProNGFElicitsRetrograde2024] identified APP as a key u
 **Channel 680 nm:** panTau (56 kDa) | **Channel 800 nm:** Actin (42 kDa)
 *Note: Lane 1 (Ctrl) was excluded from axon analysis due to unreliable reading.*
 
-```{r feb1-composite}
-#| include: false
-lane_labels_feb1 <- c("Ctrl", "ProNGF\n45 min", "ProNGF\n60 min",
-                       "ProNGF\n75 min", "siAPP", "siAPP +\nproNGF")
-
-feb1_comp <- build_composite(
-  tau_img     = image_read("ImagesTif/ELINA_2026-02-06_13h04m41s_IRDye_680RD_crop_invert-1.tif"),
-  act_img     = image_read("ImagesTif/ELINA_2026-02-05_12h18m48s_IRDye_800CW_crop_invert-1.tif"),
-  tau_kda     = "56 kDa", act_kda = "42 kDa",
-  tau_label   = "panTau", act_label = "Actin",
-  lane_labels = lane_labels_feb1,
-  title_label = "Soma + Axon"
-)
-
-image_write(feb1_comp, "WB_Feb2026_1stWB.png", format = "png", density = 300)
-```
-
-```{r feb1-load}
-#| include: false
-axon_conditions <- c("ProNGF 45min", "ProNGF 60min", "ProNGF 75min",
-                     "siAPP", "siAPP + proNGF")
-soma_conditions <- c("Ctrl", "ProNGF 45min", "ProNGF 60min",
-                     "ProNGF 75min", "siAPP", "siAPP + proNGF")
-
-raw_680_ax <- read_csv("ImagesCSV/Feb05_IRDye_680_panTau_quantification_only_axons.csv",
-                       show_col_types = FALSE) |>
-  rename(lane = 1, area = Area) |>
-  mutate(Condition = factor(axon_conditions, levels = axon_conditions), Protein = "panTau")
-
-raw_800_ax <- read_csv("ImagesCSV/Feb05_IRDye_800_Ms_Act_quantification_only_axons.csv",
-                       show_col_types = FALSE) |>
-  rename(lane = 1, area = Area) |>
-  mutate(Condition = factor(axon_conditions, levels = axon_conditions), Protein = "Actin")
-
-raw_680_sm <- read_csv("ImagesCSV/Feb05_IRDye_680_panTau_quantification_only_soma.csv",
-                       show_col_types = FALSE) |>
-  rename(lane = 1, area = Area) |>
-  mutate(Condition = factor(soma_conditions, levels = soma_conditions), Protein = "panTau")
-
-raw_800_sm <- read_csv("ImagesCSV/Feb05_IRDye_800_Ms_Act_quantification_only_soma.csv",
-                       show_col_types = FALSE) |>
-  rename(lane = 1, area = Area) |>
-  mutate(Condition = factor(soma_conditions, levels = soma_conditions), Protein = "Actin")
-
-axon_ratio <- inner_join(
-  raw_680_ax |> select(lane, Condition, tau = area),
-  raw_800_ax |> select(lane, actin = area), by = "lane"
-) |> mutate(ratio = tau / actin)
-
-soma_ratio_wb1 <- inner_join(
-  raw_680_sm |> select(lane, Condition, tau = area),
-  raw_800_sm |> select(lane, actin = area), by = "lane"
-) |> mutate(ratio = tau / actin)
-```
-
 ```{r fig-feb1-combined}
 #| fig-cap: "**APP knockdown experiment — Western blot analysis of tau levels in BFCNs.** **(A)** Blot showing panTau (56 kDa, 680 nm) and Actin (42 kDa, 800 nm) across soma and axon compartments. **(B)** Pseudo-colored and labeled western blot. **(C)** panTau / Actin ratio in axon (left) and soma (right) compartments. **(D)** Raw band intensities for panTau and Actin comparing axon and soma (Ctrl present in soma only)."
-#| fig-width: 14
-#| fig-height: 14
 #| fig-align: center
 #| out-width: "100%"
-library(cowplot)
-
-# Panel A — blot composite
-pA <- ggdraw() + draw_image(feb1_comp)
-
-# Panel B — pseudo-colored labeled WB
-pB <- ggdraw() + draw_image(image_read("figs/ColoredLabeledWB_Feb12.png"))
-
-# Panel C — panTau / Actin ratio (axon + soma side by side)
-p_ax <- ggplot(axon_ratio, aes(x = Condition, y = ratio)) +
-  geom_col(fill = PAL_COMP["Axon"], colour = "black", width = 0.65) +
-  labs(title = "Axon — panTau / Actin", x = NULL, y = "panTau / Actin (a.u.)") +
-  theme_wb()
-
-p_sm <- ggplot(soma_ratio_wb1, aes(x = Condition, y = ratio)) +
-  geom_col(fill = PAL_COMP["Soma"], colour = "black", width = 0.65) +
-  labs(title = "Soma — panTau / Actin", x = NULL, y = "panTau / Actin (a.u.)") +
-  theme_wb()
-
-pC <- plot_grid(p_ax, p_sm, ncol = 2)
-
-# Panel D — axon vs soma raw intensities
-compare_df <- bind_rows(
-  raw_680_ax |> select(Condition, area) |> mutate(Compartment = "Axon",  Protein = "panTau (680 nm)"),
-  raw_680_sm |> select(Condition, area) |> mutate(Compartment = "Soma",  Protein = "panTau (680 nm)"),
-  raw_800_ax |> select(Condition, area) |> mutate(Compartment = "Axon",  Protein = "Actin (800 nm)"),
-  raw_800_sm |> select(Condition, area) |> mutate(Compartment = "Soma",  Protein = "Actin (800 nm)")
-) |>
-  mutate(
-    Condition   = factor(as.character(Condition), levels = soma_conditions),
-    Compartment = factor(Compartment, levels = c("Axon", "Soma")),
-    Protein     = factor(Protein, levels = c("panTau (680 nm)", "Actin (800 nm)"))
-  )
-
-pD <- ggplot(compare_df, aes(x = Condition, y = area, fill = Compartment)) +
-  geom_col(position = position_dodge(width = 0.75), colour = "black", width = 0.65) +
-  scale_fill_manual(values = PAL_COMP) +
-  facet_wrap(~ Protein, scales = "free_y") +
-  labs(title    = "APP Knockdown — Axon vs Soma",
-       subtitle = "Ctrl present in Soma only",
-       x = NULL, y = "Band intensity (a.u.)", fill = NULL) +
-  theme_classic(base_size = 12) +
-  theme(axis.text.x      = element_text(angle = 35, hjust = 1),
-        strip.background = element_rect(fill = "grey90"),
-        legend.position  = "top")
-
-top_row <- plot_grid(pA, pB, ncol = 2,
-                     labels = c("A", "B"),
-                     label_size = 18, label_fontface = "bold")
-bot_row <- plot_grid(pC, pD, ncol = 2,
-                     labels = c("C", "D"),
-                     label_size = 18, label_fontface = "bold")
-plot_grid(top_row, bot_row, nrow = 2)
+knitr::include_graphics("figures/precomputed/fig-feb1-combined.png")
 ```
 
 **Interpretation:** Pretreatment with siAPP attenuates the proNGF-induced increase in tau, with siAPP + proNGF-treated neurons showing tau levels comparable to the control condition. This suggests that APP synthesis is required upstream of proNGF-induced tau accumulation and is consistent with APP acting as a critical mediator of the degenerative signaling cascade.
@@ -600,97 +163,9 @@ These cultures were used for an additional western blot to further characterize 
 **Conditions:** Soma compartment only
 **Channel 680 nm:** pTau65 (band 1) + pTau56 (band 2) | **Channel 800 nm:** pTau56 (band 1) + Actin (band 2)
 
-```{r feb2-composite}
-#| include: false
-lane_map_2 <- read_csv("ImagesCSV/LaneMapping_ExperimentJan26_2ndWB.csv",
-                       show_col_types = FALSE) |>
-  mutate(Lane = as.integer(Lane),
-         Condition = factor(Condition, levels = unique(Condition)))
-
-condition_levels_2 <- levels(lane_map_2$Condition)
-
-feb2_comp <- build_composite(
-  tau_img     = image_read("ImagesTif/ELINA_2026-02-13_12h41m46s_IRDye_680RD_-tau.tif"),
-  act_img     = image_read("ImagesTif/ELINA_2026-02-13_12h40m54s_IRDye_800CW_-actin.tif"),
-  tau_kda     = "56 kDa", act_kda = "42 kDa",
-  tau_label   = "pTau",   act_label = "Actin",
-  lane_labels = condition_levels_2,
-  title_label = "Soma"
-)
-
-image_write(feb2_comp, "WB_Feb2026_2ndWB.png", format = "png", density = 300)
-```
-
-```{r feb2-load}
-#| include: false
-band_map_2     <- read_csv("ImagesCSV/BandMapping_ExperimentJan26_2ndWB - Copy.csv",
-                           show_col_types = FALSE)
-band_map_680_2 <- band_map_2 |> filter(Channel == 680)
-band_map_800_2 <- band_map_2 |> filter(Channel == 800)
-
-data_680_2 <- read_csv(
-  "ImagesCSV/Feb26_IRDye_680RD_Ms_panTau_actin_quantification.csv",
-  show_col_types = FALSE) |>
-  rename(area = Area) |>
-  left_join(band_map_680_2, by = c("band" = "Band")) |>
-  left_join(lane_map_2,    by = c("lane" = "Lane")) |>
-  mutate(Condition = factor(Condition, levels = condition_levels_2))
-
-data_800_2 <- read_csv(
-  "ImagesCSV/Feb26_IRDye_800_Rb_pTau_p622_p202_quantification.csv",
-  show_col_types = FALSE) |>
-  rename(area = Area) |>
-  left_join(band_map_800_2, by = c("band" = "Band")) |>
-  left_join(lane_map_2,    by = c("lane" = "Lane")) |>
-  mutate(Condition = factor(Condition, levels = condition_levels_2))
-
-wide_800_2 <- data_800_2 |>
-  select(lane, Condition, Protein, area) |>
-  pivot_wider(names_from = Protein, values_from = area) |>
-  mutate(Tau_Actin = pTau56 / Actin)
-
-tau_sum_2 <- data_680_2 |>
-  group_by(lane, Condition) |>
-  summarise(tau_total = sum(area, na.rm = TRUE), .groups = "drop")
-
-actin_800_2 <- data_800_2 |>
-  filter(Protein == "Actin") |>
-  select(lane, actin = area)
-
-ratio_sum_2 <- tau_sum_2 |>
-  left_join(actin_800_2, by = "lane") |>
-  mutate(ratio = tau_total / actin,
-         Condition = factor(Condition, levels = condition_levels_2))
-```
-
 ```{r fig-feb2-combined}
 #| fig-cap: "**Phospho-Tau analysis in soma compartment.** **(A)** Western blot showing pTau (680 nm) and Actin (800 nm), soma only. **(B)** Quantification: pTau56 / Actin ratio (left) and total pTau (pTau65 + pTau56) / Actin ratio (right)."
-#| fig-width: 14
-#| fig-height: 7
 #| fig-align: center
 #| out-width: "100%"
-library(cowplot)
-
-# Panel A — blot composite
-pA <- ggdraw() + draw_image(feb2_comp)
-
-# Panel B — ratio quantification (pTau56/Actin + total Tau/Actin side by side)
-p_pt <- ggplot(wide_800_2, aes(x = Condition, y = Tau_Actin)) +
-  geom_col(fill = PAL_COMP["Soma"], colour = "black", width = 0.65) +
-  labs(title = "pTau56 / Actin (800 nm)", x = NULL, y = "pTau56 / Actin (a.u.)") +
-  theme_wb()
-
-p_tt <- ggplot(ratio_sum_2, aes(x = Condition, y = ratio)) +
-  geom_col(fill = PAL_COMP["Soma"], colour = "black", width = 0.65) +
-  labs(title    = "Total Tau (680 nm) / Actin",
-       subtitle = "(pTau65 + pTau56) / Actin",
-       x = NULL, y = "Total Tau / Actin (a.u.)") +
-  theme_wb()
-
-pB <- plot_grid(p_pt, p_tt, ncol = 2)
-
-plot_grid(pA, pB, ncol = 2,
-          labels = c("A", "B"),
-          label_size = 18, label_fontface = "bold")
+knitr::include_graphics("figures/precomputed/fig-feb2-combined.png")
 ```
-

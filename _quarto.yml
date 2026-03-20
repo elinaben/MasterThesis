@@ -63,10 +63,10 @@ execute:
   echo: false
   message: false
   warning: false
+  freeze: auto
 
 knitr:
   opts_chunk:
-    fig.path: "figures/"
     fig.align: "center"
     out.width: "80%"
     dpi: 300
