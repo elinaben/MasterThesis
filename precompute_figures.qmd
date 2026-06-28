@@ -43,7 +43,7 @@ theme_wb <- function() {
     )
 }
 
-PANEL_W  <- 500L; LEFT_W <- 72L; RIGHT_W <- 80L
+PANEL_W  <- 500L; LEFT_W <- 90L; RIGHT_W <- 80L
 TOTAL_W  <- LEFT_W + PANEL_W + RIGHT_W
 HEADER_H <- 38L;  GAP_H  <- 10L; FS <- 15L; BG <- "white"
 
@@ -53,7 +53,7 @@ fit_w <- function(img) {
 }
 add_border <- function(img, px = 2L) image_border(img, "black", paste0(px, "x", px))
 
-make_row <- function(img, kda_label, protein_label) {
+make_wb_row <- function(img, kda_label, protein_label) {
   h     <- image_info(img)$height
   left  <- image_blank(LEFT_W,  h, color = BG) |>
     image_annotate(kda_label,     size = FS-1, color="black", font="sans",
@@ -81,14 +81,14 @@ build_composite <- function(tau_img, act_img, tau_kda, act_kda,
   tau_img   <- fit_w(tau_img) |> add_border()
   act_img   <- fit_w(act_img) |> add_border()
   gap       <- image_blank(TOTAL_W, GAP_H, color = BG)
-  title_row <- image_blank(TOTAL_W, 28L, color = BG) |>
-    image_annotate(title_label, size=FS+1, color="black", font="sans",
-                   weight=700, gravity="NorthWest",
-                   location=paste0("+", LEFT_W, "+4"))
+  title_row <- image_blank(TOTAL_W, 70L, color = BG) |>
+    image_annotate(title_label, size=FS+22, color="black", font="sans",
+                   weight=700, gravity="North",
+                   location="+0+6")
   image_append(
     c(title_row, make_header(lane_labels),
-      make_row(tau_img, tau_kda, tau_label), gap,
-      make_row(act_img, act_kda, act_label)),
+      make_wb_row(tau_img, tau_kda, tau_label), gap,
+      make_wb_row(act_img, act_kda, act_label)),
     stack = TRUE
   ) |> image_border(BG, "8x8")
 }
@@ -139,7 +139,7 @@ if (needs_build(out)) {
   GAP_W    <-   25L
   LABEL_W  <-  180L
   HEADER_H <-   60L
-  FONT_SZ  <-   32L
+  FONT_SZ  <-   48L
 
   make_row <- function(t) {
     img_tuj1 <- image_read(file.path(CHDIR, t$f488)) |>
@@ -283,7 +283,7 @@ if (needs_build(out)) {
   GAP_W   <-   20L   # pixel gap between panels and rows
   LABEL_W <-  200L   # width of treatment label column on right
   HEADER_H <-  60L   # height of column-header row
-  FONT_SZ  <-  36L
+  FONT_SZ  <-  54L
 
   # Build one row per treatment: [AF488 | gap | AF568 | gap | label]
   make_row <- function(t) {
@@ -354,7 +354,7 @@ if (needs_build(out)) {
   IMG_W   <- 1800L
   GAP_H   <-   30L
   LABEL_W <-  180L
-  FONT_SZ <-   38L
+  FONT_SZ <-   57L
 
   # Each row: image on left, treatment label on right
   make_row <- function(cr) {
@@ -496,7 +496,7 @@ if (needs_build(out)) {
            Condition   = factor(Condition,   levels=cond_lvls_jul),
            Compartment = factor(Compartment, levels=c("Soma","Axon")))
 
-  # ── Panels ────────────────────────────────────────────────────────────────
+  # ── Panels: A = blot image, B = Tau/Actin ratio ─────────────────────────
   pA <- ggdraw() + draw_image(jul_comp)
   pB <- ggplot(df_jul, aes(Condition, Tau_Actin, fill=Compartment)) +
     geom_col(position=position_dodge(width=0.65), width=0.6, color="white") +
@@ -505,29 +505,10 @@ if (needs_build(out)) {
     labs(x=NULL, y="Tau / Actin (a.u.)", fill="Compartment") +
     theme_wb() + theme(legend.position="right")
 
-  y_max_t <- max(df_jul$Tau,   na.rm=TRUE)*1.15
-  y_max_a <- max(df_jul$Actin, na.rm=TRUE)*1.15
-
-  mk_bar <- function(data, y, comp, ttl) {
-    ggplot(data |> filter(Compartment==comp), aes(Condition, .data[[y]], fill=Compartment)) +
-      geom_col(width=0.6, color="white") +
-      scale_fill_manual(values=PAL_COMP) +
-      scale_y_continuous(expand=expansion(mult=c(0,0)),
-                         limits=c(0, if(y=="Tau") y_max_t else y_max_a)) +
-      labs(title=ttl, x=NULL, y="Band intensity (a.u.)") + theme_wb()
-  }
-
-  pC <- plot_grid(mk_bar(df_jul,"Tau","Soma","Soma — Tau"),
-                  mk_bar(df_jul,"Tau","Axon","Axon — Tau"), ncol=2)
-  pD <- plot_grid(mk_bar(df_jul,"Actin","Soma","Soma — Actin"),
-                  mk_bar(df_jul,"Actin","Axon","Axon — Actin"), ncol=2)
-
-  fig <- plot_grid(
-    plot_grid(pA, pB, ncol=2, labels=c("A","B"), label_size=18, label_fontface="bold"),
-    plot_grid(pC, pD, ncol=2, labels=c("C","D"), label_size=18, label_fontface="bold"),
-    nrow=2
-  )
-  save_fig(out, fig, width=14, height=14)
+  fig <- plot_grid(pA, pB, ncol=2,
+                   labels=c("A","B"), label_size=18, label_fontface="bold",
+                   rel_widths=c(1.2, 1))
+  save_fig(out, fig, width=14, height=7)
 } else { message("Cached: ", out) }
 ```
 
@@ -539,6 +520,11 @@ if (needs_build(out)) {
 out <- "figures/precomputed/fig-sep-combined.png"
 
 if (needs_build(out)) {
+  # Temporarily increase blot label fonts 50%
+  saved_fs <- FS; saved_hh <- HEADER_H
+  FS       <<- 23L
+  HEADER_H <<- 57L
+
   lane_labels_sep <- c("Ctrl", "ProNGF\n30 min", "ProNGF\n45 min", "ProNGF\n60 min")
 
   soma_comp <- build_composite(
@@ -560,6 +546,9 @@ if (needs_build(out)) {
   tau_sep      <- read_csv("ImagesCSV/Sep03_DyLight800_tau.csv",   show_col_types=FALSE) |>
     rename(Lane=1, Tau=Area)
 
+  # Restore globals
+  FS <<- saved_fs; HEADER_H <<- saved_hh
+
   df_sep <- lane_map_sep |>
     left_join(tau_sep,   by="Lane") |>
     left_join(actin_sep, by="Lane") |>
@@ -574,30 +563,17 @@ if (needs_build(out)) {
     scale_fill_manual(values=PAL_COMP) +
     scale_y_continuous(expand=expansion(mult=c(0,0.12))) +
     labs(x=NULL, y="Tau / Actin (a.u.)", fill="Compartment") +
-    theme_wb() + theme(legend.position="right")
-
-  y_max_t <- max(df_sep$Tau,   na.rm=TRUE)*1.15
-  y_max_a <- max(df_sep$Actin, na.rm=TRUE)*1.15
-
-  mk_sep <- function(comp, y, ttl) {
-    ggplot(df_sep |> filter(Compartment==comp), aes(Condition, .data[[y]], fill=Compartment)) +
-      geom_col(width=0.6, color="white") +
-      scale_fill_manual(values=PAL_COMP) +
-      scale_y_continuous(expand=expansion(mult=c(0,0)),
-                         limits=c(0, if(y=="Tau") y_max_t else y_max_a)) +
-      labs(title=ttl, x=NULL, y="Band intensity (a.u.)") + theme_wb()
-  }
-
-  pD <- plot_grid(mk_sep("Soma","Tau","Soma — Tau"), mk_sep("Axon","Tau","Axon — Tau"),
-                  mk_sep("Soma","Actin","Soma — Actin"), mk_sep("Axon","Actin","Axon — Actin"),
-                  ncol=2)
+    theme_wb() +
+    theme(legend.position="right",
+          axis.text.x = element_text(angle = 35, hjust = 1, size = 22))
 
   fig <- plot_grid(
     plot_grid(pA, pB, ncol=2, labels=c("A","B"), label_size=18, label_fontface="bold"),
-    plot_grid(pC, pD, ncol=2, labels=c("C","D"), label_size=18, label_fontface="bold"),
-    nrow=2
+    pC,
+    nrow=2, labels=c("","C"), label_size=18, label_fontface="bold",
+    rel_heights=c(1, 0.8)
   )
-  save_fig(out, fig, width=14, height=14)
+  save_fig(out, fig, width=14, height=10)
 } else { message("Cached: ", out) }
 ```
 
@@ -609,70 +585,80 @@ if (needs_build(out)) {
 out <- "figures/precomputed/fig-feb1-combined.png"
 
 if (needs_build(out)) {
+  # ── Wider blot with all 12 lane labels, bigger fonts ────────────────────
+  saved_pw <- PANEL_W; saved_tw <- TOTAL_W; saved_fs <- FS; saved_hh <- HEADER_H
+  PANEL_W  <<- 1000L
+  TOTAL_W  <<- LEFT_W + PANEL_W + RIGHT_W
+  FS       <<- 23L     # 50% bigger than default 15
+  HEADER_H <<- 57L     # taller for bigger font
+
+  # Order: Axon first (lanes 1-6), then Soma (lanes 7-12)
   lane_labels_feb1 <- c("Ctrl","ProNGF\n45 min","ProNGF\n60 min",
+                         "ProNGF\n75 min","siAPP","siAPP +\nproNGF",
+                         "Ctrl","ProNGF\n45 min","ProNGF\n60 min",
                          "ProNGF\n75 min","siAPP","siAPP +\nproNGF")
-  feb1_comp <- build_composite(
-    tau_img     = image_read("ImagesTif/ELINA_2026-02-06_13h04m41s_IRDye_680RD_crop_invert-1.tif"),
-    act_img     = image_read("ImagesTif/ELINA_2026-02-05_12h18m48s_IRDye_800CW_crop_invert-1.tif"),
-    tau_kda="56 kDa", act_kda="42 kDa", tau_label="panTau", act_label="Actin",
-    lane_labels=lane_labels_feb1, title_label="Soma + Axon"
-  )
 
-  axon_cond <- c("ProNGF 45min","ProNGF 60min","ProNGF 75min","siAPP","siAPP + proNGF")
-  soma_cond <- c("Ctrl","ProNGF 45min","ProNGF 60min","ProNGF 75min","siAPP","siAPP + proNGF")
+  tau_img <- fit_w(image_read("ImagesTif/ELINA_2026-02-12_13h04m41s_IRDye_680RD_crop_invert-1.tif")) |> add_border()
+  act_img <- fit_w(image_read("ImagesTif/ELINA_2026-02-05_12h18m48s_IRDye_800CW_crop_invert-1.tif")) |> add_border()
+  gap     <- image_blank(TOTAL_W, GAP_H, color = BG)
 
-  mk_load <- function(path, cond) {
-    read_csv(path, show_col_types=FALSE) |>
-      rename(lane=1, area=Area) |>
-      mutate(Condition=factor(cond, levels=cond))
-  }
-  raw_680_ax <- mk_load("ImagesCSV/Feb05_IRDye_680_panTau_quantification_only_axons.csv", axon_cond) |> mutate(Protein="panTau")
-  raw_800_ax <- mk_load("ImagesCSV/Feb05_IRDye_800_Ms_Act_quantification_only_axons.csv", axon_cond) |> mutate(Protein="Actin")
-  raw_680_sm <- mk_load("ImagesCSV/Feb05_IRDye_680_panTau_quantification_only_soma.csv",  soma_cond) |> mutate(Protein="panTau")
-  raw_800_sm <- mk_load("ImagesCSV/Feb05_IRDye_800_Ms_Act_quantification_only_soma.csv",  soma_cond) |> mutate(Protein="Actin")
+  # Title row: "Axon" centered over first half, "Soma" over second half
+  half_w    <- as.integer(PANEL_W / 2L)
+  title_fs  <- FS + 22L
+  title_row <- image_blank(TOTAL_W, 70L, color = BG) |>
+    image_annotate("Axon", size = title_fs, color = "black", font = "sans",
+                   weight = 700, gravity = "NorthWest",
+                   location = paste0("+", LEFT_W + half_w %/% 2L - 22L, "+8")) |>
+    image_annotate("Soma", size = title_fs, color = "black", font = "sans",
+                   weight = 700, gravity = "NorthWest",
+                   location = paste0("+", LEFT_W + half_w + half_w %/% 2L - 22L, "+8"))
 
-  axon_ratio <- inner_join(raw_680_ax |> select(lane,Condition,tau=area),
-                            raw_800_ax |> select(lane,actin=area), by="lane") |>
-    mutate(ratio=tau/actin)
-  soma_ratio <- inner_join(raw_680_sm |> select(lane,Condition,tau=area),
-                            raw_800_sm |> select(lane,actin=area), by="lane") |>
-    mutate(ratio=tau/actin)
+  header <- make_header(lane_labels_feb1)
 
+  feb1_comp <- image_append(
+    c(title_row, header,
+      make_wb_row(tau_img, "65 kDa\n56 kDa", "panTau"), gap,
+      make_wb_row(act_img, "42 kDa", "Actin")),
+    stack = TRUE
+  ) |> image_border(BG, "8x8")
+
+  # Restore globals
+  PANEL_W <<- saved_pw; TOTAL_W <<- saved_tw; FS <<- saved_fs; HEADER_H <<- saved_hh
+
+  # ── Quantification from remeasured soma+axon CSVs ───────────────────────
+  all_cond <- c("Ctrl","ProNGF 45min","ProNGF 60min",
+                "ProNGF 75min","siAPP","siAPP + proNGF")
+
+  tau_all <- read_csv("ImagesCSV/Feb05_IRDye_680_panTau_quantification_soma_and_axons.csv",
+                      show_col_types=FALSE) |>
+    rename(lane=1, tau=Area)
+  act_all <- read_csv("ImagesCSV/Feb05_IRDye_800_Ms_Act_quantification_soma_and_axon.csv",
+                      show_col_types=FALSE) |>
+    rename(lane=1, actin=Area)
+
+  # Lanes 1-6 = Axon, 7-12 = Soma
+  df_feb1 <- inner_join(tau_all, act_all, by="lane") |>
+    mutate(Condition   = factor(rep(all_cond, 2), levels=all_cond),
+           Compartment = factor(rep(c("Axon","Soma"), each=6),
+                                levels=c("Soma","Axon")),
+           ratio       = tau / actin)
+
+  # ── Panels: A = blot, B = panTau/Actin ratio ───────────────────────────
   pA <- ggdraw() + draw_image(feb1_comp)
-  pB <- ggdraw() + draw_image(image_read("figs/ColoredLabeledWB_Feb12.png"))
-  p_ax <- ggplot(axon_ratio, aes(Condition, ratio)) +
-    geom_col(fill=PAL_COMP["Axon"], colour="black", width=0.65) +
-    labs(title="Axon — panTau / Actin", x=NULL, y="panTau / Actin (a.u.)") + theme_wb()
-  p_sm <- ggplot(soma_ratio, aes(Condition, ratio)) +
-    geom_col(fill=PAL_COMP["Soma"], colour="black", width=0.65) +
-    labs(title="Soma — panTau / Actin", x=NULL, y="panTau / Actin (a.u.)") + theme_wb()
-  pC <- plot_grid(p_ax, p_sm, ncol=2)
 
-  compare_df <- bind_rows(
-    raw_680_ax |> select(Condition,area) |> mutate(Compartment="Axon", Protein="panTau (680 nm)"),
-    raw_680_sm |> select(Condition,area) |> mutate(Compartment="Soma", Protein="panTau (680 nm)"),
-    raw_800_ax |> select(Condition,area) |> mutate(Compartment="Axon", Protein="Actin (800 nm)"),
-    raw_800_sm |> select(Condition,area) |> mutate(Compartment="Soma", Protein="Actin (800 nm)")
-  ) |> mutate(Condition   = factor(as.character(Condition), levels=soma_cond),
-              Compartment = factor(Compartment, levels=c("Axon","Soma")),
-              Protein     = factor(Protein, levels=c("panTau (680 nm)","Actin (800 nm)")))
-
-  pD <- ggplot(compare_df, aes(Condition, area, fill=Compartment)) +
-    geom_col(position=position_dodge(width=0.75), colour="black", width=0.65) +
+  pB <- ggplot(df_feb1, aes(Condition, ratio, fill=Compartment)) +
+    geom_col(position=position_dodge(width=0.65), width=0.6, color="white") +
     scale_fill_manual(values=PAL_COMP) +
-    facet_wrap(~Protein, scales="free_y") +
-    labs(title="APP Knockdown — Axon vs Soma", subtitle="Ctrl present in Soma only",
-         x=NULL, y="Band intensity (a.u.)", fill=NULL) +
-    theme_classic(base_size=12) +
-    theme(axis.text.x=element_text(angle=35, hjust=1),
-          strip.background=element_rect(fill="grey90"), legend.position="top")
+    scale_y_continuous(expand=expansion(mult=c(0,0.12))) +
+    labs(x=NULL, y="panTau / Actin (a.u.)", fill="Compartment") +
+    theme_wb() +
+    theme(legend.position="right",
+          axis.text.x = element_text(angle = 35, hjust = 1, size = 22))
 
-  fig <- plot_grid(
-    plot_grid(pA, pB, ncol=2, labels=c("A","B"), label_size=18, label_fontface="bold"),
-    plot_grid(pC, pD, ncol=2, labels=c("C","D"), label_size=18, label_fontface="bold"),
-    nrow=2
-  )
-  save_fig(out, fig, width=14, height=14)
+  fig <- plot_grid(pA, pB, nrow=2,
+                   labels=c("A","B"), label_size=18, label_fontface="bold",
+                   rel_heights=c(1, 0.8))
+  save_fig(out, fig, width=14, height=12)
 } else { message("Cached: ", out) }
 ```
 
@@ -738,6 +724,635 @@ if (needs_build(out)) {
   fig <- plot_grid(pA, pB, ncol=2,
                    labels=c("A","B"), label_size=18, label_fontface="bold")
   save_fig(out, fig, width=14, height=7)
+} else { message("Cached: ", out) }
+```
+
+---
+
+## ProNGF crops — 2×2 panel (ImageJ-exported TIFs)
+
+```{r build-pronGF-crops-panel}
+out <- "figures/precomputed/fig-pronGF-crops-panel.png"
+
+if (needs_build(out)) {
+  DIR     <- "./ZeissImages/channels_MF_072525_20260318_042930"
+  IMG_W   <- 1200L
+  GAP     <-   30L
+  FONT_SZ <-   80L
+
+  # PNGs exported from ImageJ — colors and contrast already set
+  tiles <- list(
+    list(file  = file.path(DIR, "C4-ProNGF_Axons_p75_488_Tuj1_555__Tau_633_n1-1_croped-1_FINAL.png"),
+         label = "Tau", col = "white"),
+    list(file  = file.path(DIR, "C2-ProNGF_Axons_p75_488_Tuj1_555__Tau_633_n1-1_croped_FINAL.png"),
+         label = "p75", col = "green"),
+    list(file  = file.path(DIR, "C1-ProNGF_Axons_p75_488_Tuj1_555__Tau_633_n1-1_croped-1_FINAL.png"),
+         label = "Tuj1", col = "red"),
+    list(file  = file.path(DIR, "ProNGF_Axons_p75_488_Tuj1_555__Tau_633_n1-1_croped_composite-1_FINAL.png"),
+         label = "Composite", col = "white")
+  )
+
+  add_label <- function(img, label, col) {
+    image_annotate(img, label,
+                   gravity  = "SouthWest",
+                   location = "+10+8",
+                   size     = FONT_SZ,
+                   color    = col,
+                   font     = "Arial-Bold",
+                   boxcolor = "black")
+  }
+
+  imgs <- lapply(tiles, function(t) {
+    img <- image_read(t$file)
+    img <- image_scale(img, paste0(IMG_W, "x"))
+    add_label(img, t$label, t$col)
+  })
+
+  h     <- image_info(imgs[[1]])$height
+  gap_v <- image_blank(GAP,               h,   color = "white")
+  gap_h <- image_blank(IMG_W * 2L + GAP, GAP,  color = "white")
+
+  row1     <- image_append(c(imgs[[1]], gap_v, imgs[[2]]))
+  row2     <- image_append(c(imgs[[3]], gap_v, imgs[[4]]))
+  combined <- image_append(c(row1, gap_h, row2), stack = TRUE)
+
+  image_write(combined, out, format = "png")
+  message("Saved: ", out)
+} else { message("Cached: ", out) }
+```
+
+---
+
+## Ctrl crops — 2×2 panel (ImageJ-exported PNGs)
+
+```{r build-ctrl-crops-panel}
+out <- "figures/precomputed/fig-ctrl-crops-panel.png"
+
+if (needs_build(out)) {
+  DIR     <- "./ZeissImages/channels_MF_072525_20260318_042930"
+  IMG_W   <- 1200L
+  GAP     <-   30L
+  FONT_SZ <-   80L
+
+  tiles <- list(
+    list(file  = file.path(DIR, "C4-Ctrl_Axons_p75_488_Tuj1_555__Tau_633_n1-2_FINAL.png"),
+         label = "Tau", col = "white"),
+    list(file  = file.path(DIR, "C2-Ctrl_Axons_p75_488_Tuj1_555__Tau_633_n1-croped-1_FINAL.png"),
+         label = "p75", col = "green"),
+    list(file  = file.path(DIR, "C1-Ctrl_Axons_p75_488_Tuj1_555__Tau_633_n1-1_croped-1_FINAL.png"),
+         label = "Tuj1", col = "red"),
+    list(file  = file.path(DIR, "Ctrl_Axons_p75_488_Tuj1_555__Tau_633_n1-1_composite-1_FINAL.png"),
+         label = "Composite", col = "white")
+  )
+
+  add_label <- function(img, label, col) {
+    image_annotate(img, label,
+                   gravity  = "SouthWest",
+                   location = "+10+8",
+                   size     = FONT_SZ,
+                   color    = col,
+                   font     = "Arial-Bold",
+                   boxcolor = "black")
+  }
+
+  imgs <- lapply(tiles, function(t) {
+    img <- image_read(t$file)
+    img <- image_scale(img, paste0(IMG_W, "x"))
+    add_label(img, t$label, t$col)
+  })
+
+  h     <- image_info(imgs[[1]])$height
+  gap_v <- image_blank(GAP,               h,   color = "white")
+  gap_h <- image_blank(IMG_W * 2L + GAP, GAP,  color = "white")
+
+  row1     <- image_append(c(imgs[[1]], gap_v, imgs[[2]]))
+  row2     <- image_append(c(imgs[[3]], gap_v, imgs[[4]]))
+  combined <- image_append(c(row1, gap_h, row2), stack = TRUE)
+
+  image_write(combined, out, format = "png")
+  message("Saved: ", out)
+} else { message("Cached: ", out) }
+```
+
+---
+
+## Ctrl TrkB / Tau — 2×2 panel (ImageJ-exported PNGs)
+
+```{r build-trkb-tau-panel}
+out <- "figures/precomputed/fig-trkb-tau-panel.png"
+
+if (needs_build(out)) {
+  DIR     <- "./ZeissImages/channels_MF_070825_20260317_130135"
+  IMG_W   <- 1200L
+  GAP     <-   30L
+  FONT_SZ <-   80L
+
+  # Row 1: Ctrl — TrkB | Tau | Composite
+  # Row 2: ProNGF — TrkB | Tau | Composite
+  tiles <- list(
+    list(file  = file.path(DIR, "C2-Ctrl_Axons_TrkB_488_TAU_555_n1-1_croped-1_FINAL.png"),
+         label = "Ctrl — TrkB", col = "green"),
+    list(file  = file.path(DIR, "C1-Ctrl_Axons_TrkB_488_TAU_555_n1-1_FINAL-1.png"),
+         label = "Ctrl — Tau", col = "red"),
+    list(file  = file.path(DIR, "Ctrl_Axons_TrkB_488_TAU_555_n1-1_FINAL_merged-1.png"),
+         label = "Ctrl — Composite", col = "white"),
+    list(file  = file.path(DIR, "C2-ProNGF_Axons_TrkB_488_TAU_555_n2-green_trkB.png"),
+         label = "ProNGF — TrkB", col = "green"),
+    list(file  = file.path(DIR, "C1-ProNGF_Axons_TrkB_488_TAU_555_n2-1_red_tau.png"),
+         label = "ProNGF — Tau", col = "red"),
+    list(file  = file.path(DIR, "ProNGF_Axons_TrkB_488_TAU_555_n2-1_croped-composite-1.png"),
+         label = "ProNGF — Composite", col = "white")
+  )
+
+  add_label <- function(img, label, col) {
+    image_annotate(img, label,
+                   gravity  = "SouthWest",
+                   location = "+10+8",
+                   size     = FONT_SZ,
+                   color    = col,
+                   font     = "Arial-Bold",
+                   boxcolor = "black")
+  }
+
+  imgs <- lapply(tiles, function(t) {
+    img <- image_read(t$file)
+    img <- image_scale(img, paste0(IMG_W, "x"))
+    add_label(img, t$label, t$col)
+  })
+
+  h     <- image_info(imgs[[1]])$height
+  gap_v <- image_blank(GAP,                    h,   color = "white")
+  gap_h <- image_blank(IMG_W * 3L + GAP * 2L, GAP,  color = "white")
+
+  row1 <- image_append(c(imgs[[1]], gap_v, imgs[[2]], gap_v, imgs[[3]]))
+  row2 <- image_append(c(imgs[[4]], gap_v, imgs[[5]], gap_v, imgs[[6]]))
+  combined <- image_append(c(row1, gap_h, row2), stack = TRUE)
+
+  image_write(combined, out, format = "png")
+  message("Saved: ", out)
+} else { message("Cached: ", out) }
+```
+
+---
+
+## Tuj1 / Tau sequential — Ctrl vs ProNGF (MF_090825, ImageJ PNGs)
+
+```{r build-tuj1-tau-sequential-panel}
+out <- "figures/precomputed/fig-tuj1-tau-sequential-panel.png"
+
+if (needs_build(out)) {
+  DIR     <- "./ZeissImages/channels_MF_090825_20260309_134939"
+  IMG_W   <- 1200L
+  GAP     <-   30L
+  FONT_SZ <-   80L
+
+  # Single row: Ctrl Tuj1 | Ctrl Tau | Ctrl Comp | ProNGF Tuj1 | ProNGF Tau | ProNGF Comp
+  tiles <- list(
+    list(file  = file.path(DIR, "C2-Ctrl-Tuj1_488-Tau_555_2-3.png"),
+         label = "Ctrl — Tuj1", col = "green"),
+    list(file  = file.path(DIR, "C1-Ctrl-Tuj1_488-Tau_555_2-3.png"),
+         label = "Ctrl — Tau", col = "red"),
+    list(file  = file.path(DIR, "Ctrl-Tuj1_488-Tau_555_2-1-3.png"),
+         label = "Ctrl — Composite", col = "white"),
+    list(file  = file.path(DIR, "C2-ProNGF_in_Axons_Tuj1_488_Tau_555_1-1_croped-1.png"),
+         label = "ProNGF — Tuj1", col = "green"),
+    list(file  = file.path(DIR, "C1-ProNGF_in_Axons_Tuj1_488_Tau_555_1-1_croped-1.png"),
+         label = "ProNGF — Tau", col = "red"),
+    list(file  = file.path(DIR, "ProNGF_in_Axons_Tuj1_488_Tau_555_1-1_croped-1.png"),
+         label = "ProNGF — Composite", col = "white")
+  )
+
+  add_label <- function(img, label, col) {
+    image_annotate(img, label,
+                   gravity  = "SouthEast",
+                   location = "+10+8",
+                   size     = FONT_SZ,
+                   color    = col,
+                   font     = "Arial-Bold",
+                   boxcolor = "black")
+  }
+
+  imgs <- lapply(tiles, function(t) {
+    img <- image_read(t$file)
+    img <- image_scale(img, paste0(IMG_W, "x"))
+    add_label(img, t$label, t$col)
+  })
+
+  h     <- image_info(imgs[[1]])$height
+  gap_v <- image_blank(GAP, h, color = "white")
+
+  combined <- image_append(c(imgs[[1]], gap_v, imgs[[2]], gap_v, imgs[[3]],
+                             gap_v, imgs[[4]], gap_v, imgs[[5]], gap_v, imgs[[6]]))
+
+  image_write(combined, out, format = "png")
+  message("Saved: ", out)
+} else { message("Cached: ", out) }
+```
+
+---
+
+## Western Blot — Feb 2026 2nd: pTau + Total Tau + Actin (3-row composite)
+
+```{r build-feb2-3row}
+out <- "figures/precomputed/fig-feb2-ptau-totaltau-actin.png"
+
+if (needs_build(out)) {
+  saved_pw <- PANEL_W; saved_tw <- TOTAL_W; saved_fs <- FS; saved_hh <- HEADER_H; saved_rw <- RIGHT_W
+  PANEL_W  <<- 800L
+  RIGHT_W  <<- 140L
+  TOTAL_W  <<- LEFT_W + PANEL_W + RIGHT_W
+  FS       <<- 23L
+  HEADER_H <<- 57L
+
+  lane_labels <- c("Ctrl", "ProNGF\n45 min", "ProNGF\n60 min",
+                    "ProNGF\n75 min", "siAPP", "siAPP +\nproNGF")
+
+  ptau_img <- fit_w(image_read("ImagesTif/ELINA_2026-02-13_12h41m46sIRDye 680RD-1_croped_inverted_pTau181.tif")) |> add_border()
+  ttau_img <- fit_w(image_read("ImagesTif/ELINA_2026-02-13_12h40m54sIRDye 800CW-1_crop_invert_totalTau.tif"))   |> add_border()
+  act_img  <- fit_w(image_read("ImagesTif/ELINA_2026-02-13_12h40m54s_IRDye 800CW_1_actin.tif"))                 |> add_border()
+
+  gap <- image_blank(TOTAL_W, GAP_H, color = BG)
+
+  title_row <- image_blank(TOTAL_W, 70L, color = BG) |>
+    image_annotate("Soma", size = FS + 22, color = "black", font = "sans",
+                   weight = 700, gravity = "North", location = "+0+6")
+
+  header <- make_header(lane_labels)
+
+  feb2_3row <- image_append(
+    c(title_row, header,
+      make_wb_row(ptau_img, "65 kDa\n56 kDa", "pTau181"), gap,
+      make_wb_row(ttau_img, "56 kDa",          "panTau"),  gap,
+      make_wb_row(act_img,  "42 kDa",          "Actin")),
+    stack = TRUE
+  ) |> image_border(BG, "8x8")
+
+  image_write(feb2_3row, out, format = "png")
+
+  # Restore globals
+  PANEL_W <<- saved_pw; RIGHT_W <<- saved_rw; TOTAL_W <<- saved_tw; FS <<- saved_fs; HEADER_H <<- saved_hh
+  message("Saved: ", out)
+} else { message("Cached: ", out) }
+```
+
+---
+
+## TrkB / Tau IF Grid v2 — All 6 side-by-side (MF_070825)
+
+```{r build-trkb-tau-v2}
+out <- "figures/precomputed/fig-trkb-tau-v3.png"
+
+if (needs_build(out)) {
+  DIR     <- "./ZeissImages/channels_MF_070825_20260317_130135"
+  IMG_W   <- 1200L
+  GAP     <-   30L
+  FONT_SZ <-  100L
+  HDR_FONT <-  150L  # treatment header font
+  HDR_H   <-  180L   # treatment header row height
+
+  # Same 6 images as fig-trkb-tau-2x3: Ctrl (TrkB, Tau, Composite), ProNGF (TrkB, Tau, Composite)
+  tiles <- list(
+    list(file = "ctrl_trkB_green.png",               label = "TrkB",      col = "green"),
+    list(file = "ctrl_tau_red.png",                   label = "Tau",       col = "red"),
+    list(file = "Ctrl_Axons_TrkB_tau_composite_2.png",  label = "Composite", col = "white"),
+    list(file = "proNGF_trkB_green.png",              label = "TrkB",      col = "green"),
+    list(file = "proNGF_tau_red.png",                 label = "Tau",       col = "red"),
+    list(file = "ProNGF_Axons_TrkB_tau_composite.png",label = "Composite", col = "white")
+  )
+
+  # Read, scale, add channel label on image
+  imgs <- lapply(tiles, function(t) {
+    img <- image_read(file.path(DIR, t$file)) |>
+      image_scale(paste0(IMG_W, "x"))
+    image_annotate(img, t$label,
+                   gravity  = "SouthWest",
+                   location = "+10+8",
+                   size     = FONT_SZ,
+                   color    = t$col,
+                   font     = "Arial-Bold",
+                   boxcolor = "black")
+  })
+
+  h     <- image_info(imgs[[1]])$height
+  gap_v <- image_blank(GAP, h, color = "white")
+
+  # Single row: all 6 images side by side
+  img_row <- image_append(c(imgs[[1]], gap_v, imgs[[2]], gap_v, imgs[[3]],
+                            gap_v,
+                            imgs[[4]], gap_v, imgs[[5]], gap_v, imgs[[6]]))
+
+  row_w       <- image_info(img_row)$width
+  ctrl_w      <- image_info(imgs[[1]])$width * 3L + GAP * 2L
+  prongf_w    <- image_info(imgs[[4]])$width * 3L + GAP * 2L
+
+  # Treatment headers centered over each group of 3
+  header <- image_blank(row_w, HDR_H, color = "white")
+  ctrl_center   <- as.integer(ctrl_w / 2L)
+  prongf_center <- ctrl_w + GAP + as.integer(prongf_w / 2L)
+
+  header <- header |>
+    image_annotate("Ctrl", gravity = "North",
+                   location = paste0("+", ctrl_center - as.integer(row_w / 2L), "+10"),
+                   size = HDR_FONT, color = "black", font = "Arial-Bold") |>
+    image_annotate("ProNGF", gravity = "North",
+                   location = paste0("+", prongf_center - as.integer(row_w / 2L), "+10"),
+                   size = HDR_FONT, color = "black", font = "Arial-Bold")
+
+  combined <- image_append(c(header, img_row), stack = TRUE)
+
+  image_write(combined, out, format = "png")
+  message("Saved: ", out)
+} else { message("Cached: ", out) }
+```
+
+---
+
+## Tuj1 / Tau sequential v2 — side-by-side with treatment headers (MF_090825)
+
+```{r build-tuj1-tau-sequential-panel-v2}
+out <- "figures/precomputed/fig-tuj1-tau-sequential-panel-v2.png"
+
+if (needs_build(out)) {
+  DIR     <- "./ZeissImages/channels_MF_090825_20260309_134939"
+  IMG_W   <- 1200L
+  GAP     <-   30L
+  FONT_SZ  <-   80L
+  HDR_FONT <-  150L   # treatment header font
+  HDR_H    <-  180L   # header row height for treatment labels
+
+  # Ctrl tiles
+  ctrl_tiles <- list(
+    list(file  = file.path(DIR, "C2-Ctrl-Tuj1_488-Tau_555_2-3.png"),
+         label = "Tuj1", col = "green"),
+    list(file  = file.path(DIR, "C1-Ctrl-Tuj1_488-Tau_555_2-3.png"),
+         label = "Tau", col = "red"),
+    list(file  = file.path(DIR, "Ctrl-Tuj1_488-Tau_555_2-1-3.png"),
+         label = "Composite", col = "white")
+  )
+
+  # ProNGF tiles
+  prongf_tiles <- list(
+    list(file  = file.path(DIR, "C2-ProNGF_in_Axons_Tuj1_488_Tau_555_1-1_croped-1.png"),
+         label = "Tuj1", col = "green"),
+    list(file  = file.path(DIR, "C1-ProNGF_in_Axons_Tuj1_488_Tau_555_1-1_croped-1.png"),
+         label = "Tau", col = "red"),
+    list(file  = file.path(DIR, "ProNGF_in_Axons_Tuj1_488_Tau_555_1-1_croped-1.png"),
+         label = "Composite", col = "white")
+  )
+
+  add_label <- function(img, label, col) {
+    image_annotate(img, label,
+                   gravity  = "SouthEast",
+                   location = "+10+8",
+                   size     = FONT_SZ,
+                   color    = col,
+                   font     = "Arial-Bold",
+                   boxcolor = "black")
+  }
+
+  read_and_label <- function(tiles) {
+    lapply(tiles, function(t) {
+      img <- image_read(t$file) |> image_scale(paste0(IMG_W, "x"))
+      add_label(img, t$label, t$col)
+    })
+  }
+
+  ctrl_imgs   <- read_and_label(ctrl_tiles)
+  prongf_imgs <- read_and_label(prongf_tiles)
+
+  h     <- image_info(ctrl_imgs[[1]])$height
+  gap_v <- image_blank(GAP, h, color = "white")
+
+  # All 6 images in one row: Ctrl (Tuj1|Tau|Comp) | gap | ProNGF (Tuj1|Tau|Comp)
+  img_row <- image_append(c(ctrl_imgs[[1]], gap_v, ctrl_imgs[[2]], gap_v, ctrl_imgs[[3]],
+                            gap_v,
+                            prongf_imgs[[1]], gap_v, prongf_imgs[[2]], gap_v, prongf_imgs[[3]]))
+
+  row_w      <- image_info(img_row)$width
+  group_w    <- image_info(ctrl_imgs[[1]])$width * 3L + GAP * 2L
+
+  # Treatment headers centered over each group of 3
+  ctrl_center   <- as.integer(group_w / 2L)
+  prongf_center <- group_w + GAP + as.integer(group_w / 2L)
+
+  header <- image_blank(row_w, HDR_H, color = "white") |>
+    image_annotate("Ctrl", gravity = "North",
+                   location = paste0("+", ctrl_center - as.integer(row_w / 2L), "+10"),
+                   size = HDR_FONT, color = "black", font = "Arial-Bold") |>
+    image_annotate("ProNGF", gravity = "North",
+                   location = paste0("+", prongf_center - as.integer(row_w / 2L), "+10"),
+                   size = HDR_FONT, color = "black", font = "Arial-Bold")
+
+  combined <- image_append(c(header, img_row), stack = TRUE)
+
+  image_write(combined, out, format = "png")
+  message("Saved: ", out)
+} else { message("Cached: ", out) }
+```
+
+---
+
+## Western Blot — Feb 2026 1st (APP Knockdown) — Alt tau crop (Feb 06)
+
+```{r build-feb1-combined-alt}
+out <- "figures/precomputed/fig-feb1-combined-alt.png"
+
+if (needs_build(out)) {
+  saved_pw <- PANEL_W; saved_tw <- TOTAL_W; saved_fs <- FS; saved_hh <- HEADER_H
+  PANEL_W  <<- 1000L
+  TOTAL_W  <<- LEFT_W + PANEL_W + RIGHT_W
+  FS       <<- 23L
+  HEADER_H <<- 57L
+
+  lane_labels_feb1 <- c("Ctrl","ProNGF\n45 min","ProNGF\n60 min",
+                         "ProNGF\n75 min","siAPP","siAPP +\nproNGF",
+                         "Ctrl","ProNGF\n45 min","ProNGF\n60 min",
+                         "ProNGF\n75 min","siAPP","siAPP +\nproNGF")
+
+  tau_img <- fit_w(image_read("ImagesTif/ELINA_2026-02-12_13h04m41s_IRDye_680RD_crop_invert-1.tif")) |> add_border()
+  act_img <- fit_w(image_read("ImagesTif/ELINA_2026-02-05_12h18m48s_IRDye_800CW_crop_invert-1.tif")) |> add_border()
+  gap     <- image_blank(TOTAL_W, GAP_H, color = BG)
+
+  half_w    <- as.integer(PANEL_W / 2L)
+  title_fs  <- FS + 22L
+  title_row <- image_blank(TOTAL_W, 70L, color = BG) |>
+    image_annotate("Axon", size = title_fs, color = "black", font = "sans",
+                   weight = 700, gravity = "NorthWest",
+                   location = paste0("+", LEFT_W + half_w %/% 2L - 22L, "+8")) |>
+    image_annotate("Soma", size = title_fs, color = "black", font = "sans",
+                   weight = 700, gravity = "NorthWest",
+                   location = paste0("+", LEFT_W + half_w + half_w %/% 2L - 22L, "+8"))
+
+  header <- make_header(lane_labels_feb1)
+
+  feb1_comp_alt <- image_append(
+    c(title_row, header,
+      make_wb_row(tau_img, "65 kDa\n56 kDa", "panTau"), gap,
+      make_wb_row(act_img, "42 kDa", "Actin")),
+    stack = TRUE
+  ) |> image_border(BG, "8x8")
+
+  # Reuse same quantification as fig-feb1-combined
+  all_cond <- c("Ctrl","ProNGF 45min","ProNGF 60min",
+                "ProNGF 75min","siAPP","siAPP + proNGF")
+
+  tau_all <- read_csv("ImagesCSV/Feb05_IRDye_680_panTau_quantification_soma_and_axons.csv",
+                      show_col_types=FALSE) |>
+    rename(lane=1, tau=Area)
+  act_all <- read_csv("ImagesCSV/Feb05_IRDye_800_Ms_Act_quantification_soma_and_axon.csv",
+                      show_col_types=FALSE) |>
+    rename(lane=1, actin=Area)
+
+  df_feb1 <- inner_join(tau_all, act_all, by="lane") |>
+    mutate(Condition   = factor(rep(all_cond, 2), levels=all_cond),
+           Compartment = factor(rep(c("Axon","Soma"), each=6),
+                                levels=c("Soma","Axon")),
+           ratio       = tau / actin)
+
+  pA <- ggdraw() + draw_image(feb1_comp_alt)
+
+  pB <- ggplot(df_feb1, aes(Condition, ratio, fill=Compartment)) +
+    geom_col(position=position_dodge(width=0.65), width=0.6, color="white") +
+    scale_fill_manual(values=PAL_COMP) +
+    scale_y_continuous(expand=expansion(mult=c(0,0.12))) +
+    labs(x=NULL, y="panTau / Actin (a.u.)", fill="Compartment") +
+    theme_wb() +
+    theme(legend.position="right",
+          axis.text.x = element_text(angle = 35, hjust = 1, size = 22))
+
+  fig <- plot_grid(pA, pB, nrow=2,
+                   labels=c("A","B"), label_size=18, label_fontface="bold",
+                   rel_heights=c(1, 0.8))
+  save_fig(out, fig, width=14, height=12)
+
+  PANEL_W <<- saved_pw; TOTAL_W <<- saved_tw; FS <<- saved_fs; HEADER_H <<- saved_hh
+  message("Saved: ", out)
+} else { message("Cached: ", out) }
+```
+
+---
+
+## Quantification — Feb 2026 2nd WB: pTau56/Actin, pTau65/Actin, Tau56/Actin
+
+```{r build-feb2-3ratio-graph}
+out <- "figures/precomputed/fig-feb2-3ratio-graph.png"
+
+if (needs_build(out)) {
+  lane_map <- read_csv("ImagesCSV/LaneMapping_ExperimentJan26_2ndWB.csv",
+                        show_col_types = FALSE) |>
+    mutate(Lane = as.integer(Lane))
+
+  cond_lvls <- lane_map$Condition  # Ctrl, ProNGF 45min, ... siAPP + proNGF
+
+  # ── pTau (pSer202/pThr205): Band 1 = pTau65, Band 2 = pTau56 ──────────
+  ptau <- read_csv("ImagesCSV/Feb26_p202_quantification_v2.csv",
+                    show_col_types = FALSE) |>
+    mutate(Protein = ifelse(Band == 1, "pTau65", "pTau56")) |>
+    select(Lane, Protein, Area) |>
+    pivot_wider(names_from = Protein, values_from = Area)
+
+  # ── Total Tau + Actin (800 channel): Band 1 = Tau56, Band 2 = Actin ────
+  tau_act <- read_csv("ImagesCSV/Feb26_panTau_actin_quantification_v2.csv",
+                       show_col_types = FALSE) |>
+    mutate(Protein = ifelse(Band == 1, "Tau56", "Actin")) |>
+    select(Lane, Protein, Area) |>
+    pivot_wider(names_from = Protein, values_from = Area)
+
+  # ── Merge and compute ratios ────────────────────────────────────────────
+  df <- lane_map |>
+    left_join(ptau,    by = "Lane") |>
+    left_join(tau_act, by = "Lane") |>
+    mutate(
+      pTau56_Actin = pTau56 / Actin,
+      pTau65_Actin = pTau65 / Actin,
+      Tau56_Actin  = Tau56  / Actin,
+      Condition    = factor(Condition, levels = cond_lvls)
+    )
+
+  df_long <- df |>
+    select(Condition, pTau56_Actin, pTau65_Actin, Tau56_Actin) |>
+    pivot_longer(-Condition, names_to = "Ratio", values_to = "Value") |>
+    mutate(Ratio = factor(Ratio,
+                          levels = c("pTau65_Actin", "pTau56_Actin", "Tau56_Actin"),
+                          labels = c("pTau 65 kDa / Actin",
+                                     "pTau 56 kDa / Actin",
+                                     "Tau 56 kDa / Actin")))
+
+  p <- ggplot(df_long, aes(Condition, Value, fill = Ratio)) +
+    geom_col(position = position_dodge(width = 0.75), width = 0.7, colour = "black") +
+    scale_fill_manual(values = c("pTau 65 kDa / Actin" = "#E07B54",
+                                 "pTau 56 kDa / Actin" = "#4A90D9",
+                                 "Tau 56 kDa / Actin"  = "#A6A6A6")) +
+    scale_y_continuous(expand = expansion(mult = c(0, 0.12))) +
+    labs(x = NULL, y = "Signal / Actin (a.u.)", fill = NULL) +
+    theme_wb() +
+    theme(legend.position = "top",
+          axis.text.x = element_text(angle = 35, hjust = 1, size = 13))
+
+  save_fig(out, p, width = 10, height = 7)
+} else { message("Cached: ", out) }
+```
+
+---
+
+## TrkB / Tau — Ctrl vs ProNGF (new crops, 2x3 panel)
+
+```{r build-trkb-tau-2x3}
+out <- "figures/precomputed/fig-trkb-tau-2x3.png"
+
+if (needs_build(out)) {
+  DIR     <- "./ZeissImages/channels_MF_070825_20260317_130135"
+  IMG_W   <- 1200L
+  GAP     <-   30L
+  FONT_SZ <-  100L
+
+  # Row 1: Ctrl —  TrkB | Tau | Composite
+  # Row 2: ProNGF — TrkB | Tau | Composite
+  tiles <- list(
+    list(file = "ctrl_trkB_green.png",              label = "TrkB",      col = "green"),
+    list(file = "ctrl_tau_red.png",                 label = "Tau",       col = "red"),
+    list(file = "Ctrl_Axons_TrkB_tau_composite.png",label = "Composite", col = "white"),
+    list(file = "proNGF_trkB_green.png",            label = "TrkB",      col = "green"),
+    list(file = "proNGF_tau_red.png",               label = "Tau",       col = "red"),
+    list(file = "ProNGF_Axons_TrkB_tau_composite.png", label = "Composite", col = "white")
+  )
+
+  imgs <- lapply(tiles, function(t) {
+    img <- image_read(file.path(DIR, t$file)) |>
+      image_scale(paste0(IMG_W, "x"))
+    image_annotate(img, t$label,
+                   gravity  = "SouthWest",
+                   location = "+10+8",
+                   size     = FONT_SZ,
+                   color    = t$col,
+                   font     = "Arial-Bold",
+                   boxcolor = "black")
+  })
+
+  h     <- image_info(imgs[[1]])$height
+  gap_v <- image_blank(GAP,                    h,   color = "white")
+  gap_h <- image_blank(IMG_W * 3L + GAP * 2L, GAP,  color = "white")
+
+  # Row treatment labels
+  LABEL_H <- 70L
+  row_w   <- IMG_W * 3L + GAP * 2L
+  lbl_ctrl   <- image_blank(row_w, LABEL_H, color = "white") |>
+    image_annotate("Ctrl", size = FONT_SZ, color = "black",
+                   font = "Arial-Bold", gravity = "West", location = "+10+0")
+  lbl_pronGF <- image_blank(row_w, LABEL_H, color = "white") |>
+    image_annotate("ProNGF", size = FONT_SZ, color = "black",
+                   font = "Arial-Bold", gravity = "West", location = "+10+0")
+
+  row1 <- image_append(c(imgs[[1]], gap_v, imgs[[2]], gap_v, imgs[[3]]))
+  row2 <- image_append(c(imgs[[4]], gap_v, imgs[[5]], gap_v, imgs[[6]]))
+
+  combined <- image_append(
+    c(lbl_ctrl, row1, gap_h, lbl_pronGF, row2),
+    stack = TRUE
+  )
+
+  image_write(combined, out, format = "png")
+  message("Saved: ", out)
 } else { message("Cached: ", out) }
 ```
 

@@ -33,7 +33,7 @@ knitr::include_graphics("figures/precomputed/fig-trkb-tau.png")
 
 ### Tau Distribution in Axons 
 
-A key open question is whether neurotrophin treatment not only changes tau abundance but also alters how tau is distributed within axons — specifically, whether tau appears as discrete clumps or puncta versus a uniform, even distribution along the axon shaft. To begin addressing this visually, cropped regions of the Tau (AF568) channel from three conditions are shown side by side in @fig-tau-distribution. Ideally, this type of comparison across conditions would allow us to determine whether proNGF or BDNF treatment shifts tau from a diffuse to a more aggregated pattern, or vice versa, which would have implications for tau's role in neurotrophin-induced axonal changes. Note that a crop for the ProNGF + BDNF condition is not available for this field.
+A key open question is whether neurotrophin treatment not only changes tau abundance but also alters how tau is distributed within axons — specifically, whether tau appears as discrete clumps or puncta versus a uniform, even distribution along the axon shaft. To begin addressing this visually, cropped regions of the Tau (AF568) channel from three conditions are shown side by side in @fig-tau-distribution. Ideally, this type of comparison across conditions would allow us to determine whether proNGF or BDNF treatment shifts tau from a diffuse to a more aggregated pattern, or vice versa, which would have implications for tau's role in neurotrophin-induced axonal changes. Note that a crop for the proNGF + BDNF condition is not available for this field.
 
 ```{r fig-tau-distribution}
 #| fig-cap: "**Tau (AF568) distribution in BFCN axons — cropped regions from three treatment conditions.** Each panel shows the same channel (Tau, red) at higher magnification to allow visual assessment of tau distribution pattern. Clumped versus even distribution of tau signal may reflect changes in tau organization induced by neurotrophin treatment."
@@ -42,21 +42,28 @@ A key open question is whether neurotrophin treatment not only changes tau abund
 knitr::include_graphics("figures/precomputed/fig-tau-distribution.png")
 ```
 
-### Adding Tuj1 to Characterize Axonal Degeneration
+### p75, Tuj1, and Tau Staining to Characterize Axonal Degeneration
 
-As a next step, to better characterize the degeneration of the axons across treatments and to be consistent with our labs previous work I needed to use Tuj1 staining. Tuj1 (β-tubulin III) is a standard marker for neurons and is commonly used to assess axon morphology and degeneration — fragmented or beaded Tuj1 staining is a clear sign that axons are degenerating. Adding Tuj1 would also let me directly compare how tau distributes relative to the axon structure itself, which is important because changes in tau could reflect either a real increase in tau protein or just a change in where it is located along the axon.
+As a next step, to better characterize the degeneration of the axons across treatments and to be consistent with our lab's previous work I needed to use Tuj1 staining. Tuj1 (β-tubulin III) is a standard marker for neurons and is commonly used to assess axon morphology and degeneration — fragmented or beaded Tuj1 staining is a clear sign that axons are degenerating. Adding Tuj1 would also let me directly compare how tau distributes relative to the axon structure itself, which is important because changes in tau could reflect either a real increase in tau protein or just a change in where it is located along the axon.
 
-In the next 2 experiments I stained for all three antibodies — p75, Tau, and Tuj1 — simultaneously overnight. The result was very weak and patchy signal for Tau channel that is different from the way it looked when used only with TrkB. The problem arises from Tau and Tuj1 primary antibodies competing for binding at the same locations and interfere with each other, which degrades the signal quality.
+In the next 2 experiments I stained for all three antibodies — p75, Tau, and Tuj1 — simultaneously overnight. The result was very weak and patchy signal for Tau channel that is different from the way it looked when used only with TrkB. The problem arises from Tau and Tuj1 primary antibodies competing for binding at the same locations and interfering with each other, which degrades the signal quality.
 
-Looking at the images, you can see Tuj1 signal in the axons in red. The p75 staining is present but weaker than expected. In BFCNs, p75 should be strongly expressed all along the axon, so the signal we see here is less abundant than what we would want for a clean characterization of receptor distribution. Tau in far red, as mentioned above is not as good as I would have liked.
+Looking at the images (@fig-ctrl-crops-panel and @fig-pronGF-crops-panel), it is encouraging that we can detect a signal from all three antibodies — p75 in green, Tuj1 in red, and Tau in far red — in the same preparation. This confirms that the staining protocol is compatible with all three targets and provides a useful baseline. However, the signals are not yet clean enough for quantitative analysis. The p75 staining is present but weaker than expected — in BFCNs, p75 should be strongly expressed all along the axon, so ideally the signal should be more continuous and abundant. The Tau signal in the far red channel is also less defined than in earlier experiments, likely due to competition between the Tau and Tuj1 primary antibodies at overlapping epitopes.
 
-These images are useful as a starting point to confirm that all three proteins can be detected together, but further optimization of antibody concentrations or staining conditions was needed.
+What we would expect to see with a properly optimized protocol is a clear difference between the control and proNGF conditions: axons treated with proNGF should show signs of degeneration — fragmented or beaded Tuj1 staining, disrupted tau distribution, and potentially increased tau signal consistent with the upregulation seen in the western blots. The control axons should remain intact with smooth, continuous Tuj1 labeling. While the current images hint at some structural differences between the conditions, the signal quality is not sufficient to draw conclusions, and the protocol requires further optimization before these comparisons can be made reliably.
 
-```{r fig-p75-tuj1-tau}
-#| fig-cap: "**p75, Tuj1, and Tau immunofluorescence in BFCN axons — Ctrl vs ProNGF.** Each row is one condition. Left: DAPI + p75 (AF488, green); middle: DAPI + Tuj1 (AF555, red); right: DAPI + Tau (AF633, far red). While all three proteins are detectable, Tuj1 signal is not sufficient for degeneration quantification and p75 is less abundant along the axon than expected."
+```{r fig-ctrl-crops-panel}
+#| fig-cap: "**Control — p75 (green), Tau (far red), and Tuj1 (red) immunofluorescence in BFCN axons.** Top left: Tau (far red, AF633); top right: p75 (green, AF488); bottom left: Tuj1 (red, AF555); bottom right: composite of all channels. All three proteins are detectable, though signal quality requires further optimization."
 #| fig-align: center
 #| out-width: "100%"
-knitr::include_graphics("figures/precomputed/fig-p75-tuj1-tau.png")
+knitr::include_graphics("figures/precomputed/fig-ctrl-crops-panel.png")
+```
+
+```{r fig-pronGF-crops-panel}
+#| fig-cap: "**ProNGF-treated — p75 (green), Tau (far red), and Tuj1 (red) immunofluorescence in BFCN axons.** Same layout as the control panel above. ProNGF treatment is expected to induce axonal degeneration visible as fragmented or beaded Tuj1 staining and altered Tau distribution, though the current protocol does not yet provide sufficient signal clarity to confirm this."
+#| fig-align: center
+#| out-width: "100%"
+knitr::include_graphics("figures/precomputed/fig-pronGF-crops-panel.png")
 ```
 
 ### Testing Whether the Problem Was the Secondary Antibody
@@ -68,7 +75,7 @@ If the issue was specific to the secondary antibody used for Tau (for example, i
 The staining for tau was even worse than before and the p75 is not even worth showing.
 
 ```{r fig-tuj1-tau-swapped}
-#| fig-cap: "**Channel-swap test — Tuj1 (AF488, green) and Tau (AF555, red) stained simultaneously overnight.** Ctrl, ProNGF, and BDNF axon compartments are shown. This experiment was done to test whether the weak Tau signal seen previously was caused by the secondary antibody. Tau signal remained weak, suggesting the issue is competition between primary antibodies rather than a secondary antibody problem."
+#| fig-cap: "**Channel-swap test — Tuj1 (AF488, green) and Tau (AF555, red) stained simultaneously overnight.** Ctrl, proNGF, and BDNF axon compartments are shown. This experiment was done to test whether the weak Tau signal seen previously was caused by the secondary antibody. Tau signal remained weak, suggesting the issue is competition between primary antibodies rather than a secondary antibody problem."
 #| fig-align: center
 #| out-width: "100%"
 knitr::include_graphics("figures/precomputed/fig-tuj1-tau-swapped.png")
@@ -106,12 +113,12 @@ The confocal images at increasing magnification and from multiple angles reveal 
 
 As an initial characterization, I examined how different neurotrophin conditions affect tau levels in both axons and soma. BFCNs were treated with proNGF, BDNF, or a combination of proNGF + BDNF, and tau and actin were quantified in both compartments by Western blot (see @fig-jul25-combined).
 
-**Conditions:** Ctrl · ProNGF · BDNF · ProNGF + BDNF
+**Conditions:** Ctrl · proNGF · BDNF · proNGF + BDNF
 **Compartments:** Soma (lanes 1–4) · Axon (lanes 5–8)
 **Antibody:** Tau (DyLight 800, 56 kDa) · Actin (DyLight 800, 42 kDa)
 
 ```{r fig-jul25-combined}
-#| fig-cap: "**Effect of neurotrophin treatment on tau levels in BFCNs.** **(A)** Western blot showing Tau (56 kDa) and Actin (42 kDa) across all conditions and compartments; lanes 1–4 = Soma, lanes 5–8 = Axon. **(B)** Tau / Actin ratio in soma and axon compartments. **(C)** Raw Tau band intensities. **(D)** Raw Actin band intensities."
+#| fig-cap: "**Effect of neurotrophin treatment on tau levels in BFCNs.** **(A)** Western blot showing Tau (56 kDa) and Actin (42 kDa) across all conditions and compartments; lanes 1–4 = Soma, lanes 5–8 = Axon. **(B)** Tau / Actin ratio in soma and axon compartments."
 #| fig-align: center
 #| out-width: "100%"
 knitr::include_graphics("figures/precomputed/fig-jul25-combined.png")
@@ -125,7 +132,7 @@ knitr::include_graphics("figures/precomputed/fig-jul25-combined.png")
 
 To determine whether axonal proNGF treatment increases tau levels, I treated BFCN axons with proNGF and collected lysates at 30, 45, and 60 minutes. These time points right before the critical 1–2 hour window during which proNGF induces local axonal protein synthesis, as established by Dasgupta et al. [@dasguptaProNGFElicitsRetrograde2024], who demonstrated that blocking protein synthesis after 2 hours no longer protected neurons from proNGF-induced degeneration. Western blot results are shown in @fig-sep-combined.
 
-**Conditions:** Ctrl · ProNGF 30 min · ProNGF 45 min · ProNGF 60 min
+**Conditions:** Ctrl · proNGF 30 min · proNGF 45 min · proNGF 60 min
 **Antibodies:** Tau (DyLight 800, 56 kDa) · Actin (DyLight 800, 42 kDa)
 
 ```{r fig-sep-combined}
@@ -143,7 +150,7 @@ knitr::include_graphics("figures/precomputed/fig-sep-combined.png")
 
 Dasgupta et al. [@dasguptaProNGFElicitsRetrograde2024] identified APP as a key upstream regulator of proNGF-induced axonal degeneration, with APP synthesis required for the degenerative cascade. To test whether the proNGF-induced increase in tau depends on APP, I pretreated BFCN axons with siRNA targeting APP (siAPP) before proNGF stimulation. If APP mediates tau induction, then blocking APP synthesis should prevent the proNGF-induced increase in tau levels. Results are shown in @fig-feb1-combined.
 
-**Conditions:** Ctrl (soma only) · ProNGF 45 min · ProNGF 60 min · ProNGF 75 min · siAPP · siAPP + proNGF
+**Conditions:** Ctrl (soma only) · proNGF 45 min · proNGF 60 min · proNGF 75 min · siAPP · siAPP + proNGF
 **Channel 680 nm:** panTau (56 kDa) | **Channel 800 nm:** Actin (42 kDa)
 *Note: Lane 1 (Ctrl) was excluded from axon analysis due to unreliable reading.*
 
@@ -169,3 +176,50 @@ These cultures were used for an additional western blot to further characterize 
 #| out-width: "100%"
 knitr::include_graphics("figures/precomputed/fig-feb2-combined.png")
 ```
+
+---
+
+## ddPCR Quantification of Tau mRNA in Axon and Soma Compartments
+
+### Background and Rationale
+
+The proteomic analysis of the nascent axonal proteome identified two distinct tau isoforms in the soma — 0N3R and 0N4R — while only a single isoform, 0N3R, was detected as newly synthesized in the axon compartment. This suggests that either 0N3R mRNA is preferentially localized to axons, or that 0N3R is selectively translated in the axon even when 0N4R mRNA is also present there. To begin addressing whether this selectivity occurs at the mRNA level, I used ddPCR to quantify total tau mRNA in axon and soma fractions separately, and to ask whether proNGF treatment affects mRNA abundance in each compartment.
+
+### Primer Validation
+
+To confirm that the tau primers amplify reliably from both compartments, I first ran conventional RT-PCR on soma and axon lysates from filter chamber cultures. The primers were designed in the 5' UTR region of the rat *Mapt* transcript, which is shared between the 0N3R and 0N4R isoforms, so this assay detects total tau mRNA rather than either isoform specifically. Both compartments produced a band of the expected size, confirming that the primers work in the filter chamber material and that tau mRNA is present in the axon fraction — consistent with the proteomic evidence that tau is locally synthesized there.
+
+### ddPCR Results
+
+Following primer validation, I ran ddPCR on filter chamber axon and soma lysates from proNGF-treated and control neurons, using beta-actin as a co-loaded reference gene on the same plate. The raw copy number concentrations measured are summarized below:
+
+| Compartment | Condition | Tau (copies/µL) | Actin (copies/µL) |
+|-------------|-----------|-----------------|-------------------|
+| Soma | Control | 202.70 | 481.51 |
+| Soma | proNGF | 308.78 | 1,019.05 |
+| Axon | Control | 16.91 | 52.43 |
+| Axon | proNGF | 171.43 | 944.33 |
+
+Looking at the raw Tau numbers, there is a clear and large increase in tau mRNA in the axon fraction following proNGF treatment — axon Tau copies go from 16.91 to 171.43, roughly a 10-fold increase. In the soma the increase is more modest, from 202.70 to 308.78, approximately 1.5-fold. This is consistent with the western blot data showing that tau protein increases more prominently in the axon compartment after proNGF treatment.
+
+### Problem: Actin as a Normalization Control
+
+However, when I tried to normalize Tau to actin, a significant problem emerged. The actin copy numbers in the axon fraction are dramatically different between conditions — 52.43 copies/µL in the control versus 944.33 in the proNGF condition, an 18-fold difference. This is much larger than expected for a housekeeping gene and substantially exceeds the tau increase in the same compartment. When Tau is normalized to actin, the result actually shows tau going down in proNGF axons (0.18 normalized) compared to control (0.32 normalized), which directly contradicts the protein data.
+
+There are a few possible explanations for this. One is that actin mRNA itself is genuinely upregulated in axons following proNGF treatment — which would make it unsuitable as a reference gene in this context, since it is responding to the treatment. Another possibility is that there was an unequal amount of RNA loaded between the proNGF and control axon wells, and the actin increase simply reflects a loading difference rather than a biological one.
+
+The soma actin also increases roughly 2-fold after proNGF (481 to 1,019 copies/µL), which is less extreme but still raises the same question. This could reflect a general increase in transcriptional activity or RNA stability in proNGF-treated neurons, or a difference in the amount of material collected between conditions.
+
+Because of this normalization issue, the current ddPCR data cannot be used to draw a reliable quantitative conclusion about whether tau mRNA levels change after proNGF treatment. The raw increase in axon tau copies is very high, but without a valid reference gene or equalized RNA input, the fold-change cannot be interpreted with confidence. This experiment needs to be repeated with a more rigorous normalization strategy — either using an exogenous spike-in RNA added before RNA extraction, equalizing RNA input by quantification, or identifying a reference gene that does not change in axons under proNGF treatment.
+
+### What the Data Does Confirm
+
+Despite the normalization problem, the ddPCR data does confirm a few things that are useful. First, tau mRNA is detectable in the axon compartment of filter chamber cultures, which is not trivial given the small volume of the axon lysate and the overall low mRNA abundance in axons. Second, the primers designed in the 5' UTR work reliably in this material. Third, there is a large raw difference in tau mRNA between axon and soma under control conditions — the soma has roughly 12 times more tau copies per µL than the axon (202.70 vs 16.91), which is consistent with the cell body being the primary site of mRNA abundance and the axon containing a smaller but localized pool.
+
+### Next Steps
+
+Several follow-up experiments will address the limitations described above. First, I will replace beta-actin with GAPDH as the reference gene. Actin is a cytoskeletal protein whose expression can change as part of the structural remodeling that accompanies axon growth and proNGF treatment, which makes it a poor normalization control in this context. GAPDH is not a cytoskeletal protein and is less likely to respond to the treatment, so it should provide a more stable baseline for normalizing tau copy number.
+
+Second, I will repeat the experiment in both filter chamber cultures and regular well cultures. In the well cultures I will collect whole lysates and use them to validate that the signal is comparable to what I see in the soma fraction of the filter chambers. Because the axon compartment is very small and contributes a negligible amount of material relative to the soma, the whole-lysate measurement should be dominated by the somatic signal, and confirming that the two agree would give confidence that the filter chamber measurements are reliable.
+
+Third, we are ordering new primers that target the 0N3R and 0N4R mRNAs specifically, rather than the shared 5' UTR region. The current primers detect total tau mRNA and cannot distinguish between isoforms. With isoform-specific primers I will be able to identify and quantify 0N3R and 0N4R separately in the soma and axon compartments, and directly test whether the selectivity for 0N3R observed at the protein level also exists at the mRNA level in axons.

@@ -1,0 +1,282 @@
+---
+title: "IPA Pathway Analysis"
+subtitle: "Axonal MAPT Nascent Proteome after proNGF Treatment"
+format: pptx
+bibliography: bib/eIF2.bib
+---
+
+## What Is IPA?
+
+**Ingenuity Pathway Analysis (IPA)** — QIAGEN's knowledge-based platform for interpreting multi-omics data in the context of biology, disease, and mechanism.
+
+- Powered by the **QIAGEN Knowledge Base**: millions of manually curated gene, protein, and chemical interactions extracted from published literature
+- Accepts a wide range of input data types and maps them to known biological relationships
+- Generates statistical and mechanistic predictions about what is happening in your experiment
+
+---
+
+## What Data Can IPA Analyze?
+
+| Data Type | Examples |
+|-----------|---------|
+| **Transcriptomics** | RNA-seq, microarray, single-cell RNA-seq |
+| **Proteomics** | Mass spectrometry-based protein expression |
+| **Phosphoproteomics** | Phosphorylation site quantification |
+| **Metabolomics** | Metabolite abundance profiles |
+| **Epigenomics** | ChIP-seq, methylation arrays |
+| **miRNA** | miRNA expression profiles |
+| **GWAS / SNPs** | Genetic variant associations |
+| **Drug / chemical screens** | Compound perturbation datasets |
+
+Any measurement that yields a gene/protein identifier + fold-change (or p-value) can be uploaded.
+
+---
+
+## Core Analytical Capabilities
+
+- **Canonical Pathway Analysis** — tests which known biological pathways are enriched in your dataset; reports significance (p-value) and activation state (z-score)
+- **Upstream Regulator Analysis** — predicts transcription factors, kinases, receptors, and drugs whose known targets overlap your data, and whether they are **activated** or **inhibited**
+- **Causal Network Analysis** — extends upstream regulators into multi-step chains, connecting regulators through intermediate molecules
+- **Downstream Effects Analysis** — predicts which biological functions and disease phenotypes are expected to increase or decrease based on the data
+- **Regulator Effects** — links upstream regulators through the data to downstream phenotypic outcomes in a single model
+- **Comparison Analysis** — overlays multiple experiments or time points to identify shared and divergent regulatory themes
+- **BioMarker & Tox Analysis** — identifies candidate biomarkers and maps data onto toxicity-related pathways
+
+---
+
+## IPA Upstream Regulators & Causal Networks
+
+![](IPA/Upstream_Causal_2026-04-13_151454.png)
+
+---
+
+## What Are Upstream Regulators & Causal Networks?
+
+- **Upstream Regulator Analysis** identifies molecules (proteins, genes, drugs, etc.) that may explain the observed changes in the dataset
+- IPA compares the direction of change in your data to what is known in the literature and predicts whether each regulator is **activated** or **inhibited**
+- **Causal Networks** extend this by connecting upstream regulators through intermediate molecules, building multi-step regulatory chains
+- Together, they answer: *what is driving the changes we observe, and through which mechanisms?*
+
+---
+
+## MAPT — Upstream Regulator Analysis
+
+![](IPA/MAPT_Upregulators.jpg)
+
+---
+
+## Interpreting the MAPT Upstream Analysis
+
+- IPA identified **20 upstream regulators** whose known targets overlap with the dataset
+- Each regulator is linked to targets with a prediction: **Activated** (expression change matches activation), **Inhibited** (matches inhibition), or **Affected** (regulated but direction unclear)
+- Top regulators by number of targets:
+
+| Regulator | Targets | Key role |
+|-----------|---------|----------|
+| **TP53** | 310 | Tumor suppressor, apoptosis |
+| **MYC** | 256 | Transcription factor — 120 targets predicted inhibited |
+| **APP** | 201 | Amyloid precursor protein — co-regulated with MAPT |
+| **MAPT** | 190 | Tau — 184 targets affected, self-predicted activated |
+| **PSEN1** | 103 | Presenilin-1 — familial AD gene |
+| **BDNF** | 78 | Neurotrophin — 36 targets predicted inhibited |
+
+---
+
+## MAPT's Directional Targets
+
+- MAPT is predicted **Activated** (FC = 1.100) and regulates itself (positive feedback)
+- Key directional predictions:
+  - **FYN** (FC = -1.250) → **Inhibited** — Fyn phosphorylates Tau; its decrease disrupts synaptic signaling
+  - **MAPK3/ERK1** (FC = -1.111) → **Inhibited** — reduced pro-survival signaling
+  - **VIM/Vimentin** (FC = 1.100) → **Activated** — intermediate filament remodeling
+- 184/190 targets are "Affected" — Tau acts as a broad signaling hub, not a classical transcription factor
+- Also regulates 14-3-3 proteins (YWHAE, YWHAZ) and translational machinery — explored in the following pathways
+
+---
+
+## IPA Canonical Pathways
+
+![](IPA/Main_Pathways_2026-04-14 102623.png)
+
+IPA tests each canonical pathway by calculating what fraction of its known members appear in your dataset. The **p-value** (bar height) reflects the statistical significance of this overlap — a smaller p-value means more pathway members are present than expected by chance. The **ratio** indicates the proportion of pathway genes detected. Pathways are ranked by significance to highlight the biological processes most represented in the data.
+
+---
+
+## Rho GTPase Cycle — Most Significant Pathway (123/450 molecules, p = 3.38E-49)
+
+![](IPA/RhoGTPaseCycle_Pathway.jpg)
+
+---
+
+## Rho GTPase Cycle — Key Findings
+
+- Most statistically significant pathway in the dataset
+- Rho GTPases (RhoA, RhoB, Rac) control **actin cytoskeleton dynamics**, cell polarity, and axon morphology
+- Most proteins in the pathway trend **downward**, indicating disrupted cytoskeletal regulation
+
+| Protein | FC | p-value | Relevance to proNGF treatment |
+|---------|-----|---------|-------------------------------|
+| **FGD4** | -1.667 | 0.03 | RhoGEF that activates Cdc42 for myelination and axon outgrowth — its decrease impairs cytoskeletal organization |
+| **RHOB** | -1.250 | 0.01 | Small GTPase controlling endosomal trafficking and apoptosis — reduced RhoB alters vesicle transport in axons |
+| **ARHGAP1** | -1.250 | 0.02 | RhoGAP that inactivates Rho — its decrease leaves Rho signaling unbalanced |
+| **CYFIP1** | -1.250 | 0.02 | WAVE complex component for actin branching — reduced CYFIP1 impairs axonal actin dynamics |
+| **ABI1** | -1.250 | 0.01 | WAVE complex adaptor for actin polymerization — decreased ABI1 disrupts growth cone remodeling |
+
+- Together, these changes suggest proNGF treatment disrupts the axon's ability to maintain its cytoskeletal architecture through coordinated suppression of Rho GTPase regulators
+
+---
+
+## EIF2 Signaling Pathway (78 members in dataset)
+
+![](IPA/EIF2_signaling_pathway.jpg)
+
+---
+
+## Cap-Dependent Translation Is Suppressed
+
+- All statistically significant hits in the EIF2 pathway are **decreased**
+- Nearly every ribosomal protein (RPL/RPS) trends downward (-1.111 to -1.429)
+- This indicates a coordinated suppression of the axon's capacity to synthesize new proteins
+
+| Protein | FC | p-value | Role |
+|---------|-----|---------|------|
+| PABPC1 | -1.111 | ~0 | Stabilizes mRNAs, promotes translation |
+| WARS1 | -1.111 | 0.01 | Charges tRNA with tryptophan |
+| RPL18A | -1.111 | 0.03 | 60S ribosomal subunit assembly |
+| EIF4A1 | -1.111 | 0.05 | Unwinds mRNA structures for ribosome scanning |
+| MAPK1 | -1.250 | 0.05 | Activates translation machinery via Mnk1 |
+| RPL11 | -1.429 | 0.01 | 60S ribosomal subunit — largest decrease |
+
+---
+
+## Not All mRNAs Are Cap-Dependent
+
+- Most mRNAs use **cap-dependent translation**: the eIF4F complex binds the 5' m7G cap, recruits the ribosome, which scans the 5' UTR to find the start codon
+- When EIF2 signaling is inhibited (integrated stress response), this process is globally suppressed
+- However, some mRNAs contain an **Internal Ribosome Entry Site (IRES)** — a structured RNA element in the 5' UTR that recruits ribosomes **directly**, bypassing the cap and standard initiation factors
+- IRES-mediated translation can continue even when cap-dependent translation is shut down
+- RNA-binding proteins called **ITAFs** (IRES trans-acting factors) help fold the IRES and recruit ribosomes
+
+---
+
+## MAPT (Tau) — IRES-Mediated Translation
+
+- Tau mRNA contains a functional **IRES** in its 5' UTR [@veo2009tau]
+- This allows Tau to be translated even when global cap-dependent translation is suppressed [@thakor2012ires]
+- **HNRNPA1** (FC = -1.250), a known ITAF, appears in the dataset
+- Under EIF2 pathway inhibition, Tau production continues while most other proteins decline
+- **Result**: Tau protein selectively accumulates relative to everything else in the axon
+- Prolonged ISR also activates **DDIT3/CHOP** → pro-apoptotic program, consistent with cell death at 24 hours
+
+---
+
+## APP — Also IRES-Dependent
+
+- APP mRNA also contains a functional **IRES** in its 5' UTR
+- Like Tau, APP can be translated under conditions of translational stress when cap-dependent translation is suppressed
+- APP appears in the dataset with **FC = 1.200** and is identified as an upstream regulator with **18 downstream targets**
+- Both MAPT and APP escaping translational suppression via IRES is significant — these are the two proteins most central to Alzheimer's disease pathology
+- APP also contains an **Iron Responsive Element (IRE)** in its 5' UTR — when iron rises or oxygen drops, Iron Regulatory Proteins release and APP translation increases, linking APP production to oxidative stress and iron dysregulation
+- Their selective translation under stress may represent a shared vulnerability: the same stress response that shuts down most protein synthesis paradoxically favors the production of the two most neurotoxic proteins
+
+---
+
+## Other IRES-Containing Proteins Are Also Increased
+
+| Gene | FC | Function |
+|------|-----|----------|
+| **APP** | 1.200 | Amyloid precursor protein |
+| **STMN1** | 1.200 | Stathmin 1 — destabilizes microtubules |
+| **MAPT** | 1.100 | Tau |
+| **CTNNB1** | 1.100 | Beta-catenin — Wnt signaling |
+| **VIM** | 1.100 | Vimentin — intermediate filament remodeling |
+
+- All known IRES-containing mRNAs encoding structural/signaling proteins trend **upward**
+- This supports the model that IRES-mediated translation is selectively active while cap-dependent translation is suppressed
+- **STMN1** is particularly relevant — it destabilizes microtubules, and its increase alongside Tau would compound cytoskeletal disruption in the axon
+
+---
+
+## 14-3-3-mediated Signaling Pathway
+
+![](IPA/14-3-3-mediated Signaling.jpg)
+
+---
+
+## 14-3-3 Pathway — Loss of Protective Scaffolds
+
+- **YWHAZ** (14-3-3zeta) and **YWHAE** (14-3-3epsilon) both decreased (FC = -1.111)
+- 14-3-3 proteins serve three critical protective roles:
+  - **BAD sequestration**: Hold pro-apoptotic BAD away from mitochondria
+  - **ASK1 inhibition**: Keep ASK1 (MAP3K5) inactive → prevents JNK activation
+  - **RAF1 regulation**: Maintain pro-survival MAPK signaling balance
+
+---
+
+## 14-3-3 — Tau Acts as a Molecular Sponge
+
+- 14-3-3zeta forms a trimeric complex with Tau and GSK3beta
+- 14-3-3zeta binds Tau at the **microtubule-binding domain** — competes with tubulin
+- Locally synthesized Tau **sequesters** 14-3-3 into pathological complexes
+- Simultaneously, new 14-3-3 synthesis is decreased
+- **Dual catastrophe**: increased sequestration + decreased replacement
+- Depletes the axon of molecular safeguards against apoptosis and kinase dysregulation
+- Loss of 14-3-3 → ASK1 released → **JNK activated** → retrograde cell death
+
+---
+
+## RAF/MAP Kinase Activity Cascade (67 members in dataset)
+
+![](IPA/RafMAPActovityCascade.jpg)
+
+---
+
+## RAF/MAP Kinase Cascade — Pro-Survival Signaling Collapses
+
+- **MAPK1/ERK2** (FC = -1.250, p = 0.05) — key pro-survival kinase
+- **FYN** (FC = -1.250, p = 0.05) — Src family kinase, synaptic signaling
+- **CAMK2B** (FC = -1.429) — calcium/calmodulin signaling disrupted
+- **PPP5C** (FC = -1.250, p = 0.04) — phosphatase that dephosphorylates Tau
+- Proteasome subunits broadly decreased: PSMD6 (p = 0.01), PSMB7 (p = 0.03)
+
+**Interpretation**: The axon is losing both pro-survival signaling (ERK) and protein degradation capacity (proteasome), compounding the translational crisis.
+
+---
+
+## Robo Receptor Signaling (93 members in dataset)
+
+![](IPA/RoboSignaling.jpg)
+
+---
+
+## Robo Receptor Signaling — Axon Guidance Disrupted
+
+- **ROBO1** increased (FC = 1.300) — Roundabout receptor for Slit ligands
+- **GPC1/Glypican-1** significantly increased (FC = 1.400, p = 0.04) — Slit-Robo co-receptor
+- **SRGAP2** decreased (FC = -1.250) — links Robo to Rho GTPase regulation
+- Pathway shares EIF2 components (ribosomal proteins, PABPC1, proteasome subunits)
+
+**Interpretation**: Axon guidance cues are being altered. Increased ROBO1/GPC1 with decreased SRGAP2 may reflect cytoskeletal reorganization in the degenerating axon.
+
+---
+
+## Convergence — The Vicious Cycle
+
+1. **proNGF triggers translational stress** → EIF2 pathway inhibited
+2. **Tau is selectively translated** via IRES despite global suppression
+3. **Tau sequesters 14-3-3 proteins** → depletes protective scaffolds
+4. **ASK1 is released** → JNK cascade activated → retrograde cell death
+5. **ERK signaling collapses** → pro-survival pathways fail
+6. **Proteasome capacity declines** → protein homeostasis lost
+7. **Axon guidance altered** → cytoskeletal reorganization
+
+**MAPT sits at the center**, connecting translational control, survival signaling, and structural integrity.
+
+---
+
+## Future Directions
+
+- **ASK1 inhibition**: Does an ASK1 inhibitor (e.g., selonsertib) phenocopy JNK inhibition in protecting BFCNs from proNGF?
+- **14-3-3 levels**: Measure free 14-3-3 pool depletion after proNGF treatment
+- **Phospho-ASK1**: Check activation state in axon lysates after proNGF
+- **siRNA for 3R Tau**: Target the exon 9-11 junction unique to 0N3R isoform (candidates identified at CDS positions 614 and 617)

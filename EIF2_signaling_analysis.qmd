@@ -1,0 +1,125 @@
+---
+title: "IPA Pathway Analysis — Axonal MAPT Nascent Proteome"
+format: docx
+bibliography: bib/eIF2.bib
+---
+
+## MAPT as a Central Upstream Regulator
+
+IPA identified MAPT as an **activated upstream regulator** (FC = 1.100, prediction = "Activated"), with evidence linking it to the regulation of **255 downstream targets** in the dataset. Among these are APP (FC = 1.200, regulates 18 targets), cytoskeletal proteins (STMN1, STMN2, septins), and notably the 14-3-3 family members YWHAE and YWHAZ. This positions MAPT not just as a structural protein but as a signaling hub whose increased local translation in the axon has broad consequences across multiple pathways.
+
+---
+
+## EIF2 Signaling Is Inhibited: Translational Suppression
+
+![EIF2 Signaling Pathway (IPA)](IPA/EIF2_signaling_pathway.jpg)
+
+The EIF2 signaling pathway shows clear evidence of inhibition, indicating that global protein translation is being suppressed in axons following proNGF treatment.
+
+The statistically significant hits are all decreased:
+
+| Symbol | Fold Change | p-value | Function |
+|--------|-------------|---------|----------|
+| **PABPC1** | -1.111 | ~0 | Poly(A) binding protein — stabilizes mRNAs and promotes translation initiation [@mangus2003pabpc]. |
+| **WARS1** | -1.111 | 0.01 | Tryptophanyl-tRNA synthetase — charges tRNA with tryptophan for incorporation during translation [@ibba2000trna]. |
+| **EIF4A1** | -1.111 | 0.05 | RNA helicase — unwinds 5' UTR structures so ribosomes can scan to the start codon [@linder2011dead]. |
+| **MAPK1** | -1.250 | 0.05 | ERK2 kinase — phosphorylates and activates translation machinery components [@waskiewicz1997mnk]. |
+| **RPL18A** | -1.111 | 0.03 | 60S ribosomal subunit component — required for ribosome assembly [@iadevaia2014mtorc1]. |
+| **RPL11** | -1.429 | 0.01 | 60S ribosomal subunit component — most dramatically decreased ribosomal protein. |
+
+Nearly every ribosomal protein in the dataset (RPL and RPS families) shows a negative fold change (-1.111 to -1.429). While most do not individually reach significance, the consistent downward direction across dozens of ribosomal subunits is not random noise — it reflects a coordinated reduction in the cell's capacity to build ribosomes and synthesize new proteins.
+
+---
+
+## Stress Granule Formation
+
+![Stress Granules Pathway (IPA)](IPA/StressGranules.jpg)
+
+The stress granule pathway overlaps substantially with EIF2 signaling and reinforces the translational suppression picture. Key observations:
+
+- **G3BP1** (FC = -1.429, p = 0.17) — the core stress granule nucleation factor — is decreased, along with translation initiation factors (eIF2S1-3, eIF3 subunits, eIF4A1/A2, eIF4G1/G3) and heat shock proteins (HSPA5, HSPA9, HSP90 family).
+- **G3BP2** (FC = 1.200) trends upward, suggesting a shift in stress granule composition.
+- **mTOR** (FC = -1.111) and **RPTOR** (FC = -1.111) are both decreased, indicating suppression of the mTORC1 pathway that normally promotes translation and inhibits stress granule formation.
+- **PRKAA1/AMPK** (FC = -1.429, p = 0.09) — a key energy sensor — shows one of the most dramatic decreases.
+
+Stress granules form when translation is stalled under stress: untranslated mRNAs, stalled initiation complexes, and RNA-binding proteins aggregate into cytoplasmic foci. The data suggests the axon is in a state of translational stress with active remodeling of mRNA triage machinery.
+
+---
+
+## MAPT Escapes Translational Suppression via IRES
+
+Under normal conditions, most mRNAs require cap-dependent translation: the eIF4F complex recognizes the 5' m7G cap, recruits the ribosome, and scanning begins [@sonenberg2009translational]. When EIF2 signaling is inhibited — as shown above — this cap-dependent process is suppressed through the integrated stress response (ISR) [@harding2003isr].
+
+However, MAPT (Tau) mRNA contains an **Internal Ribosome Entry Site (IRES)** in its 5' UTR [@veo2009tau]. This structured RNA element allows ribosomes to bind directly to the mRNA without the 5' cap or the standard initiation factor machinery. IRES-mediated translation can operate even when eIF2alpha is phosphorylated and cap-dependent translation is shut down [@thakor2012ires].
+
+IRES trans-acting factors (ITAFs) — RNA-binding proteins that facilitate ribosome recruitment to IRES elements — participate in this process. Notably, **HNRNPA1** (FC = -1.250), a known ITAF, appears in the dataset.
+
+The ISR also selectively upregulates stress-responsive genes like ATF4 (through upstream ORF scanning) and ultimately **DDIT3/CHOP** — a pro-apoptotic transcription factor. Sustained ISR activation would trigger CHOP-mediated apoptosis, consistent with the cell death documented at 24 hours in proNGF-treated BFCNs.
+
+**The result**: while global translation is suppressed, Tau continues to be synthesized via its IRES, creating a selective increase in Tau protein relative to everything else in the axon.
+
+---
+
+## 14-3-3 Pathway: Tau Sequesters Protective Scaffolds
+
+![14-3-3-mediated Signaling (IPA)](IPA/14-3-3-mediated Signaling.jpg)
+
+Both **YWHAZ** (14-3-3zeta, FC = -1.111) and **YWHAE** (14-3-3epsilon, FC = -1.111) are decreased in the nascent axonal proteome. These 14-3-3 proteins serve critical protective roles:
+
+**BAD sequestration**: Under normal conditions, AKT phosphorylates BAD, and 14-3-3 holds phospho-BAD in the cytoplasm, preventing it from reaching the mitochondria where it would inhibit Bcl-2/Bcl-xL and trigger apoptosis. Reduced 14-3-3 releases this brake.
+
+**ASK1 inhibition**: ASK1 (MAP3K5) sits atop the JNK and p38 stress kinase cascades. 14-3-3 normally binds phosphorylated ASK1 and locks it inactive. When 14-3-3 is depleted, ASK1 is freed to activate JNK — directly linking to the finding that JNK activation by proNGF is required for retrograde cell death.
+
+**RAF1 regulation**: 14-3-3 also regulates the RAF-MAPK cascade, and its depletion disrupts the balance of pro-survival vs. pro-apoptotic signaling.
+
+The tau-14-3-3 relationship is bidirectional: 14-3-3zeta forms a trimeric complex with tau and GSK3beta, scaffolding tau phosphorylation. Critically, 14-3-3zeta binds tau at the microtubule-binding region, competing with tubulin for the same site. As tau is locally translated via IRES in the stressed axon, it sequesters 14-3-3 proteins into pathological complexes — effectively acting as a "sponge" that depletes the protective 14-3-3 pool. Simultaneously, the axon fails to replenish 14-3-3 through new synthesis (both trending down). This dual mechanism — increased sequestration plus decreased synthesis — creates a catastrophic depletion of 14-3-3-dependent safety mechanisms.
+
+2. Use IPA's "Upstream Analysis" Tab to check whether IPA has predicted:
+
+YWHAZ as an inhibited upstream regulator — This would directly support your hypothesis that 14-3-3ζ function is compromised
+TP53 as activated — Convergent evidence from the nucleolar stress pathway
+MAPK/JNK/p38 axis as activated — Predicted consequence of 14-3-3ζ sequestration away from ASK1
+
+---
+
+## RAF/MAP Kinase Cascade
+
+![RAF/MAP Kinase Activity Cascade (IPA)](IPA/RafMAPActovityCascade.jpg)
+
+The RAF/MAP kinase cascade data shows widespread suppression of signaling and protein quality control:
+
+- **MAPK1/ERK2** (FC = -1.250, p = 0.05) and **MAPK3/ERK1** (FC = -1.111) are both decreased, indicating reduced pro-survival MAPK signaling.
+- **FYN** kinase (FC = -1.250, p = 0.05) — a Src family kinase involved in synaptic signaling — is significantly decreased.
+- **CAMK2B** (FC = -1.429) shows one of the largest fold changes, suggesting disrupted calcium/calmodulin signaling.
+- **Proteasome subunits** (PSMA, PSMB, PSMC, PSMD families) are overwhelmingly trending down, with **PSMD6** (FC = -1.250, p = 0.01) and **PSMB7** (FC = -1.250, p = 0.03) reaching significance. This points to impaired protein degradation capacity alongside the translational suppression.
+- **PPP5C** (protein phosphatase 5, FC = -1.250, p = 0.04) is significantly decreased — a phosphatase known to dephosphorylate tau and other substrates.
+
+The combined decrease in MAPK signaling, proteasome function, and phosphatase activity paints a picture of an axon losing both its pro-survival signaling and its protein homeostasis machinery.
+
+---
+
+## Robo Receptor Signaling
+
+![Robo Receptor Signaling (IPA)](IPA/RoboSignaling.jpg)
+
+The Robo (Roundabout) receptor pathway, primarily known for axon guidance, also shows relevant changes:
+
+- **ROBO1** (FC = 1.300) is trending upward — Robo receptors respond to Slit ligands and regulate cytoskeletal dynamics and axon repulsion.
+- **GPC1/Glypican-1** (FC = 1.400, p = 0.04) is significantly increased — a heparan sulfate proteoglycan that acts as a co-receptor modulating Slit-Robo signaling.
+- **SRGAP2** (FC = -1.250, p = 0.08) — a Slit-Robo GTPase-activating protein that links Robo signaling to Rho GTPase regulation — is decreased.
+- The pathway shares many components with EIF2 signaling (ribosomal proteins, proteasome subunits, PABPC1, eIF4G1), reinforcing the convergence of translational suppression across multiple IPA pathways.
+
+The upregulation of Robo1 and GPC1 alongside the decrease in SRGAP2 may reflect altered axon guidance cues in the degenerating axon, potentially contributing to cytoskeletal reorganization.
+
+---
+
+## Convergence: MAPT Connects All Pathways
+
+The IPA data reveals MAPT as a central node connecting these pathways:
+
+1. **EIF2/Stress Granules**: Global translation is suppressed, but Tau escapes via IRES
+2. **14-3-3 depletion**: Locally synthesized Tau sequesters 14-3-3 proteins, releasing ASK1 to activate JNK and freeing BAD to trigger apoptosis
+3. **RAF/MAPK suppression**: Pro-survival ERK signaling is decreased while proteasome capacity declines
+4. **Robo signaling**: Axon guidance pathways are altered, with increased ROBO1 and GPC1
+
+The axon enters a vicious cycle: proNGF triggers translational stress, Tau is selectively translated, Tau sequesters 14-3-3 protective scaffolds, ASK1/JNK cascade is unleashed, and the axon cannot maintain protein homeostasis — leading to the retrograde degeneration documented experimentally.

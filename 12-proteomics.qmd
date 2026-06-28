@@ -1,0 +1,222 @@
+# Proteomics Analysis of the Axonal Nascent Proteome
+
+## Overview of IPA Pathway and Upstream Regulator Analysis
+
+Using Ingenuity Pathway Analysis (IPA), a knowledge-based platform from QIAGEN, a previous study from our lab identified MAPT and APP among the most significant upstream regulators of the nascent proteome dataset [@dasguptaProNGFElicitsRetrograde2024]. I extended this analysis to ask why MAPT is considered an upstream regulator and which pathways drive the upregulation of its translation, linking increased Tau synthesis to axonal degeneration. 
+
+The input for this IPA analysis is a list of proteins with fold-change values that reflect whether their axonal synthesis increased or decreased in response to proNGF. This list comes from mass spectrometry of newly synthesized proteins, which were tagged with puromycin and measured after either proNGF treatment or control. 
+
+
+IPA cross-references the proteins in a dataset against a curated database of published molecular interactions, pathways, and regulatory relationships. It then uses this information to predict which canonical pathways are enriched in the data, which upstream regulators may be driving the observed changes, and what the likely downstream functional consequences are. Rather than looking at individual proteins in isolation, IPA lets me ask what these changes mean together as a system.
+
+I uploaded the full axonal nascent proteome dataset — including fold-change values and p-values for each protein — and ran canonical pathway analysis, upstream regulator analysis, and downstream effects analysis. Several pathways together create a clear picture: the axon is undergoing translational stress, cytoskeletal disruption, and suppression of pro-survival signaling, while Tau and APP continue to be synthesized and by doing so may play a role in the degenerative cascade.
+
+## Re-running the Analysis Against an Updated Knowledge Base
+
+The original IPA analysis was run by our lab more than a year ago [@dasguptaProNGFElicitsRetrograde2024]. I chose to run it again because IPA does not compare the dataset against a fixed reference. It relies on a curated knowledge base of published molecular interactions, pathways, and regulatory relationships that QIAGEN updates as new research comes out. The dataset itself did not change, but the knowledge it is compared against did.
+
+This matters for how the results are read. The qualitative picture stays the same, so the main conclusions hold. What can change is the strength of support for a given regulator: as new studies are published, IPA learns more of the molecular interactions and downstream targets that link a regulator to the proteins in the dataset, and this can raise its significance or bring new regulators into view.
+
+```{r fig-upstream-original}
+#| fig-cap: "**Top upstream regulators — original analysis.** IPA upstream regulator analysis from our lab's previous study [@dasguptaProNGFElicitsRetrograde2024]. MAPT and APP are the most significant upstream regulators of the nascent proteome dataset."
+#| fig-align: center
+#| out-width: "100%"
+knitr::include_graphics("IPA/Published_Upstream_Regulartors.png")
+```
+
+```{r fig-upstream-rerun}
+#| fig-cap: "**Top upstream regulators — new analysis.** The same dataset re-analyzed against the updated IPA knowledge base. MAPT and APP remain top regulators with stronger p-values, while new regulators such as RYR1 and PSEN1 appear."
+#| fig-align: center
+#| out-width: "100%"
+knitr::include_graphics("IPA/Recent_Upstream_Regulartors.png")
+```
+
+@fig-upstream-original and @fig-upstream-rerun show the top upstream regulators from the original analysis and from the re-run. MAPT and APP remain among the top regulators in both, which confirms that the central finding is stable. Their support became stronger: the p-values for both APP and MAPT dropped. The re-run also surfaced regulators that were not in the original top list, most notably RYR1, the ryanodine receptor 1—an intracellular calcium-release channel of the endoplasmic reticulum (now the most significant)—and PSEN1, a presenilin linked to Alzheimer's disease. So the additional time of added research did not change the original result but only reinforced MAPT and APP and added context around them.
+
+## MAPT as a Central Upstream Regulator
+
+```{r fig-mapt-upstream}
+#| fig-cap: "**MAPT-centred regulator network from IPA.** IPA places MAPT at the top of a mechanistic network of upstream regulators — including PSEN1, MTOR, APP, and BDNF — connected by known regulatory relationships from the Ingenuity Knowledge Base. The arrows show literature-based regulation between regulators, not measurements in this dataset; node colour indicates each regulator's predicted activation state (orange, activated; blue, inhibited)."
+#| fig-align: center
+#| out-width: "90%"
+knitr::include_graphics("IPA/MAPT_Upregulators.jpg")
+```
+
+When I ran the upstream regulator analysis, IPA identified MAPT as a predicted activated regulator (FC = 1.100) with connections to 255 downstream targets in the dataset. This means that the pattern of changes across the proteome is partially consistent with what you would expect if MAPT were acting as an activated signaling hub — not just a structural protein but something with broader regulatory reach.
+
+@fig-mapt-upstream shows how IPA places MAPT in this role. It is a mechanistic regulator network: MAPT sits at the top and connects to other upstream regulators — including PSEN1, MTOR, APP, and BDNF — which in turn connect to further regulators below them. The arrows are known regulatory relationships drawn from IPA's curated knowledge base of published literature, not measurements from this dataset, and the node colours show each regulator's predicted activation state (orange, activated; blue, inhibited). Some of these molecules, such as PSEN1 and BDNF, were not measured in the dataset themselves; they appear because the literature links them to MAPT and they help explain how MAPT could sit on top of the regulatory cascade.
+
+A separate view is the list of MAPT's downstream targets that were actually measured in the dataset. @tbl-mapt-targets shows a few of them with the numbers behind each link.
+
+| Target (gene) | Fold change | IPA prediction | Supporting findings |
+|---|---|---|---|
+| **MAPT** (the regulator) | 1.100 | Activated | 255 |
+| APP | 1.200 | Affected | 18 |
+| STMN2 | 1.200 | Affected | 1 |
+| TUBB | 1.100 | Affected | 2 |
+| RPL19 | 1.100 | Affected | 1 |
+| DCTN1 | 1.000 | Affected | 1 |
+
+: A few of MAPT's measured downstream targets in the dataset, drawn from the IPA evidence table. {#tbl-mapt-targets}
+
+In @tbl-mapt-targets, the fold-change column shows how much each protein's axonal synthesis changed after proNGF and the supporting-findings column counts how many published observations back up that MAPT–protein link. The top row is MAPT itself: its 255 findings are the 255 target connections that earned it the activated-hub call.
+
+Put simply: the figure and the table answer the following questions: The figure is a map of who controls whom among the main regulators, with MAPT at the top. The table is a list that names the proteins MAPT acts on that we actually saw change in the experiment, and shows how strong the evidence is for each link — the bigger the findings number, the more studies support it. I pulled a few interesting genes from that table that shows how tau is tied to our degenration story: TUBB is β-tubulin, a building block of microtubules — the cytoskeleton that tau organizes. STMN2 (stathmin-2, also called SCG10) helps control microtubule stability and is an axonal maintenance protein that is lost early when an axon is injured, which makes it an early marker of axon degeneration. DCTN1 is the p150 subunit of dynactin, part of the dynein–dynactin complex that drives retrograde transport — mentioned in to introduction before (do I put here references?). RPL19 is a ribosomal protein, part of the translation machinery itself, so its change fits the translational stress that we will look at later on. APP, finally, is backed by 18 findings, far more than most targets, which is why the MAPT–APP connection stands out. 
+
+TODO: Show a few of those studies or is it too much of unnecessary detail?
+
+The MAPT–APP connection is worth pointing out. APP was identified as the primary upstream driver in the proteomic analysis, and one of the goals of this thesis is to understand whether Tau synthesis is upstream or downstream of APP. IPA identifying MAPT as an activated regulator of APP-related targets in the same dataset suggests a tight functional relationship between these two proteins in the degenerating axon.
+
+## Canonical Pathway Analysis
+
+```{r fig-main-pathways}
+#| fig-cap: "**Top canonical pathways enriched in the axonal nascent proteome after proNGF treatment.** Bar height reflects the statistical significance of pathway enrichment (-log10 p-value). The Rho GTPase cycle is the most significantly enriched pathway, followed by EIF2 signaling and other pathways related to translation, cytoskeletal regulation, and stress responses."
+#| fig-align: center
+#| out-width: "90%"
+knitr::include_graphics("IPA/Main_Pathways_2026-04-14 102623.png")
+```
+
+The canonical pathway analysis ranks pathways by how many of their known members appear in the dataset and whether that overlap is statistically significant. The most significant pathway by far was the Rho GTPase cycle (p = 3.38 × 10⁻⁴⁹, 123 out of 450 pathway members detected), which stands out clearly above the rest. Among the other pathways detected, several are of particular interest given their relevance to translational regulation and neuronal degeneration — including EIF2 signaling, stress granule formation, and 14-3-3-mediated signaling — and I will explore each of these in more detail in the following sections.
+
+## Rho GTPase Cycle: Disrupted Cytoskeletal Regulation
+
+```{r fig-rho-pathway}
+#| fig-cap: "**Rho GTPase cycle pathway overlay from IPA.** Green nodes indicate proteins that are downregulated in the dataset."
+#| fig-align: center
+#| out-width: "90%"
+knitr::include_graphics("IPA/RhoGTPaseCycle_Pathway.jpg")
+```
+
+The Rho GTPase cycle is the most statistically enriched pathway in the dataset, with 123 out of 450 known pathway members detected. This cycle controls actin cytoskeleton dynamics, cell polarity, and axon morphology. Most of the detected members trend downward, which points to a broad suppression of cytoskeletal regulation in proNGF-treated axons. Several proteins with significant fold-changes stand out (@tbl-rho).
+
+| Protein | Fold change | p-value | Role and consequence of its decrease |
+|---|---|---|---|
+| FGD4 | −1.667 | 0.03 | RhoGEF that activates Cdc42; its decrease impairs cytoskeletal organization |
+| RHOB | −1.250 | 0.01 | Small GTPase in endosomal trafficking and apoptosis; reduced levels are linked to altered vesicle transport |
+| CYFIP1 | −1.250 | 0.02 | WAVE-complex component that drives actin branching; its decrease impairs actin polymerization |
+| ABI1 | −1.250 | 0.01 | WAVE-complex component that drives actin branching; its decrease impairs actin polymerization |
+| ARHGAP1 | −1.250 | 0.02 | RhoGAP that inactivates Rho; its decrease leaves Rho signaling unbalanced |
+
+: Significant Rho GTPase cycle proteins decreased after proNGF treatment. {#tbl-rho}
+
+Together, these changes are consistent with the axonal fragmentation observed experimentally, where the cytoskeletal architecture begins to break down after proNGF treatment.
+
+## EIF2 Signaling: Global Translation Is Being Suppressed
+
+```{r fig-eif2-pathway}
+#| fig-cap: "**EIF2 signaling pathway overlay from IPA.** The EIF2 pathway shows broad downregulation of translational machinery, including translation initiation factors, ribosomal subunits, and signaling components that normally promote protein synthesis."
+#| fig-align: center
+#| out-width: "90%"
+knitr::include_graphics("IPA/EIF2_signaling_pathway.jpg")
+```
+
+In my opinion, the analysis of the EIF2 signaling pathway was the most striking and thought provoking. On the one hand the study showed that for the treatment to have an effect and for the axonal degeneration to happen we must have translation, but here we see a clear picture of it being suppressed: nearly every statistically significant hit is decreased. This includes translation initiation factors (EIF4A1, EIF4G1, and EIF4G3), the poly(A) binding protein PABPC1, the tRNA synthetase WARS1, and ribosomal subunit proteins across both the 40S (RPS family) and 60S (RPL family) subunits. MAPK1/ERK2 is also significantly decreased, which matters because ERK normally phosphorylates Mnk1 to activate the translation initiation factor eIF4E, and RPL11 shows one of the most dramatic decreases. The fold-changes and roles of these proteins are summarized in @tbl-eif2.
+
+| Protein | Fold change | p-value | Role / significance |
+|---|---|---|---|
+| EIF4A1 | −1.111 | 0.05 | Translation initiation factor (eIF4F helicase) |
+| EIF4G1 | trend down | — | Translation initiation scaffold (eIF4F) |
+| EIF4G3 | trend down | — | Translation initiation scaffold (eIF4F) |
+| PABPC1 | −1.111 | <0.001 | Poly(A)-binding protein; links the mRNA tail to initiation |
+| WARS1 | −1.111 | 0.01 | tRNA synthetase; charges tRNA for translation |
+| RPL11 | −1.429 | 0.01 | 60S ribosomal protein; one of the largest decreases |
+| MAPK1/ERK2 | −1.250 | 0.05 | Phosphorylates Mnk1 to activate eIF4E |
+| mTOR | −1.111 | — | mTORC1 kinase; central regulator of translation initiation |
+| RPTOR | −1.111 | — | mTORC1 component (raptor); partners with mTOR |
+| PRKAA1/AMPK | −1.429 | 0.09 | Energy sensor that inhibits mTORC1 when energy is low |
+
+: Significant EIF2 and translational-machinery proteins decreased after proNGF treatment. {#tbl-eif2}
+
+While most ribosomal protein changes individually do not reach statistical significance, the consistent downward direction across dozens of ribosomal subunit proteins is not random noise — it reflects a precise and intentional reduction in the axon's capacity to build ribosomes and synthesize new proteins. This kind of pattern, where individually modest but directionally consistent changes across an entire pathway add up to a meaningful biological signal, is exactly the type of result that pathway analysis is designed to detect.
+
+The overall picture from EIF2 signaling is that proNGF treatment pushes the axon into a state where global cap-dependent translation is being shut down. This is consistent with the integrated stress response (ISR), a cellular program activated when protein homeostasis is disrupted.
+
+But, how we explain the dependency on translation of degeneration and even the increase in translation of some proteins? The answer is in the next section.
+
+## MAPT/APP Escape via IRES and Iron-Responsive Element
+
+One of the most interesting interpretations to come out of the EIF2 pathway data is that it provides a potential mechanism for why both Tau and APP specifically continue to be synthesized even as global translation is being shut down. Under normal conditions, most mRNAs are translated in a cap-dependent manner: the eIF4F complex recognizes the 5' m7G cap structure on the mRNA and recruits the ribosome, which then scans for the start codon. When the ISR is activated and eIF2α becomes phosphorylated, this cap-dependent process is globally inhibited.
+
+Both MAPT and APP mRNAs contain Internal Ribosome Entry Sites (IRES) in their 5' UTRs. For MAPT, the IRES was characterized in the human tau mRNA and allows cap-independent ribosome recruitment [@veo2009tau]. For APP, an IRES in the 5' UTR has similarly been shown to sustain translation during conditions where cap-dependent translation is diminished — including ischemia and mitosis [@beaudoinRegulatingAmyloidPrecursor2008]. An IRES is a structured RNA element that can directly recruit ribosomes to the mRNA without requiring the 5' cap or the standard eIF4F-dependent scanning mechanism, allowing continued synthesis under the same stress conditions that suppress global translation. RNA-binding proteins called IRES trans-acting factors (ITAFs) assist in this process. 
+
+In addition to the IRES, APP mRNA contains a second regulatory element in its 5' UTR: an Iron-Responsive Element (IRE), specifically an IRE Type II stem-loop [@rogersIronresponsiveElementType2002]. IREs are structured RNA motifs originally characterized as regulators of ferritin translation in response to cellular iron levels. In the case of APP, the IRE in the 5' UTR is bound by Iron Regulatory Protein 1 (IRP1) when iron is scarce, which represses translation. When intracellular iron levels rise, IRP1 dissociates from the IRE, allowing eIF4F to bind instead and increasing APP translation. This means that APP translation is directly sensitive to iron availability — under conditions of iron overload or oxidative stress, APP synthesis is upregulated through this IRE-mediated mechanism, independent of the IRES. 
+
+
+Other IRES-Containing Proteins Are Also Increased supporting the model that IRES-mediated translation is active while cap-dependent translation is suppressed
+
+| Gene | FC | Function |
+|------|-----|----------|
+| **APP** | 1.200 | Amyloid precursor protein |
+| **STMN1** | 1.200 | Stathmin 1 — destabilizes microtubules |
+| **MAPT** | 1.100 | Tau |
+| **CTNNB1** | 1.100 | Beta-catenin — Wnt signaling |
+| **VIM** | 1.100 | Vimentin — intermediate filament remodeling |
+
+- **STMN1** is particularly relevant — it destabilizes microtubules, and its increase alongside Tau would compound cytoskeletal disruption in the axon
+
+To conclude, in the context of proNGF-treated BFCN axons, the IRES and IRE mechanisms provide an explanation why these two proteins are upregulated while global translation is suppressed. The axon is not specifically "turning on" Tau and APP synthesis; rather, the translational stress created by proNGF–p75NTR signaling happens to spare the mRNAs that are equipped to bypass cap-dependent initiation.
+
+## 14-3-3-Mediated Signaling: Loss of Protective Scaffolding
+
+```{r fig-14-3-3}
+#| fig-cap: "**14-3-3-mediated signaling pathway overlay from IPA.** Both YWHAZ (14-3-3ζ) and YWHAE (14-3-3ε) are decreased in the nascent axonal proteome, suggesting reduced synthesis of these key scaffold proteins that normally suppress pro-apoptotic signaling."
+#| fig-align: center
+#| out-width: "90%"
+knitr::include_graphics("IPA/14-3-3-mediated Signaling.jpg")
+```
+
+Add table for the members that significantly changed...
+
+Both YWHAZ (14-3-3ζ, FC = −1.111) and YWHAE (14-3-3ε, FC = −1.111) are decreased in the nascent proteome. 14-3-3 proteins are scaffolding proteins that suppress pro-apoptotic signaling by holding key targets in inactive states. Their decrease points to three specific mechanisms relevant to proNGF-induced degeneration.
+
+The first involves BAD, a pro-apoptotic BCL-2 family member. Under normal conditions, AKT phosphorylates BAD and 14-3-3 binds the phosphorylated form, sequestering it in the cytoplasm away from mitochondria. When 14-3-3 levels decrease, this brake is released and BAD can reach mitochondria where it inhibits the pro-survival proteins BCL-2 and BCL-xL, triggering apoptosis.
+
+The second involves ASK1 (MAP3K5), which sits upstream of the JNK and p38 stress kinase cascades. 14-3-3 normally binds phosphorylated ASK1 and keeps it inactive. When 14-3-3 levels drop, ASK1 is freed to activate JNK — which is directly relevant because JNK activation is required for retrograde cell death downstream of p75NTR in BFCNs.
+
+The third involves RAF1 (c-Raf), a kinase in the pro-survival ERK/MAPK cascade. Here 14-3-3's role is two-sided: it binds RAF1 at two phosphoserine sites and both stabilizes the protein and sets when it turns on, holding it in an inactive, closed conformation until the right signals arrive. Because 14-3-3 tunes this balance rather than simply switching RAF1 off, losing it does not cleanly turn RAF1 on or off — it throws off the timing and strength of the ERK signaling that normally keeps the neuron alive.
+
+There is also a known direct relationship between Tau and 14-3-3ζ: the two proteins interact at the microtubule-binding domain of Tau, and 14-3-3ζ can compete with tubulin for the same binding site. This raises the possibility that increased local Tau synthesis in the axon, driven by IRES-mediated translation while cap-dependent synthesis is suppressed, could sequester 14-3-3ζ away from its normal protective targets. At the same time, the axon is failing to replenish 14-3-3 through new synthesis. This combination — increased sequestration by Tau plus decreased new synthesis — could produce a functionally significant depletion of 14-3-3-dependent protective signaling.
+
+To ask whether this competition is even plausible, it helps to know how much of each protein the neuron actually makes. I looked up Tau and 14-3-3ζ in PaxDB, a database that estimates protein abundance from mass spectrometry datasets (@fig-ywhaz-abundance and @fig-tau-abundance).
+
+```{r fig-ywhaz-abundance}
+#| fig-cap: "**YWHAZ (14-3-3ζ) is one of the most abundant proteins in neurons.** PaxDB abundance data for rat YWHAZ. In neuron tissue it ranks 19th out of 5,267 proteins (6,658 ppm, top 8%), and on the whole-organism histogram (YWHAZ marked in red) it sits well into the high-abundance tail."
+#| fig-align: center
+#| out-width: "90%"
+knitr::include_graphics("figs/YwhazAbundance.png")
+```
+
+```{r fig-tau-abundance}
+#| fig-cap: "**Tau (MAPT) is abundant but well below 14-3-3ζ.** PaxDB abundance data for rat MAPT. In hippocampal formation it falls in the top 25% of detected proteins (210–393 ppm) — abundant, but about an order of magnitude lower than YWHAZ. MAPT is marked in red on the whole-organism histogram."
+#| fig-align: center
+#| out-width: "90%"
+knitr::include_graphics("figs/MaptAbundance.png")
+```
+
+14-3-3ζ is one of the most abundant proteins a neuron makes: it ranks 19th out of 5,267 proteins, in the top 8%. Tau is also abundant — it sits in the top 25% — but it is roughly an order of magnitude lower than 14-3-3ζ. The clients that 14-3-3 holds in check, BAD, RAF1, and ASK1, are rarer still. So the abundance order runs YWHAZ/14-3-3ζ ≫ Tau ≫ BAD ≈ RAF1 > ASK1.
+
+This order is what makes it possible for a small change to have an impact. Because 14-3-3ζ is so much more abundant than its partners, only a small slice of the total 14-3-3 pool is normally tied up holding BAD, RAF1, and ASK1 in their inactive states. Tau sits between 14-3-3 and them in abundance, so it is present in large enough amounts that even a modest rise in local Tau could pull away a meaningful share of free 14-3-3ζ. The balance that matters is not Tau against the whole 14-3-3 pool, but Tau against the part of 14-3-3 those low-abundance clients need. Against that part, even a small shift in the Tau-to-14-3-3 balance could be enough to release BAD, RAF1, or ASK1.
+
+I want to be clear that this is a hypothesis, not a measurement. The abundance numbers come from whole-tissue datasets, not from the axon itself. Testing it would mean asking whether the newly synthesized Tau in proNGF-treated axons is in fact bound to 14-3-3ζ, and following where that Tau goes inside the axon — whether it ends up where 14-3-3's other clients are. Until that is done, the abundance argument only shows that the competition is possible on stoichiometric grounds, not that it happens.
+
+
+## Stress Granule Formation
+
+```{r fig-stress-granules}
+#| fig-cap: "**Stress granule pathway overlay from IPA.** Stress granule pathway changes overlap substantially with EIF2 signaling, reinforcing the picture of translational stress in proNGF-treated axons."
+#| fig-align: center
+#| out-width: "90%"
+knitr::include_graphics("IPA/StressGranules.jpg")
+```
+
+The stress granule pathway overlaps heavily with EIF2 signaling and adds further evidence for a state of translational stress. Stress granules form when ribosomes stall during translation initiation: untranslated mRNAs, stalled initiation complexes, and RNA-binding proteins condense into cytoplasmic foci, effectively putting those mRNAs on hold until stress is resolved.
+
+G3BP1 (FC = −1.429), the core nucleator of stress granule assembly, is decreased — along with numerous translation initiation factors (eIF2 subunits, eIF3 subunits, eIF4A1, eIF4G1/G3) and heat shock proteins (HSPA5, HSPA9, the HSP90 family). G3BP2 (FC = 1.200), a related stress granule component, trends upward, which may reflect a compositional shift in how stress granules are organized. Multiple heat shock proteins are also decreased, which matters because chaperones like HSP70 and HSP90 are required for maintaining protein quality and preventing aggregation. Their reduction alongside ribosomal proteins suggests the axon is losing both its synthesis capacity and its ability to manage protein quality.
+
+## Overall Interpretation
+
+Taken together, the IPA analysis reveals a consistent pattern across multiple pathways that fits with a model of proNGF-induced axonal degeneration mediated by translational reprogramming. Following proNGF treatment, the axon enters a state where cap-dependent global protein synthesis is suppressed — evidenced by the EIF2 signaling, stress granule, and ribosomal protein data. Within this context of general translational suppression, MAPT mRNA appears to continue being translated through its IRES, resulting in a selective increase in Tau protein relative to the broader proteome.
+
+The increased Tau in this environment could have multiple consequences. It may sequester 14-3-3 scaffold proteins away from their protective targets, thereby releasing ASK1 to activate JNK and freeing BAD to promote apoptosis. It may also enhance retrograde transport by stabilizing the dynein–dynactin machinery on microtubules, potentially facilitating the retrograde propagation of pro-degenerative signals from the axon terminal to the soma. At the same time, the axon is experiencing coordinated suppression of Rho GTPase signaling, pro-survival MAPK signaling, and protein quality control through the proteasome — all of which would make it harder for the neuron to recover.
+
+It is important to note that these are predictions based on the overlap between the dataset and IPA's curated knowledge base. The upstream regulator and pathway predictions reflect what is consistent with the data, not direct experimental evidence for each mechanism. The data for individual proteins also shows that most fold changes are modest, and many do not reach conventional significance thresholds on their own. The value of the pathway analysis is in detecting coordinated trends across groups of related proteins, which can reflect biological signal even when individual changes are small. Experimental validation of the key hypotheses — particularly the IRES-mediated Tau translation and the Tau–14-3-3 interaction — would be needed to establish these mechanisms directly.

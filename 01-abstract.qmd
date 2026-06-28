@@ -21,6 +21,18 @@ Dr. Wilma Friedman
 
 \vspace{1cm}
 ```
+Traumatic brain injury causes retrograde degeneration of basal forebrain cholinergic neurons (BFCNs), which project axons to the cerebral cortex. This degeneration is not caused by direct mechanical damage to the cell bodies but is rather initiated at the axon terminals, where the injury induces, among other inflammatory reactions, an elevation of proNGF which in turn activates p75NTR.
 
-Short summary — do last.
+Previous work from our lab showed that p75NTR activation at BFCN axon terminals triggers local protein synthesis and retrograde transport of degenerative signals, and that both processes are required for axonal fragmentation and neuronal death. Proteomic analysis of the newly synthesized proteins in the axonal compartment following proNGF treatment identified Tau (MAPT) and amyloid precursor protein (APP) among the most statistically significant upregulated newly synthesized proteins, and showed that blocking the increase in newly synthesized APP prevents axonal degeneration and neuronal death.
+
+Notably, the proteomic data revealed isoform-specific differences in tau synthesis between compartments, with the isoform 0N3R being exclusively synthesized in the axons while in the somas both 0N3R and 0N4R were identified as newly synthesized. This observation raised the question of whether specific tau isoforms play distinct roles downstream of p75NTR signaling and whether isoform-targeted siRNA could selectively block axonal degeneration.
+
+Previous work from the laboratory focused on understanding the mechanisms underlying the upregulation of APP. My present study investigates the regulation of Tau and its relationship to APP upregulation, specifically examining whether proNGF–p75NTR signaling promotes increased Tau synthesis in axons during the early stages of retrograde degeneration and exploring the potential role of newly synthesized Tau in this process.
+
+The specific aims of this thesis were: 
+ (1) to confirm that proNGF treatment induces an increase in Tau levels and evaluate the contribution of different isoforms; 
+ (2) to evaluate whether blocking APP synthesis prevents the subsequent increase in Tau and protects axons from degeneration, in order to determine whether APP and Tau act in parallel or in a linear pathway; 
+ (3) to evaluate mRNA levels of Tau in response to proNGF treatment for total and isoform-specific tau; and 
+ (4) to use IPA to identify novel pathways involved after proNGF treatment that contribute to axonal degeneration.
+
 

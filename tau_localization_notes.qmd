@@ -1,0 +1,31 @@
+---
+title: "Tau Mislocalization via Calpain-Mediated AIS Degradation"
+author: "Elina Nemtsov"
+date: today
+format: html
+bibliography: bib/TauLocalization.bib
+---
+
+## The Axon Initial Segment as a Barrier for Tau
+
+Under normal conditions, tau is predominantly an axonal protein. One of the key mechanisms that maintains this polarized distribution is the axon initial segment (AIS) — a specialized cytoskeletal structure at the base of the axon that acts as a diffusion barrier, preventing somatodendritic proteins from entering the axon and axonal proteins like tau from leaking back into the soma.
+
+The AIS is held together by a scaffold of ankyrinG and βIV spectrin, which anchor ion channels and maintain the structural integrity of this barrier. When this scaffold is intact, tau stays where it belongs — in the axon.
+
+## Calpain Degrades the AIS
+
+After neuronal injury, intracellular calcium levels rise sharply. This activates calpain, a calcium-dependent cysteine protease. Schafer et al. showed that calpain rapidly and preferentially cleaves the AIS cytoskeletal proteins ankyrinG and βIV spectrin, leading to a complete loss of AIS integrity — even before the neuron dies or the axon visibly degenerates [@schaferDisruptionAxonInitial2009]. Importantly, calpain inhibition was sufficient to preserve AIS structure both in vitro and in vivo, confirming that calpain is the key protease responsible.
+
+Once the AIS barrier is destroyed, the neuron loses its polarity. Proteins that were restricted to the axon — including tau — are free to diffuse back into the soma and dendrites.
+
+## Tau Mislocalization After Injury
+
+This connects directly to what we see in traumatic brain injury (TBI) and neurodegenerative disease. Shin et al. demonstrated that TBI induces tau acetylation at the same sites found in Alzheimer's disease brain, and that this acetylated tau mislocalizes from the axon to the somatodendritic compartment, driving neurodegeneration [@shinReducingAcetylatedTau2021]. The mechanism they describe — S-nitrosylated GAPDH activating p300/CBP acetyltransferase while inactivating Sirtuin1 deacetylase — provides a molecular pathway for how tau becomes modified and mislocalizes after injury.
+
+## Putting It Together: ProNGF → Calpain → AIS Loss → Tau in the Soma
+
+In our system, proNGF treatment of BFCN axons triggers calcium influx and calpain activation as part of the degenerative cascade (via the p75/APP pathway described in the SciSignaling paper). If calpain is activated in the axon, it would degrade the AIS cytoskeleton, destroying the barrier that normally keeps tau axonal. This would cause tau to delocalize from the axon back to the soma — which could explain why we see changes in tau distribution across compartments in our western blot data.
+
+This also raises an important point: an apparent "increase" in somatic tau after proNGF treatment might not reflect new tau synthesis in the soma at all. Instead, it could be axonal tau flooding back into the cell body because the AIS barrier has been compromised. Distinguishing between these two possibilities — new synthesis vs. redistribution — is critical for interpreting our results.
+
+## References

@@ -1,0 +1,142 @@
+---
+title: "ATF2-Pathway Proteins in the Proteomics & Phosphoproteomics Datasets"
+subtitle: "Cross-reference of Gómez-Deza et al. (Neuron, 2026) ATF2 cascade against in-house data"
+author: "Elina Nemtsov"
+date: today
+format:
+  pptx:
+    toc: false
+---
+
+# Overview
+
+## What this deck shows
+
+The ATF2 paper (Gómez-Deza et al., *Neuron* 2026) defines one pro-apoptotic cascade:
+
+**DLK / LZK (MAP3K12/13) → MKK4/7 (MAP2K4/7) → JNK (MAPK8/9/10) → phospho-ATF2 → JUN → CASP3 / PUMA / BIM / HRK**
+
+For each dataset below, the slides give the **gene detected** (rat symbols), its **line in the original source file**, and the **fold change / ratio + p-value**.
+
+Every table is backed by a small CSV that was extracted from the raw data, so the rows can be searched directly. The `grep` reference commands on the last slides point at those extracted CSVs.
+
+## Source files and the extracted CSVs
+
+| Dataset | Original source file | Extracted CSV (searchable) |
+|---|---|---|
+| Newly synthesized (nascent axonal) | `IPA/Axons_table_proteins.csv` | `ATF2_analysis/nascent_ATF2_hits.csv` |
+| Total proteome | `IPA/GeneSymbol_Table.csv` | `ATF2_analysis/total_proteome_ATF2_hits.csv` |
+| Phosphoproteomics | `IPA/Phosphoproteomics data for PP2Ci_16April2026.xlsx` (Excel only) | `ATF2_analysis/phospho_ATF2_hits.csv` |
+
+The first column of every extracted CSV (`source_line` / `source_row`) is the row number in the original file.
+
+# Newly synthesized (nascent axonal) proteome
+
+## proNGF vs Ctrl
+
+Source: `IPA/Axons_table_proteins.csv` — Extracted: `nascent_ATF2_hits.csv`
+
+| Src line | Gene (role) | Unique pep | Cov % | proNGF/Ctrl | T-test (p) |
+|---|---|---|---|---|---|
+| 967 | Casp3 (Caspase-3) | 1 | 2.89 | 0.90 | 0.46 |
+
+**Only Casp3 is detected** (single peptide, low coverage → weak ID), and it does not change with proNGF.
+None of ATF2, DLK, LZK, JNKs, MKK4/7, JUN, ATF3/4, FOS, CHOP, PUMA, BIM, HRK were detected.
+
+# Total proteome (combined treatments)
+
+## Ratios vs Ctrl
+
+Source: `IPA/GeneSymbol_Table.csv` — Extracted: `total_proteome_ATF2_hits.csv`
+
+| Src line | Gene (role) | Pep | Cov % | proNGF/Ctrl (p) | BDNF/Ctrl (p) | proNGF+BDNF/Ctrl (p) |
+|---|---|---|---|---|---|---|
+| 277  | Fos (c-Fos)   | 1 | 3.2  | 1.10 (0.11) | 1.12 (0.08) | 1.09 (0.07) |
+| 503  | Mapk9 (JNK2)  | 3 | 15.8 | 1.07 (0.46) | 0.99 (0.88) | 1.00 (1.00) |
+| 1879 | Map2k7 (MKK7) | 5 | 12.6 | 1.01 (0.81) | 1.05 (0.04) | 0.99 (0.78) |
+| 2473 | Casp3 (Casp-3)| 7 | 24.2 | 1.00 (0.93) | 1.02 (0.52) | 1.08 (0.06) |
+| 2720 | Map2k4 (MKK4) | 8 | 21.0 | 1.00 (0.97) | 1.00 (0.94) | 1.02 (0.73) |
+| 3849 | Mapk8 (JNK1)  | 8 | 27.7 | 0.98 (0.34) | 0.98 (0.35) | 1.00 (0.88) |
+| 4253 | Map3k13 (LZK) | 1 | 1.2  | 0.97 (0.32) | 0.96 (0.37) | 0.99 (0.75) |
+
+## Total proteome — notes
+
+- **Robustly identified** (≥3 peptides): Mapk9, Map2k7, Casp3, Map2k4, Mapk8.
+- **Weak ID** (1 peptide): Fos, Map3k13 (LZK).
+- **Not detected:** ATF2, DLK (Map3k12), c-Jun (Jun), Mapk10/JNK3, ATF3, ATF4, CHOP, CEBPG, PUMA, BIM, HRK, γH2AX.
+- **No significant treatment effect** in the proNGF or proNGF+BDNF arms (all p > 0.05); only weak upward trends for Casp3 and Fos in proNGF+BDNF (p ≈ 0.06–0.07).
+- Abundances are TMT-normalized (~100/channel), so identification is judged by peptide count / coverage, not raw value.
+
+# Phosphoproteomics (nerve-crush model)
+
+## ⚠ Different experiment
+
+`Phosphoproteomics data for PP2Ci_16April2026.xlsx` is **not** the proNGF/BDNF study.
+It is a **sciatic-nerve-crush** dataset: **Naïve vs Crushed**, with crushed arms treated by DMSO / CK2 inhibitor / PP2C inhibitor.
+The column shown is **log2(Crushed / Naïve)** with its p-value. (−log10P ≥ 1.30 ⇒ p ≤ 0.05.)
+
+## Significant phosphosites (p ≤ 0.05)
+
+Source: Excel → Extracted: `phospho_ATF2_hits.csv`
+
+| Excel row | Gene (role) | Phosphosite | log2(Crush/Naïve) | p-value |
+|---|---|---|---|---|
+| 1807  | Map3k12 (DLK)  | pThr43/45 | **+0.47** | **0.0001** |
+| 17647 | Jund (JunD)    | pSer245/249 | −0.48 | 0.031 |
+| 2417  | Casp3 (Casp-3) | pSer26/29 | +0.39 | 0.043 |
+| 1506  | Map3k12 (DLK)  | pThr9/11/13 | +0.52 | 0.045 |
+| 5441  | Map2k4 (MKK4)  | pSer255 | +0.18 | 0.047 |
+| 15960 | Map2k4 (MKK4)  | pSer88 | −0.30 | 0.049 |
+
+**Headline:** the apical kinase **DLK (Map3k12) is significantly more phosphorylated after injury (pThr43/45, ~1.4×, p ≈ 1×10⁻⁴)** — consistent with the paper placing DLK at the top of the cascade.
+
+## Non-significant phosphosites (p > 0.05)
+
+| Excel row | Gene (role) | Phosphosite | log2(Crush/Naïve) | p-value |
+|---|---|---|---|---|
+| 1055  | Jund (JunD)   | pSer100 | +0.61 | 0.104 |
+| 1996  | Junb (JunB)   | pThr117 | +0.45 | 0.126 |
+| 3769  | Map3k12 (DLK) | pSer569 | +0.28 | 0.129 |
+| 3871  | Map2k4 (MKK4) | pSer88  | +0.27 | 0.057 |
+| 4108  | Jund (JunD)   | pSer245/249 | +0.26 | 0.061 |
+| 6925  | Map2k4 (MKK4) | pThr78  | +0.11 | 0.211 |
+| 8724  | Map2k4 (MKK4) | pSer88  | +0.04 | 0.826 |
+| 10501 | **Atf2 (core driver)** | **pSer94** (non-activating S-P site) | −0.04 | 0.668 |
+| 14598 | Map2k4 (MKK4) | pSer391/392 | −0.21 | 0.385 |
+| 18052 | Map2k4 (MKK4) | pSer88  | −0.57 | 0.086 |
+
+**ATF2 caveat:** detected, but only at pSer94 (not the JNK/p38 activation-loop Thr69/71), low coverage, and unchanged by injury. c-Jun, JNKs, MKK7, ATF3/4, CHOP, FOS phosphosites were not captured.
+
+# Find the lines yourself (grep reference)
+
+## How to look up a gene in the extracted CSVs
+
+These are **reference commands only** — copy one into a terminal (WSL / Linux / macOS) if you want to locate a gene's row yourself. `grep -n` prints the line number; the `source_line` / `source_row` column in each row gives the position in the original file.
+
+Newly synthesized:
+
+```
+grep -n -i "Casp3" ATF2_analysis/nascent_ATF2_hits.csv
+```
+
+Total proteome (any pathway gene):
+
+```
+grep -n -i -E "Fos|Mapk9|Map2k7|Casp3|Map2k4|Mapk8|Map3k13" ATF2_analysis/total_proteome_ATF2_hits.csv
+```
+
+## Grep reference — phospho CSV
+
+Phosphoproteomics (extracted from the Excel file):
+
+```
+grep -n -i -E "Atf2|Map3k12|Map2k4|Junb|Jund|Casp3" ATF2_analysis/phospho_ATF2_hits.csv
+```
+
+Just DLK and ATF2:
+
+```
+grep -n -i -E "Map3k12|Atf2" ATF2_analysis/phospho_ATF2_hits.csv
+```
+
+To search the **original** (non-extracted) CSVs instead, point the same pattern at `IPA/Axons_table_proteins.csv` or `IPA/GeneSymbol_Table.csv`.

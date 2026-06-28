@@ -32,13 +32,17 @@ These properties make BFCNs an ideal model system for dissecting the molecular m
 
 ## Tau background and roles
 
-Tau is a microtubule-associated protein that is highly enriched in axons, where it binds microtubules and contributes to the organization of the axonal cytoskeleton. Early studies demonstrated that tau becomes selectively enriched in the distal axon during neuronal polarization, supporting a role in establishing neuronal polarity and axonal identity [@kempfTauBindsDistal1996]. 
+Tau is a microtubule-associated protein that is highly enriched in axons, where it binds microtubules and contributes to the organization of the axonal cytoskeleton. Early studies showed that tau is enriched in the distant axon during neuronal polarization and by doing so has a role in establishing neuronal polarity. [@kempfTauBindsDistal1996]. 
 
-More recent work indicates that tau does not simply act as a constitutive stabilizer of microtubules but instead helps regulate microtubule organization and dynamics within axons. In particular, tau promotes the formation of long labile microtubule domains that support cytoskeletal remodeling and axonal transport processes [@qiangTauDoesNot2018]. 
+More recent work indicates that tau does not simply act only as stabilizer of microtubules but also helps to regulate microtubule organization and dynamics within axons. In particular, tau promotes the formation of long labile microtubule domains that support cytoskeletal remodeling and axonal transport processes [@qiangTauDoesNot2018]. 
 
 In addition to regulating microtubules directly, tau can coordinate interactions between microtubules and the actin cytoskeleton, thereby contributing to axonal structure, growth cone dynamics, and neurite extension [@elieTauCoorganizesDynamic2015; @biswasMicrotubuleAssociatedProteinTau2018]. Through these functions, tau plays an important role in maintaining neuronal architecture and supporting intracellular trafficking along axons.
 
-Tau also participates in the regulation of intracellular transport by modulating the interaction between motor proteins and the microtubule lattice. Experimental studies demonstrated that tau molecules bound along microtubules can alter motor access to the microtubule surface and influence the motility of kinesin- and dynein-driven cargoes [@dixitDifferentialRegulationDynein2008; @chaudharyTauDirectsIntracellular2018]. More recent work further showed that tau can differentially regulate the trafficking of specific cargo populations, including endosomes and lysosomes, indicating that tau can selectively tune intracellular transport depending on cargo type and motor engagement [@balabanianTauDifferentiallyRegulates2022].
+Tau also participates in the regulation of intracellular transport by modulating the interaction between motor proteins and the microtubule lattice. Experimental studies demonstrated that tau molecules bound along microtubules can alter motor access to the microtubule surface and influence the motility of kinesin- and dynein-driven cargoes [@dixitDifferentialRegulationDynein2008; @chaudharyTauDirectsIntracellular2018]. More recent work further showed that tau can differentially regulate the trafficking of specific cargo populations, including endosomes and lysosomes, indicating that tau can selectively tune intracellular transport depending on cargo type and motor engagement [@balabanianTauDifferentiallyRegulates2022]. 
+
+
+
+Because tau helps regulate motor-driven transport, it also takes part in moving mitochondria along axons, in both the anterograde and retrograde directions. This happens in part through the mitochondrial adaptor TRAK2 and the fusion proteins Mitofusin 1 and 2 (Mfn1/2). Through these roles in mitochondrial transport and dynamics, tau is increasingly linked to how neurons respond to stress and injury [@castillo-casanaTauMitochondriaInteractions2025].
 
 Under pathological conditions, tau undergoes abnormal post-translational modifications, most prominently hyperphosphorylation, which reduces its affinity for microtubules and disrupts cytoskeletal organization and axonal transport. Detachment of tau from microtubules can promote its mislocalization and aggregation into soluble oligomers and eventually into paired helical filaments and neurofibrillary tangles, a defining pathological feature of Alzheimer’s disease and other tauopathies [@wangTauPhysiologyPathology2016]. Importantly, such alterations in tau function are associated with early defects in axonal transport and synaptic function, highlighting the importance of tau-mediated transport regulation in neuronal health and degeneration.
 
@@ -83,6 +87,10 @@ The predominance of 0N3R in fetal brain and its gradual replacement by 4R isofor
 - **Synaptic function and plasticity**
   - Tau contributes to synaptic plasticity by regulating postsynaptic receptor trafficking, synaptic signaling complexes, and dendritic spine dynamics. Loss of tau disrupts activity-dependent trafficking of AMPA receptors and alters NMDA-dependent synaptic responses, demonstrating that tau participates in the dynamic regulation of postsynaptic signaling and synaptic efficacy [@suzukiMicrotubuleassociatedTauContributes2017; @ittnerDendriticFunctionTau2010; @sydowTauInducedDefectsSynaptic2011].
 
+- **Regulation of mitochondrial transport and dynamics**
+  - Because tau regulates motor-driven transport, it also helps move mitochondria along axons in both the anterograde and retrograde directions, in part through the mitochondrial adaptor TRAK2 [@castillo-casanaTauMitochondriaInteractions2025].
+  - Tau also interacts with the mitochondrial fusion proteins Mitofusin 1/2 (Mfn1/2) and OPA1, contributing to the fusion–fission balance that shapes mitochondrial morphology [@castillo-casanaTauMitochondriaInteractions2025].
+
 - **Nuclear and stress-related roles**
   - A fraction of tau localizes to the neuronal nucleus, where it can bind DNA and protect genomic integrity under stress conditions. Nuclear tau has been shown to accumulate after heat or oxidative stress and to protect neuronal DNA from stress-induced damage [@sultanNuclearTauKey2011].
     
@@ -113,6 +121,14 @@ The authors demonstrated that tau bound along microtubules can influence the abi
 Importantly, the study showed that different tau isoforms can differentially regulate motor transport. In particular, the short 3R tau isoform displayed distinct effects on motor-driven cargo trafficking compared with 4R isoforms, suggesting that tau splice variants can modulate axonal transport in an isoform-dependent manner [@balabanianTauDifferentiallyRegulates2022]. This observation is particularly relevant because neuronal systems often express specific tau isoform compositions that may influence transport behavior.
 
 Together, these findings indicate that tau can act as a regulator of motor access to microtubule tracks, thereby tuning the balance between anterograde kinesin-driven transport and retrograde dynein-driven transport. In the context of axonal signaling and degeneration, this regulatory role suggests that changes in tau abundance or local synthesis could alter the efficiency of cargo transport along axons, potentially influencing the propagation of injury signals.
+
+#### Tau–mitochondria interactions
+
+Tau's role in transport also extends to mitochondria. Neurons move mitochondria in two directions along axons: anterograde transport from the soma to the synaptic terminals, driven by kinesin-1, and retrograde transport back to the soma, driven by dynein. Because tau tunes the access of these motors to microtubules, it can shift mitochondrial movement in both directions. Quintanilla et al. showed this using a tau fragment truncated by caspase-3 at Asp421, a form linked to Alzheimer's disease. When they expressed this truncated tau in hippocampal neurons, it impaired both anterograde and retrograde mitochondrial transport and reduced the number of moving mitochondria. The effect went together with lower levels of the mitochondrial motor adaptor TRAK2 and a drop in ATP production [@quintanillaTruncatedTauInduces2020].
+
+Tau also takes part in mitochondrial dynamics—the fusion and fission that set the shape and number of mitochondria. On the fusion side, tau interacts with the fusion proteins OPA1 and Mitofusin 1 and 2 (Mfn1/2). Neurotoxic tau fragments lower the levels of these proteins, which weakens fusion [@castillo-casanaTauMitochondriaInteractions2025]. On the fission side, hyperphosphorylated tau binds the fission protein Drp1 and raises its activity [@manczakAbnormalInteractionMitochondrial2012]. Together, these changes push the balance toward excessive mitochondrial fragmentation.
+
+These changes matter for how neurons respond to stress and injury. Excessive fragmentation lowers ATP production, raises reactive oxygen species, and has been linked to neuroinflammation and degeneration. Changes in the amount, isoform, or modification of tau can therefore reshape both the transport and the dynamics of mitochondria, and through this affect axonal energy supply during the early stages of degeneration [@castillo-casanaTauMitochondriaInteractions2025].
 
 ### Retrograde Degenerative Signaling of p75NTR
 
