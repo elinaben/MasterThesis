@@ -1,0 +1,9 @@
+compartment,n_experiments,condition,mean_foldchange,sem
+Soma,2,Ctrl,1.0,0.0
+Soma,2,ProNGF,1.122,0.2262
+Soma,2,siAPP,0.6354,0.0271
+Soma,2,siAPP+ProNGF,1.2565,0.0771
+Axon,2,Ctrl,1.0,0.0
+Axon,2,ProNGF,1.0468,0.4333
+Axon,2,siAPP,0.9321,0.0886
+Axon,2,siAPP+ProNGF,1.3152,0.2611

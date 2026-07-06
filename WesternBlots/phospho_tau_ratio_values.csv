@@ -1,0 +1,13 @@
+dataset,condition,pTau_over_Tau
+February 2026 — soma,Ctrl,1.3155
+February 2026 — soma,ProNGF,1.0552
+February 2026 — soma,siAPP,0.7855
+February 2026 — soma,siAPP+ProNGF,1.5096
+2026-07-02 — soma,Ctrl,0.0
+2026-07-02 — soma,ProNGF,0.4468
+2026-07-02 — soma,siAPP,0.7148
+2026-07-02 — soma,siAPP+ProNGF,0.9064
+2026-07-02 — axon,Ctrl,0.7634
+2026-07-02 — axon,ProNGF,0.3314
+2026-07-02 — axon,siAPP,0.8073
+2026-07-02 — axon,siAPP+ProNGF,0.7221

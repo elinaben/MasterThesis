@@ -1,0 +1,41 @@
+# Supplementary Material {#sec-supplementary}
+
+## Per-experiment total tau fold-change and loading-control normalization
+
+Because the experiments used different loading controls (actin in the soma, and Ponceau S in the axon, where actin is scarce) and were run on different days, I expressed total tau as a fold-change relative to control within each experiment and compartment before pooling. The soma and axon were run on separate gels, so I treated them as independent experiments and selected their lanes separately (for example, in July 2025 #2 the soma used only the well-loaded replicate, while the axon used both). One additional experiment (May 2026) was excluded because its axon was quantified from a phone-photographed Ponceau membrane rather than a scanned blot. The per-experiment values are listed in @tbl-ctrl-pronGF.
+
+| Exp | Experiment (date) | Loading control (soma / axon) | Notes | Soma | Axon |
+|:--|:--|:--|:--|:--:|:--:|
+| 1 | July 2025 (2025-07-08) | actin / actin | single proNGF lane | 2.15 | 1.17 |
+| 2 | July 2025 (2025-07-25) | actin / actin | soma = replicate 1 (2nd under-loaded); axon = both replicates | 0.89 | 0.86 |
+| 3 | Sept 2025 (2025-09-03) | actin / actin | time course, proNGF 60 min | 1.33 | 2.40 |
+| 4 | Feb 2026 (2026-02-05) | actin / actin | time course, proNGF 60 min | 1.82 | 1.15 |
+| 5 | July 2026 (2026-07-02) | actin / Ponceau | single proNGF lane | 1.79 | 1.22 |
+| | **Mean ± SEM** | | | **1.60 ± 0.22** | **1.36 ± 0.27** |
+
+: Total tau fold-change (proNGF / control) per experiment and compartment. Fold-change is computed within each experiment and compartment; soma and axon were run on separate gels and pooled independently. {#tbl-ctrl-pronGF}
+
+## Actin is a poor loading control in the axon compartment
+
+For the soma, β-actin (42 kDa) is an adequate loading control, but in the axon compartment it is not. The 2026-07-02 blot makes this clear: probed for actin, the soma lanes give a strong band, while the axon lanes give a very weak and uneven signal (@fig-appkd-actin). This is expected for two reasons. First, actin is far less abundant in axons than in cell bodies, so the axonal band is close to the detection floor and small pipetting differences translate into large apparent changes. Second, actin is a cytoskeletal protein whose levels change during the axonal remodeling and degeneration that proNGF induces, so it is not treatment-independent — the same problem appeared at the mRNA level, where axonal *Actb* copies changed ~18-fold with proNGF (see the ddPCR results). Because a loading control must be both abundant and unresponsive to the treatment, neither condition holds for axonal actin. For this reason I normalized axonal tau to total protein (Ponceau S staining of the membrane), which loads evenly across all lanes, and reserved actin normalization for the soma.
+
+![**Total tau, actin, and Ponceau S — 2026-07-02.** The same blot as in the main text, here also showing the actin channel. Actin (42 kDa) is strong in the soma lanes but weak and uneven in the axon lanes, whereas Ponceau S total protein is even across all lanes.](WesternBlots/figures/fig_2026-07-02_totaltau_actin_ponceau.png){#fig-appkd-actin width=100%}
+
+## Phospho-tau quantification — datasets, antibody, and channels
+
+The phosphorylated-fraction summary in the main text (@fig-phospho-quant) pools four phospho datasets. In all of them phospho-tau was detected on the **680RD** channel and total tau on the **800CW** channel of the same membrane. The phospho antibody differs between blots — the February 2026 blots used **pTau181** and the 2026-07-02 blot used **AT8 (pSer202/pThr205)** — so this summary averages the phosphorylated fraction (any phospho-epitope over total tau) across antibodies. Phosphorylation was expressed as pTau / total tau per lane, then as a fold-change relative to each blot's own control before averaging across experiments (the blots sit on non-comparable intensity scales). The 2026-07-02 soma dataset had no detectable phospho band in its control lane, so it is excluded from the soma average. Computed values: `WesternBlots/phospho_summary_values.csv`; script: `WesternBlots/make_phospho_summary.py`.
+
+| Dataset | Compartment | Conditions | Phospho (680RD) | Total tau (800CW) | Source files |
+|:--|:--|:--|:--|:--|:--|
+| February 2026 #1 (2026-02-05/06) | soma + axon | Ctrl · proNGF (×2, averaged) · siAPP · siAPP + proNGF | pTau181 | total tau | `2026-02-06_phospho_totaltau_bands.csv` (from ImageLab reports) |
+| February 2026 #2 (2026-02-13) | soma | Ctrl · proNGF 45/60/75 min (averaged) · siAPP · siAPP + proNGF | pTau181 | rabbit pan-Tau | `Feb26_p202_quantification_v2.csv`, `Feb26_panTau_actin_quantification_v2.csv` |
+| 2026-07-02 | soma | Ctrl · proNGF · siAPP · siAPP + proNGF | AT8 pSer202/pThr205 | total tau | `2026-07-02_ImageLab_bands.csv` |
+| 2026-07-02 | axon | Ctrl · proNGF · siAPP · siAPP + proNGF | AT8 pSer202/pThr205 | total tau | `2026-07-02_ImageLab_bands.csv` |
+
+For each lane, phospho-tau is the sum of the 64 and 56 kDa phospho bands. Total tau is the sum of the 64 and 56 kDa total-tau bands in the 2026-07-02 blot; in the February blot the total-tau channel was quantified as a single tau band (band 1 — band 2 on that channel is actin).
+
+**Note on channel labeling.** The original February file names (`…_800_Rb_pTau…`, `…_680RD_Ms_panTau…`) had the channel-to-target prefixes reversed; the corrected v2 files — consistent with the 2026-07-02 convention — place phospho-tau on 680RD and total tau on 800CW. The February phospho antibody was **pTau181**; the `p202` in some file names is a labeling mistake made when the report was exported and does not reflect the antibody used.
+
+The February 2026 soma blot itself, together with an earlier actin-normalized per-band view, is shown below.
+
+![**Phospho-Tau analysis in soma compartment (February 2026).** **(A)** Western blot showing pTau (680 nm) and total tau / actin (800 nm), soma only. **(B)** Earlier actin-normalized quantification: pTau56 / Actin ratio (left) and total pTau (pTau65 + pTau56) / Actin ratio (right); superseded by the pTau / total-tau analysis in the main text.](figures/precomputed/fig-feb2-combined.png){#fig-feb2-combined width=100%}

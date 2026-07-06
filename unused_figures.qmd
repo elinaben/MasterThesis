@@ -1,0 +1,39 @@
+---
+title: "Unused figures — archive"
+subtitle: "Quantified western-blot figures generated during the project but not shown in the thesis"
+format:
+  html:
+    toc: true
+    embed-resources: true
+---
+
+# About this document
+
+This is an archive of quantified western-blot figures I generated that did **not**
+make it into the main text or the supplementary material. They are kept here for
+completeness and provenance — each shows a full experiment (blot plus
+quantification) at n = 1, or an earlier version of an analysis that was later
+revised. External/journal figures, raw scans, and intermediate processing files
+are not included.
+
+# Total tau — individual experiments
+
+![**Total tau, February 2026 (APP-knockdown experiment #1).** (A) panTau (65/56 kDa) and Actin (42 kDa) across the proNGF time course (45/60/75 min), siAPP, and siAPP + proNGF, in axon and soma. (B) panTau / Actin per condition and compartment. The total-tau blot underlying the February 2026 entry of the per-experiment fold-change table in the supplementary.](figures/precomputed/fig-feb1-combined-alt.png){width=100%}
+
+![**Total tau, July 2025.** (A) Tau (56 kDa) and Actin (42 kDa) in soma and axon for control, proNGF, BDNF, and proNGF + BDNF. (B) Tau / Actin per condition and compartment. This is the only experiment that additionally tested BDNF and proNGF + BDNF.](figures/precomputed/fig-jul25-combined.png){width=100%}
+
+![**Total tau, September 2025 (proNGF time course).** (A, B) Tau (56 kDa) and Actin (42 kDa) in soma and axon across control and proNGF at 30, 45, and 60 min. (C) Tau / Actin per condition and compartment; the strongest increase is at 60 min.](figures/precomputed/fig-sep-combined.png){width=100%}
+
+# Phospho-tau — February 2026 #2, alternate and superseded views
+
+![**Phospho-tau blot, February 2026 (soma).** pTau181 (65 and 56 kDa), panTau (56 kDa), and Actin (42 kDa) across control, the proNGF time course, siAPP, and siAPP + proNGF.](figures/precomputed/fig-feb2-ptau-totaltau-actin.png){width=90%}
+
+![**Phospho-tau, three-ratio quantification (February 2026 soma).** pTau65 / Actin, pTau56 / Actin, and total-Tau56 / Actin per condition. An earlier actin-normalized view, superseded by the pTau / total-tau summary in the main text.](figures/precomputed/fig-feb2-3ratio-graph.png){width=90%}
+
+![**Phospho-tau (pTau56 / Actin) in the soma — earlier two-experiment version.** February 2026 and 2026-07-02, pTau56 normalized to actin. Superseded by the pTau / total-tau analysis in the main text.](WesternBlots/figures/fig_phospho_quant.png){width=90%}
+
+![**Phospho-tau (pTau / total tau) per experiment — earlier per-panel version.** February 2026 soma, 2026-07-02 soma, and 2026-07-02 axon shown as separate panels. Superseded by the averaged summary figure in the main text.](WesternBlots/figures/fig_phospho_tau_ratio.png){width=100%}
+
+# proNGF pathway activation — JNK
+
+![**JNK activation, Ctrl vs proNGF.** (A) p-JNK and total JNK (54/46 kDa). (B) p-JNK / total-JNK ratio, higher with proNGF (1.18 → 2.60). Used to confirm the proNGF preparation was biologically active (see Methods). This is an alternative version of the JNK validation blot; a different rendering of the same experiment appears in the main text (Results).](figs/June26_JNK_figure.png){width=85%}

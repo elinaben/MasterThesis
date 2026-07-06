@@ -1,25 +1,33 @@
 project:
   type: book
+  output-dir: .
+  post-render: post-render.py
 
 book:
   title: "Regulation of MAPT (Tau) Translation in Basal Forebrain Axons"
   author: "Elina Nemtsov"
   date: today
-  output-file: "Elina_Master_Thesis"
+  output-file: "_temp_render"
   chapters:
     - index.qmd
     - 00-copyright.qmd
     - 01-abstract.qmd
     - 02-acknowledgements.qmd
     - 10-introduction.qmd
+    - 12-proteomics.qmd
     - 30-results.qmd
     - 20-methods.qmd
     - 40-discussion.qmd
-    - 50-conclusion.qmd
     - references.qmd
+    - supplementary_material.qmd
 
-bibliography: bib/references.bib
+bibliography:
+  - bib/references.bib
+  - bib/eIF2.bib
 link-citations: true
+
+crossref:
+  chapters: false
 
 format:
   pdf:
@@ -56,6 +64,7 @@ format:
         \renewcommand{\maketitle}{}
   docx:
     toc: true
+    number-sections: false
   html:
     toc: true
 
